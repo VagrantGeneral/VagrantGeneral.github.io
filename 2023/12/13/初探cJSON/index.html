@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="HanKangKai">
+
+
+
+    <meta name="description" content="流浪者">
+
+
+
+<title>初探cJSON | Wandergeneral</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">HanKangKai&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">HanKangKai&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">初探cJSON</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">HanKangKai</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">十二月 13, 2023&nbsp;&nbsp;22:46:57</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/cJSON/">cJSON</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="什么是JSON"><a href="#什么是JSON" class="headerlink" title="什么是JSON"></a>什么是JSON</h2><p>JSON是一种轻量级的数据交换格式。易于人阅读和编写。同时也易于机器解析和生成。</p>
+<p>JSON采用完全独立于语言的文本格式，使用了类似于C语言家族的习惯。这些特性使其成为理想的数据交换语言。</p>
+<p>跟XML相比，JSON的优势在于格式简洁短小，特别是在处理大量复杂数据的时候，这个优势便显得非常突出。</p>
+<p>从各浏览器的支持来看，JSON解决了因不同浏览器对XML DOM解析方式不同而引起的问题。</p>
+<h2 id="JSON结构"><a href="#JSON结构" class="headerlink" title="JSON结构"></a>JSON结构</h2><h4 id="1-JSON构建于两种结构"><a href="#1-JSON构建于两种结构" class="headerlink" title="1.JSON构建于两种结构"></a>1.JSON构建于两种结构</h4><ul>
+<li><strong>“ 名称&#x2F;值 ”对 的集合</strong>。不同的语言中，它被理解为对象(object)，纪录(record)，结构(struct)，字典(dictionary)，哈希表(hash table)，有键列表(keyed list)，或者关联数组(associative array)。</li>
+<li><strong>值的有序列表</strong>。在大部分语言中，它被理解为数组(array)。</li>
+</ul>
+<h4 id="2-JSON具有以下形式"><a href="#2-JSON具有以下形式" class="headerlink" title="2.JSON具有以下形式"></a>2.JSON具有以下形式</h4><p><strong>对象是一个无序的 “名称&#x2F;值” 集合。</strong>一个对象以 <strong>“{“</strong> (左括号)<strong>开始</strong>，<strong>“}”</strong> (右括号)<strong>结束</strong>。</p>
+<p>每个 <strong>“名称”</strong> 后跟一个<strong>“:”</strong>(冒号)；“名称&#x2F;值” 之间使用 <strong>“,”</strong> (逗号)分隔。</p>
+<p><img src="/%E5%88%9D%E6%8E%A2cJSON/%E5%AF%B9%E8%B1%A1.png" alt="对象"></p>
+<p><strong>数组是值的有序集合。</strong>一个数组以 “[“ 开始，”]”结束，值之间以 , 分隔。</p>
+<p><img src="/%E5%88%9D%E6%8E%A2cJSON/%E6%95%B0%E7%BB%84.png" alt="数组"></p>
+<p><strong>值可以是双引号括起来的字符串，数值，true，false，null，对象或数组。</strong>这些结构可以嵌套。</p>
+<p><img src="/%E5%88%9D%E6%8E%A2cJSON/%E5%80%BC.png" alt="值"></p>
+<p>示例：cJSON数据</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	“c_type<span class="string">&quot;: [&quot;</span><span class="type">char</span><span class="string">&quot;,&quot;</span><span class="type">short</span><span class="string">&quot;,&quot;</span><span class="type">int</span><span class="string">&quot;,&quot;</span><span class="type">long</span><span class="string">&quot;,&quot;</span><span class="type">double</span><span class="string">&quot;,&quot;</span><span class="type">bool</span><span class="string">&quot;]</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string">	&quot;</span>name<span class="string">&quot;: &quot;</span>韩康慨<span class="string">&quot;,</span></span><br><span class="line"><span class="string">	&quot;</span>age<span class="string">&quot;: 17,</span></span><br><span class="line"><span class="string">	&quot;</span>LOVE<span class="string">&quot;: [&quot;</span>Study<span class="string">&quot;,&quot;</span>Programming<span class="string">&quot;,&quot;</span>Go shopping<span class="string">&quot;],</span></span><br><span class="line"><span class="string">	&quot;</span>score<span class="string">&quot;: 145,</span></span><br><span class="line"><span class="string">	&quot;</span>address<span class="string">&quot;: &quot;</span>shanxi<span class="string">&quot;</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>cJSON有两种形式，一种是object对象，第二种是array数组。</strong></li>
+<li><strong>在对象中，成员是以  string : value  存在。string是对value的标识。value既可以存数值，浮点数，布尔值，字符串，亦可以是对象，数组。</strong></li>
+<li><strong>同样，在数组中，不仅可以存放数值，同时也可以是布尔，字符串，对象，数组。</strong></li>
+</ul>
+<p><strong>&amp;</strong> Json中的数组因为可以存不同类型的值或对象，所以具有很高的泛用性，可以作为一种新的数组思路来使用。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>这次我们初步探讨了一下JSON的基本形式和结构，了解到JSON在数据存储方面的形式以及不同形式的不同成员。</p>
+<p>数组和对象</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>HanKangKai</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2023/12/13/%E5%88%9D%E6%8E%A2cJSON/">http://example.com/2023/12/13/%E5%88%9D%E6%8E%A2cJSON/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/cJSON/"># cJSON</a>
+                    
+                        <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"># 数据结构</a>
+                    
+                        <a href="/tags/C-C/"># C/C++</a>
+                    
+                        <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/"># 字符串</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2023/12/10/%E7%9B%9B%E6%9C%80%E5%A4%9A%E6%B0%B4%E7%9A%84%E5%AE%B9%E5%99%A8/">盛最多水的容器</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© HanKangKai | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
