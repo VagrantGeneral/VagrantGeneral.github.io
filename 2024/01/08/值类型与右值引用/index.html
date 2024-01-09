@@ -223,6 +223,68 @@ window.msRequestAnimationFrame ||
                 <div class="container">
     
     
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
 
     
     <article class="post-wrap">
@@ -240,12 +302,61 @@ window.msRequestAnimationFrame ||
                         </span>
                     
                     
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/effectivemoderncpp/">effectivemoderncpp</a>
+                            
+                        </span>
+                    
                 </div>
             
         </header>
 
         <div class="post-content">
-            
+            <h2 id="1-你是否清楚下面函数执行几次拷贝"><a href="#1-你是否清楚下面函数执行几次拷贝" class="headerlink" title="1.你是否清楚下面函数执行几次拷贝"></a>1.你是否清楚下面函数执行几次拷贝</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">int geta() &#123;</span><br><span class="line">	int a = 10;</span><br><span class="line">	return a;</span><br><span class="line">&#125;</span><br><span class="line">int x = geta();</span><br></pre></td></tr></table></figure>
+
+<p>解析：</p>
+<p>int tmp &#x3D; a;</p>
+<p>int x &#x3D; tmp;</p>
+<p><strong>如此低效！</strong></p>
+<h2 id="2-C-98的表达式类型"><a href="#2-C-98的表达式类型" class="headerlink" title="2.C++98的表达式类型"></a>2.C++98的表达式类型</h2><h5 id="左值：指向特定内存的具名对象"><a href="#左值：指向特定内存的具名对象" class="headerlink" title="左值：指向特定内存的具名对象"></a>左值：指向特定内存的具名对象</h5><h5 id="右值：临时对象；字符串除外的字面量"><a href="#右值：临时对象；字符串除外的字面量" class="headerlink" title="右值：临时对象；字符串除外的字面量"></a>右值：临时对象；字符串除外的字面量</h5><p>(判断是否可以取地址，可以取地址左值，不可取地址右值)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int * p = &amp;(x++);//报错</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">int fun(int &amp; a) &#123;</span><br><span class="line">	int b = a;</span><br><span class="line">	a = a + 1;</span><br><span class="line">	return b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于x++,fun中定义一个临时变量来存<strong>x的引用</strong>，返回<strong>临时变量</strong></p>
+<p>对于临时变量不能取地址（右值）</p>
+<p>所以会报错</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int * p = &amp;(++x);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">int&amp; fun(int &amp; a) &#123;</span><br><span class="line">	a = a + 1;</span><br><span class="line">	return a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于++x,fun接受x的引用，返回x的引用</p>
+<p>x的引用只是起别名，不会变x的属性，可以取地址</p>
+<p>所以通过</p>
+<h2 id="3-C-11的表达式类型"><a href="#3-C-11的表达式类型" class="headerlink" title="3.C++11的表达式类型"></a>3.C++11的表达式类型</h2><h2 id="4-赋值操作只有拷贝这种唯一解吗？（类比一个人学习）"><a href="#4-赋值操作只有拷贝这种唯一解吗？（类比一个人学习）" class="headerlink" title="4.赋值操作只有拷贝这种唯一解吗？（类比一个人学习）"></a>4.赋值操作只有拷贝这种唯一解吗？（类比一个人学习）</h2><h4 id="a-拷贝操作：我想与一名10年码农一样强，我也应该学10年。"><a href="#a-拷贝操作：我想与一名10年码农一样强，我也应该学10年。" class="headerlink" title="a.拷贝操作：我想与一名10年码农一样强，我也应该学10年。"></a>a.拷贝操作：我想与一名10年码农一样强，我也应该学10年。</h4><h4 id="b-引用操作：我与这位10年码农共享一份大脑。"><a href="#b-引用操作：我与这位10年码农共享一份大脑。" class="headerlink" title="b.引用操作：我与这位10年码农共享一份大脑。"></a>b.引用操作：我与这位10年码农共享一份大脑。</h4><h4 id="c-移动操作：这位10年码农今年150岁将要去世，我就把他的大脑移植过来我用。"><a href="#c-移动操作：这位10年码农今年150岁将要去世，我就把他的大脑移植过来我用。" class="headerlink" title="c.移动操作：这位10年码农今年150岁将要去世，我就把他的大脑移植过来我用。"></a>c.移动操作：这位10年码农今年150岁将要去世，我就把他的大脑移植过来我用。</h4><h2 id="5-右值引用与移动语义"><a href="#5-右值引用与移动语义" class="headerlink" title="5.右值引用与移动语义"></a>5.右值引用与移动语义</h2><ul>
+<li><strong>左值引用不接受右值，所以出现只接受右值的右值引用。（Type&amp;&amp;）</strong></li>
+<li><strong>移动语义：std::move()可以将左值转换为右值。（“移动语义”没移动）</strong></li>
+</ul>
+<p><strong>移动操作的实现</strong></p>
+<ul>
+<li>移动构造</li>
+<li>移动赋值</li>
+</ul>
+<h3 id="注："><a href="#注：" class="headerlink" title="注："></a>注：</h3><ol>
+<li><strong>纯右值亦可以std::move。</strong></li>
+<li><strong>类中未实现移动构造，std::move后仍执行拷贝。</strong></li>
+<li><strong>右值引用仍是左值。</strong></li>
+<li></li>
+</ol>
+<h2 id="代码："><a href="#代码：" class="headerlink" title="代码："></a>代码：</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line">#include &lt;string&gt;</span><br><span class="line"></span><br><span class="line">// copy from 【现代 C++ 语言核心特性解析】</span><br><span class="line">class BigMemoryPool</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    static const int PoolSize = 4096;</span><br><span class="line">    BigMemoryPool() : pool_(new char[PoolSize]) &#123;&#125;</span><br><span class="line">    ~BigMemoryPool()</span><br><span class="line">    &#123;</span><br><span class="line">        if (pool_ != nullptr)</span><br><span class="line">        &#123;</span><br><span class="line">            delete[] pool_;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    BigMemoryPool(BigMemoryPool &amp;&amp;other)</span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; &quot;move&quot; &lt;&lt; std::endl;</span><br><span class="line">        pool_ = other.pool_;</span><br><span class="line">        other.pool_ = nullptr;</span><br><span class="line">    &#125;</span><br><span class="line">    BigMemoryPool(const BigMemoryPool &amp;other) : pool_(new char[PoolSize])</span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; &quot;copy&quot; &lt;&lt; std::endl;</span><br><span class="line">        memcpy(pool_, other.pool_, PoolSize);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line">    char *pool_;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">BigMemoryPool getPool()</span><br><span class="line">&#123;</span><br><span class="line">    BigMemoryPool memoryPool;</span><br><span class="line">    return memoryPool;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">BigMemoryPool getPool(const BigMemoryPool aa)</span><br><span class="line">&#123;</span><br><span class="line">    return aa;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int gx = 10;</span><br><span class="line">int get_gx()</span><br><span class="line">&#123;</span><br><span class="line">    return gx;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int get_x()</span><br><span class="line">&#123;</span><br><span class="line">    int x = 20;</span><br><span class="line">    return x;</span><br><span class="line">&#125;</span><br><span class="line">BigMemoryPool get_pool(const BigMemoryPool &amp;pool)</span><br><span class="line">&#123;</span><br><span class="line">    return pool;</span><br><span class="line">&#125;</span><br><span class="line">// BigMemoryPool tmp = pool;</span><br><span class="line"></span><br><span class="line">BigMemoryPool make_pool()</span><br><span class="line">&#123;</span><br><span class="line">    BigMemoryPool pool;</span><br><span class="line">    return get_pool(pool);</span><br><span class="line">&#125;</span><br><span class="line">//  BigMemoryPool tmp2 = tmp;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    const int x = 10;</span><br><span class="line">    // &amp;get_x(); //get_x()是右值表达式，不能取地址</span><br><span class="line">    // &amp;get_gx(); //get_gx()是右值表达式。不能取地址</span><br><span class="line">    // int y = std::move(x);</span><br><span class="line">    const int &amp;z = x;</span><br><span class="line">    const int &amp;&amp;y = std::move(x);</span><br><span class="line">    &amp;z;</span><br><span class="line">    // x++;</span><br><span class="line">    const int cx = 100;</span><br><span class="line">    const int &amp;&amp;cy = std::move(cx);</span><br><span class="line">    // int &amp;y = get_x();</span><br><span class="line"></span><br><span class="line">    // int &amp;&amp;y = x;</span><br><span class="line"></span><br><span class="line">    // int *p1 = &amp;x++;</span><br><span class="line">    // int *p2 = &amp;++x;</span><br><span class="line">    auto p3 = &amp;&quot;hello world&quot;;</span><br><span class="line">    int &amp;&amp;m = get_x();</span><br><span class="line"></span><br><span class="line">    // BigMemoryPool aaa;</span><br><span class="line">    BigMemoryPool ccc = make_pool();</span><br><span class="line">    // BigMemoryPool ccc = tmp2</span><br><span class="line">    // BigMemoryPool &amp;&amp;ddd = std::move(aaa);</span><br><span class="line">    // BigMemoryPool &amp;ccc = aaa;</span><br><span class="line">    int mmm = 10;</span><br><span class="line">    // BigMemoryPool bbb = getPool();</span><br><span class="line">    // BigMemoryPool ccc = std::move(bbb);</span><br><span class="line"></span><br><span class="line">    // BigMemoryPool aaa = getPool();</span><br><span class="line">    // BigMemoryPool ccc = getPool(bbb);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
         </div>
 
         
@@ -282,6 +393,12 @@ window.msRequestAnimationFrame ||
                 <span>Tag(s):</span>
                 <span class="tag">
                     
+                    
+                        <a href="/tags/%E5%80%BC%E7%B1%BB%E5%9E%8B/"># 值类型</a>
+                    
+                        <a href="/tags/std-move/"># std::move</a>
+                    
+                        
                 </span>
             </div>
             <div>
