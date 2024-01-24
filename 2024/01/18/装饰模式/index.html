@@ -223,6 +223,68 @@ window.msRequestAnimationFrame ||
                 <div class="container">
     
     
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
 
     
     <article class="post-wrap">
@@ -240,12 +302,24 @@ window.msRequestAnimationFrame ||
                         </span>
                     
                     
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
+                            
+                        </span>
+                    
                 </div>
             
         </header>
 
         <div class="post-content">
-            
+            <h3 id="装饰模式"><a href="#装饰模式" class="headerlink" title="装饰模式"></a>装饰模式</h3><p>在某些情况下我们可能会 “过度使用继承来扩展对象的功能”，从而为类型引入静态特质。</p>
+<p>动态（组合）地给一个对象增加一些额外的职责。就增加功能而言，装饰模式比生成子类（继承）更为灵活（消除重复代码，减少子类个数）。</p>
+<p>解决主题类在多个方向上的扩展功能。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">class Stream &#123;</span><br><span class="line">	virtual void read() = 0;</span><br><span class="line">	virtual void seek() = 0;</span><br><span class="line">	virtual void write() = 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class FileStream : public Stream &#123;</span><br><span class="line">	virtual void read() &#123;</span><br><span class="line">		//file操作</span><br><span class="line">	&#125;</span><br><span class="line">	virtual void seek() &#123;</span><br><span class="line">		//file操作</span><br><span class="line">	&#125;</span><br><span class="line">	virtual void write() &#123;</span><br><span class="line">		//file操作</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class NetStream : public Stream &#123;</span><br><span class="line">	virtual void read() &#123;</span><br><span class="line">		//Net操作</span><br><span class="line">	&#125;</span><br><span class="line">	virtual void seek() &#123;</span><br><span class="line">		//Net操作</span><br><span class="line">	&#125;</span><br><span class="line">	virtual void write() &#123;</span><br><span class="line">		//Net操作</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//扩展（装饰）</span><br><span class="line">class BuffStream : public Stream &#123;</span><br><span class="line">	Stream * m_stream;</span><br><span class="line">	</span><br><span class="line">	virtual void read() &#123;</span><br><span class="line">		//添加Buff后</span><br><span class="line">		m_stream -&gt; Read();</span><br><span class="line">	&#125;</span><br><span class="line">	virtual void seek() &#123;</span><br><span class="line">		//添加Buff后</span><br><span class="line">		m_stream -&gt; Seek();</span><br><span class="line">	&#125;</span><br><span class="line">	virtual void write() &#123;</span><br><span class="line">		//添加Buff后</span><br><span class="line">		m_stream -&gt; Write();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
         </div>
 
         
@@ -282,6 +356,10 @@ window.msRequestAnimationFrame ||
                 <span>Tag(s):</span>
                 <span class="tag">
                     
+                    
+                        <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"># 设计模式</a>
+                    
+                        
                 </span>
             </div>
             <div>
