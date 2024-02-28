@@ -15,7 +15,7 @@
 
 
 
-<title>C++中的多态与RTTI | Wandergeneral</title>
+<title>const关键字 | Wandergeneral</title>
 
 
 
@@ -223,11 +223,73 @@ window.msRequestAnimationFrame ||
                 <div class="container">
     
     
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
 
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">C++中的多态与RTTI</h1>
+            <h1 class="post-title">const关键字</h1>
             
                 <div class="post-meta">
                     
@@ -236,7 +298,7 @@ window.msRequestAnimationFrame ||
 
                     
                         <span class="post-time">
-                        Date: <a href="#">一月 8, 2024&nbsp;&nbsp;21:38:55</a>
+                        Date: <a href="#">二月 28, 2024&nbsp;&nbsp;19:30:12</a>
                         </span>
                     
                     
@@ -245,7 +307,47 @@ window.msRequestAnimationFrame ||
         </header>
 
         <div class="post-content">
-            
+            <h1 id="const的作用"><a href="#const的作用" class="headerlink" title="const的作用"></a>const的作用</h1><h3 id="1-定义常量"><a href="#1-定义常量" class="headerlink" title="1.定义常量"></a>1.定义常量</h3><p>定义的变量的值不能被改变，在整个作用域中都保持固定。换句话说，就是常类型的变量或对象的值不能被更新。</p>
+<p><img src="/Pictures/www.png" alt="www"></p>
+<h3 id="2-类型检查"><a href="#2-类型检查" class="headerlink" title="2.类型检查"></a>2.类型检查</h3><p>const常量与#define宏定义的区别：[[const与define的区别|区别]]</p>
+<h3 id="3-防止修改，起保护作用，增加程序健壮性"><a href="#3-防止修改，起保护作用，增加程序健壮性" class="headerlink" title="3.防止修改，起保护作用，增加程序健壮性"></a>3.防止修改，起保护作用，增加程序健壮性</h3><p>void f(const int i) {<br>    i++;&#x2F;&#x2F;错误<br>}<br>确保不会改变const修饰的变量</p>
+<h3 id="4-可以节省空间，避免不必要的内存分配"><a href="#4-可以节省空间，避免不必要的内存分配" class="headerlink" title="4.可以节省空间，避免不必要的内存分配"></a>4.可以节省空间，避免不必要的内存分配</h3><p>const定义的常量在程序运行过程中只是一份拷贝，而#define定义的常量在内存中有若干个拷贝；</p>
+<h1 id="顶层const与底层const的区分"><a href="#顶层const与底层const的区分" class="headerlink" title="顶层const与底层const的区分"></a>顶层const与底层const的区分</h1><h3 id="《C-Primer》-当执行对象拷贝操作时，常量的顶层const不受影响，而底层const必须一致"><a href="#《C-Primer》-当执行对象拷贝操作时，常量的顶层const不受影响，而底层const必须一致" class="headerlink" title="!!!《C++Primer》: 当执行对象拷贝操作时，常量的顶层const不受影响，而底层const必须一致"></a>!!!《C++Primer》: 当执行对象拷贝操作时，常量的顶层const不受影响，而底层const必须一致</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">const int a = 10;</span><br><span class="line">int b = a;</span><br></pre></td></tr></table></figure>
+<p>const为<strong>顶层const</strong>,<strong>不受影响</strong>即可忽略。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const int *const p = new int(10);  </span><br></pre></td></tr></table></figure>
+<p>左侧const修饰指针，为底层const<br>右侧const修饰变量，为顶层const,(根据原则，此const可忽略)  </p>
+<p>const int * p;<br>底层const</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int *p1 = p;//错误</span><br></pre></td></tr></table></figure>
+
+<p>p1为int * ，不能接const int *</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int * const pc = new int(10); </span><br><span class="line">int * pb = pc;//正确</span><br></pre></td></tr></table></figure>
+
+<p>pc为int *，pb为int *，pb可以接受pc</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">const int mm = 10;  </span><br><span class="line">int * pd = &amp;mm;错误</span><br></pre></td></tr></table></figure>
+
+<p>mm为顶层const，但对mm取地址后，为<strong>底层const</strong>，<strong>必须一致</strong>。</p>
+<p>pd为int *，不能接const int *。</p>
+<p>const int a &#x3D; 10;<br>顶层const,可忽略  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int b = a;  </span><br><span class="line">const int b = a;</span><br><span class="line">const int &amp; ra = 10;</span><br></pre></td></tr></table></figure>
+
+<p><strong>引用</strong>是起别名，底层为指针操作，此const为<strong>底层const</strong>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const int &amp; ra = b;</span><br></pre></td></tr></table></figure>
+
+<p>无论b是否改变，ra是b的别名，不会改变b（即<strong>不能且不会通过ra来改变b的值</strong>）</p>
+<p><strong>常量引用可接任意值</strong></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结:"></a>总结:</h3><ul>
+<li><p><strong>引用</strong>不是对象时且不进行拷贝，则<strong>不满足以上原则</strong></p>
+</li>
+<li><p><strong>常量引用</strong>如果<strong>在左侧</strong>，右侧<strong>可接</strong>受<strong>任何值</strong></p>
+</li>
+<li><p><strong>非常量引用 &#x3D; 常量</strong> （会<strong>报错</strong>）</p>
+</li>
+<li><p><strong>引用</strong>如果在<strong>等号右侧</strong>，请<strong>忽略</strong>它(&amp;)</p>
+</li>
+<li><p><strong>非常量 &#x3D; 常量引用</strong> （合理）</p>
+</li>
+</ul>
+
         </div>
 
         
@@ -259,7 +361,7 @@ window.msRequestAnimationFrame ||
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="http://example.com/2024/01/08/C-%E4%B8%AD%E7%9A%84%E5%A4%9A%E6%80%81%E4%B8%8ERTTI/">http://example.com/2024/01/08/C-%E4%B8%AD%E7%9A%84%E5%A4%9A%E6%80%81%E4%B8%8ERTTI/</a></span>
+                        <span><a href="http://example.com/2024/02/28/const%E5%85%B3%E9%94%AE%E5%AD%97/">http://example.com/2024/02/28/const%E5%85%B3%E9%94%AE%E5%AD%97/</a></span>
                     </p>
                 
                 
@@ -282,6 +384,12 @@ window.msRequestAnimationFrame ||
                 <span>Tag(s):</span>
                 <span class="tag">
                     
+                    
+                        <a href="/tags/const/"># const</a>
+                    
+                        <a href="/tags/c-c/"># c/c++</a>
+                    
+                        
                 </span>
             </div>
             <div>
@@ -292,10 +400,6 @@ window.msRequestAnimationFrame ||
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2024/01/09/I-O%E5%A4%8D%E7%94%A8/">I/O复用</a>
-            
-            
-            <a class="next" rel="next" href="/2024/01/08/C-%E7%B1%BB%E5%AF%B9%E8%B1%A1%E5%B8%83%E5%B1%80/">C++类对象布局</a>
             
         </section>
 
