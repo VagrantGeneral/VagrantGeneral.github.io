@@ -15,7 +15,7 @@
 
 
 
-<title>extern | Wandergeneral</title>
+<title>extern关键字 | Wandergeneral</title>
 
 
 
@@ -223,11 +223,73 @@ window.msRequestAnimationFrame ||
                 <div class="container">
     
     
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
 
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">extern</h1>
+            <h1 class="post-title">extern关键字</h1>
             
                 <div class="post-meta">
                     
@@ -236,16 +298,38 @@ window.msRequestAnimationFrame ||
 
                     
                         <span class="post-time">
-                        Date: <a href="#">二月 28, 2024&nbsp;&nbsp;22:07:28</a>
+                        Date: <a href="#">二月 29, 2024&nbsp;&nbsp;0:31:02</a>
                         </span>
                     
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E5%85%B3%E9%94%AE%E5%AD%97/">关键字</a>
+                            
+                        </span>
                     
                 </div>
             
         </header>
 
         <div class="post-content">
-            
+            <p>利用关键字extern，可以在一个文件中引用另一个文件中定义的变量或者函数;</p>
+<h3 id="1-引用同一文件下的变量"><a href="#1-引用同一文件下的变量" class="headerlink" title="1.引用同一文件下的变量"></a>1.引用同一文件下的变量</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;  </span><br><span class="line">int func();  </span><br><span class="line">int main()  </span><br><span class="line">&#123;  </span><br><span class="line">	func(); //1  </span><br><span class="line">	extern int num;  </span><br><span class="line">	printf(&quot;%d&quot;,num); //2  </span><br><span class="line">	return 0;  </span><br><span class="line">&#125;  </span><br><span class="line">int num = 3;  </span><br><span class="line">int func()  </span><br><span class="line">&#123;  </span><br><span class="line">	printf(&quot;%d\n&quot;,num);  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果没有extern,对于printf来说不知道num在哪；但对于func的定义，num在之前已经定义过了；</p>
+<p>因此，在不想改变num的位置时，<code>extern是一个不错的选择</code>。他会告诉编译器这个变量可能在后边的程序里，要到后面去找。</p>
+<h3 id="2-引用另一文件下的变量"><a href="#2-引用另一文件下的变量" class="headerlink" title="2.引用另一文件下的变量"></a>2.引用另一文件下的变量</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;  </span><br><span class="line">int main()  &#123;  </span><br><span class="line">	extern int num;  </span><br><span class="line">	printf(&quot;%d&quot;,num);  </span><br><span class="line">	return 0;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;  </span><br><span class="line">int num = 5;  </span><br><span class="line">voidfunc()  &#123;  </span><br><span class="line">	printf(&quot;fun in a.c&quot;);  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里b.c中定义了一个变量num，如果main.c中想要引用这个变量，那么可以使用extern这个关键字。注意这里能成功引用的原因是，num这个关键字在b.c中是一个全局变量，也就是说<code>只有当一个变量是一个全局变量时，extern变量才会起作用</code>。</p>
+<p>另外，<code>extern关键字只需要指明类型和变量名</code>就行了，不能再重新赋值，<em>初始化需要在原文件所在处进行，如果不进行初始化的话，全局变量会被编译器自动初始化为0</em>。但是在声明之后就可以使用变量名进行修改了。</p>
+<p>如果不想这个变量被修改可以使用const关键字进行修饰，写法如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">extern const int num;</span><br></pre></td></tr></table></figure>
+
+<p><em>使用include将另一个文件全部包含进去可以引用另一个文件中的变量</em>，但是这样做的结果就是，被包含的文件中的所有的变量和方法都可以被这个文件使用，这样就变得<em>不安全</em>，如果只是希望一个文件使用另一个文件中的<em>某个变量</em>还是<code>使用extern关键字更好</code>。</p>
+<h3 id="3-引用另一文件下的函数"><a href="#3-引用另一文件下的函数" class="headerlink" title="3.引用另一文件下的函数"></a>3.引用另一文件下的函数</h3><p>extern除了引用另一个文件中的变量外，还可以引用另一个文件中的函数，引用方法和引用变量相似。</p>
+<p>因为所有的函数都是全局的，所以对函数的extern用法和对全局变量的修饰基本相同，需要注意的就是，需要<em>指明返回值的类型和参数</em>。</p>
+
         </div>
 
         
@@ -259,7 +343,7 @@ window.msRequestAnimationFrame ||
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="http://example.com/2024/02/28/extern/">http://example.com/2024/02/28/extern/</a></span>
+                        <span><a href="http://example.com/2024/02/29/extern%E5%85%B3%E9%94%AE%E5%AD%97/">http://example.com/2024/02/29/extern%E5%85%B3%E9%94%AE%E5%AD%97/</a></span>
                     </p>
                 
                 
@@ -282,6 +366,12 @@ window.msRequestAnimationFrame ||
                 <span>Tag(s):</span>
                 <span class="tag">
                     
+                    
+                        <a href="/tags/c-c/"># c/c++</a>
+                    
+                        <a href="/tags/extern/"># extern</a>
+                    
+                        
                 </span>
             </div>
             <div>
@@ -292,10 +382,10 @@ window.msRequestAnimationFrame ||
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2024/02/28/decltype%E5%85%B3%E9%94%AE%E5%AD%97/">decltype关键字</a>
+                <a class="prev" rel="prev" href="/2024/02/29/malloc%E4%B8%8Efree/">malloc与free</a>
             
             
-            <a class="next" rel="next" href="/2024/02/28/auto%E5%85%B3%E9%94%AE%E5%AD%97/">auto关键字</a>
+            <a class="next" rel="next" href="/2024/02/28/Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/">Lambda表达式</a>
             
         </section>
 
