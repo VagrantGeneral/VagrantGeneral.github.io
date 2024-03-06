@@ -15,7 +15,7 @@
 
 
 
-<title>friend关键字 | Wandergeneral</title>
+<title>类型萃取 | Wandergeneral</title>
 
 
 
@@ -227,7 +227,7 @@ window.msRequestAnimationFrame ||
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">friend关键字</h1>
+            <h1 class="post-title">类型萃取</h1>
             
                 <div class="post-meta">
                     
@@ -236,14 +236,14 @@ window.msRequestAnimationFrame ||
 
                     
                         <span class="post-time">
-                        Date: <a href="#">二月 28, 2024&nbsp;&nbsp;22:09:47</a>
+                        Date: <a href="#">三月 6, 2024&nbsp;&nbsp;20:44:34</a>
                         </span>
                     
                     
                         <span class="post-category">
                     Category:
                             
-                                <a href="/categories/%E5%85%B3%E9%94%AE%E5%AD%97/">关键字</a>
+                                <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%9D%A1%E6%AC%BE/">设计条款</a>
                             
                         </span>
                     
@@ -252,14 +252,17 @@ window.msRequestAnimationFrame ||
         </header>
 
         <div class="post-content">
-            <p>C++中的friend关键字用于声明友元函数或友元类。友元函数或友元类可以访问当前类的私有成员和保护成员，即使它们不是当前类的成员函数或成员类。</p>
-<p>1、友元函数 友元函数是一个独立的函数，它可以访问当前类的私有成员和保护成员，即使它不是当前类的成员函数。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyClass</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> x;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">MyClass</span>(<span class="type">int</span> a) : <span class="built_in">x</span>(a) &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">friend</span> <span class="type">void</span> <span class="title">myFriendFunc</span><span class="params">(MyClass obj)</span></span>; <span class="comment">// 声明友元函数</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">myFriendFunc</span><span class="params">(MyClass obj)</span> </span>&#123; <span class="comment">// 定义友元函数</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;x = &quot;</span> &lt;&lt; obj.x &lt;&lt; endl; <span class="comment">// 可以访问MyClass的私有成员x</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="function">MyClass <span class="title">obj</span><span class="params">(<span class="number">10</span>)</span></span>;</span><br><span class="line">    <span class="built_in">myFriendFunc</span>(obj); <span class="comment">// 调用友元函数</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+            <p>如果你尝试过模板元编程（<em>template metaprogramming</em>，TMP）， 你一定会碰到取模板类型参数然后基于它创建另一种类型的情况。举个例子，给一个类型<code>T</code>，如果你想去掉<code>T</code>的常量修饰和引用修饰（<code>const</code>- or reference qualifiers），比如你想把<code>const std::string&amp;</code>变成<code>std::string</code>。又或者你想给一个类型加上<code>const</code>或变为左值引用，比如把<code>Widget</code>变成<code>const Widget</code>或<code>Widget&amp;</code>。</p>
+<p>C++11在<em>type traits</em>（类型特性）中给了你一系列工具去实现类型转换，如果要使用这些模板请包含头文件<code>&lt;type_traits&gt;</code>。里面有许许多多<em>type traits</em>，也不全是类型转换的工具，也包含一些可预测接口的工具。给一个你想施加转换的类型<code>T</code>，结果类型就是<code>std::</code>transformation<code>&lt;T&gt;::type</code>，比如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">std::remove_const&lt;T&gt;::type          <span class="comment">//从const T中产出T</span></span><br><span class="line"></span><br><span class="line">std::remove_reference&lt;T&gt;::type      <span class="comment">//从T&amp;和T&amp;&amp;中产出T</span></span><br><span class="line"></span><br><span class="line">std::add_lvalue_reference&lt;T&gt;::type  <span class="comment">//从T中产出T&amp;</span></span><br></pre></td></tr></table></figure>
+<p>注意类型转换尾部的<code>::type</code>。如果你在一个模板内部将他们施加到类型形参上（实际代码中你也总是这么用），你也需要在它们前面加上<code>typename</code>。至于为什么要这么做是因为这些C++11的<em>type traits</em>是通过在<code>struct</code>内嵌套<code>typedef</code>来实现的。</p>
+<p>因为标准委员会没有及时认识到别名声明是更好的选择，所以直到C++14它们才提供了使用别名声明的版本。这些别名声明有一个通用形式：对于C++11的类型转换<code>std::</code>transformation<code>&lt;T&gt;::type</code>在C++14中变成了<code>std::</code>transformation<code>_t</code>。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">std::remove_const&lt;T&gt;::type          <span class="comment">//C++11: const T → T</span></span><br><span class="line">std::<span class="type">remove_const_t</span>&lt;T&gt;              <span class="comment">//C++14 等价形式</span></span><br><span class="line"></span><br><span class="line">std::remove_reference&lt;T&gt;::type      <span class="comment">//C++11: T&amp;/T&amp;&amp; → T</span></span><br><span class="line">std::<span class="type">remove_reference_t</span>&lt;T&gt;          <span class="comment">//C++14 等价形式</span></span><br><span class="line"></span><br><span class="line">std::add_lvalue_reference&lt;T&gt;::type  <span class="comment">//C++11: T → T&amp;</span></span><br><span class="line">std::<span class="type">add_lvalue_reference_t</span>&lt;T&gt;      <span class="comment">//C++14 等价形式</span></span><br></pre></td></tr></table></figure>
 
-<p>2、友元类 友元类是指一个类可以访问另一个类的私有成员和保护成员，即使它不是另一个类的派生类或基类。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyClass</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> x;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">MyClass</span>(<span class="type">int</span> a) : <span class="built_in">x</span>(a) &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">friend</span> <span class="keyword">class</span> <span class="title class_">MyFriendClass</span>; <span class="comment">// 声明友元类</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyFriendClass</span> &#123; <span class="comment">// 定义友元类</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">printX</span><span class="params">(MyClass obj)</span> </span>&#123; <span class="comment">// 可以访问MyClass的私有成员x</span></span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;x = &quot;</span> &lt;&lt; obj.x &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="function">MyClass <span class="title">obj</span><span class="params">(<span class="number">10</span>)</span></span>;</span><br><span class="line">    MyFriendClass friendObj;</span><br><span class="line">    friendObj.<span class="built_in">printX</span>(obj); <span class="comment">// 调用友元类的成员函数</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>C++11的的形式在C++14中也有效，但是我不能理解为什么你要去用它们。就算你没办法使用C++14，使用别名模板也是小儿科。只需要C++11的语言特性，甚至每个小孩都能仿写，对吧？如果你有一份C++14标准，就更简单了，只需要复制粘贴：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>&gt;</span><br><span class="line"><span class="keyword">using</span> <span class="type">remove_const_t</span> = <span class="keyword">typename</span> remove_const&lt;T&gt;::type;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>&gt;</span><br><span class="line"><span class="keyword">using</span> <span class="type">remove_reference_t</span> = <span class="keyword">typename</span> remove_reference&lt;T&gt;::type;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>&gt;</span><br><span class="line"><span class="keyword">using</span> <span class="type">add_lvalue_reference_t</span> = <span class="keyword">typename</span> add_lvalue_reference&lt;T&gt;::type;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>总结：friend关键字用于声明友元函数或友元类，它们可以访问当前类的私有成员和保护成员，即使它们不是当前类的成员函数或成员类。友元函数是一个独立的函数，而友元类是一个类可以访问另一个类的私有成员和保护成员。友元函数或友元类的声明必须在当前类的定义中进行，但它们的定义可以在当前类的定义之外进行。</p>
+<p>看见了吧？不能再简单了。</p>
 
         </div>
 
@@ -274,7 +277,7 @@ window.msRequestAnimationFrame ||
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="http://example.com/2024/02/28/friend%E5%85%B3%E9%94%AE%E5%AD%97/">http://example.com/2024/02/28/friend%E5%85%B3%E9%94%AE%E5%AD%97/</a></span>
+                        <span><a href="http://example.com/2024/03/06/%E7%B1%BB%E5%9E%8B%E8%90%83%E5%8F%96/">http://example.com/2024/03/06/%E7%B1%BB%E5%9E%8B%E8%90%83%E5%8F%96/</a></span>
                     </p>
                 
                 
@@ -298,7 +301,7 @@ window.msRequestAnimationFrame ||
                 <span class="tag">
                     
                     
-                        <a href="/tags/friend/"># friend</a>
+                        <a href="/tags/%E7%B1%BB%E5%9E%8B%E8%90%83%E5%8F%96/"># 类型萃取</a>
                     
                         
                 </span>
@@ -311,10 +314,10 @@ window.msRequestAnimationFrame ||
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2024/02/28/inline%E5%85%B3%E9%94%AE%E5%AD%97/">inline关键字</a>
+                <a class="prev" rel="prev" href="/2024/03/06/%E4%BC%98%E5%85%88%E8%80%83%E8%99%91auto%E8%80%8C%E9%9D%9E%E6%98%BE%E7%A4%BA%E7%B1%BB%E5%9E%8B%E5%A3%B0%E6%98%8E/">优先考虑auto而非显示类型声明</a>
             
             
-            <a class="next" rel="next" href="/2024/02/28/explicit%E5%85%B3%E9%94%AE%E5%AD%97/">explicit关键字</a>
+            <a class="next" rel="next" href="/2024/02/29/%E5%88%97%E8%A1%A8%E5%88%9D%E5%A7%8B%E5%8C%96/">列表初始化</a>
             
         </section>
 
