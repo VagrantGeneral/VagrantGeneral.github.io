@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="HanKangKai">
+
+
+
+    <meta name="description" content="流浪者">
+
+
+
+<title>区别使用()和{}创建对象 | Wandergeneral</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+    <script>
+    !
+    function() {
+        function n(n, e, t) {
+            return n.getAttribute(e) || t
+        }
+        function e(n) {
+            return document.getElementsByTagName(n)
+        }
+        function t() {
+            var t = e("script"),
+                o = t.length,
+                i = t[o - 1];
+            return {
+                l: o,
+                z: n(i, "zIndex", -1), //置于主页面背后
+                o: n(i, "opacity", .5), //线条透明度
+                c: n(i, "color", "0,0,0"), //线条颜色
+                n: n(i, "count", 100) //线条数量
+            }
+        }
+        function o() {
+            a = m.width = window.innerWidth ||
+    document.documentElement.clientWidth || document.body.clientWidth,
+            c = m.height = window.innerHeight ||
+    document.documentElement.clientHeight || document.body.clientHeight
+        }
+        function i() {
+            r.clearRect(0, 0, a, c);
+            var n, e, t, o, m, l;
+            s.forEach(function(i, x) {
+                for (i.x += i.xa, i.y += i.ya, i.xa *= i.x > a || i.x < 0 ? -1 :
+1, i.ya *= i.y > c || i.y < 0 ? -1 : 1, r.fillRect(i.x - .5, i.y - .5, 1,
+1), e = x + 1; e < u.length; e++) n = u[e],
+                null !== n.x && null !== n.y && (o = i.x - n.x, m = i.y - n.y, l
+= o * o + m * m, l < n.max && (n === y && l >= n.max / 2 && (i.x -= .03 * o,
+i.y -= .03 * m), t = (n.max - l) / n.max, r.beginPath(), r.lineWidth = t /
+2, r.strokeStyle = "rgba(" + d.c + "," + (t + .2) + ")", r.moveTo(i.x, i.y),
+r.lineTo(n.x, n.y), r.stroke()))
+            }),
+            x(i)
+        }
+            var a, c, u, m = document.createElement("canvas"),
+                d = t(),
+                l = "c_n" + d.l,
+                r = m.getContext("2d"),
+                x = window.requestAnimationFrame || window.webkitRequestAnimationFrame
+|| window.mozRequestAnimationFrame || window.oRequestAnimationFrame ||
+window.msRequestAnimationFrame ||
+                function(n) {
+                    window.setTimeout(n, 1e3 / 45)
+                },
+                w = Math.random,
+                y = {
+                    x: null,
+                    y: null,
+                    max: 2e4
+                };
+            m.id = l,
+            m.style.cssText = "position:fixed;top:0;left:0;z-index:" + d.z +
+";opacity:" + d.o,
+            e("body")[0].appendChild(m),
+            o(),
+            window.onresize = o,
+            window.onmousemove = function(n) {
+                n = n || window.event,
+                    y.x = n.clientX,
+                    y.y = n.clientY
+                评论区采用的时Valine https://valine.js.org/ 和LeanCloud
+            },
+            window.onmouseout = function() {
+                y.x = null,
+                y.y = null
+            };
+            for (var s = [], f = 0; d.n > f; f++) {
+                var h = w() * a,
+                    g = w() * c,
+                    v = 2 * w() - 1,
+                    p = 2 * w() - 1;
+                    s.push({
+                        x: h,
+                        y: g,
+                        xa: v,
+                        ya: p,
+                        max: 6e3
+                    })
+            }
+            u = s.concat([y]),
+            setTimeout(function() {
+                i()
+            },
+            100)
+        } ();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">HanKangKai&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">HanKangKai&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">区别使用()和{}创建对象</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">HanKangKai</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">二月 29, 2024&nbsp;&nbsp;18:50:36</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%9D%A1%E6%AC%BE/">设计条款</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p><img src="/Pictures/C++%E8%A1%A5%E5%AE%8C%E8%AE%A1%E5%88%92%E8%83%8C%E6%99%AF.png" alt="C++补完计划背景"></p>
+<p>C++11初始化对象的方法有很多种，一般来说，用（）或者{}括起来或者放在&#x3D;右边</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">x</span><span class="params">(<span class="number">0</span>)</span></span>;               <span class="comment">//使用小括号初始化</span></span><br><span class="line"><span class="type">int</span> y = <span class="number">0</span>;              <span class="comment">//使用&quot;=&quot;初始化</span></span><br><span class="line"><span class="type">int</span> z&#123; <span class="number">0</span> &#125;;             <span class="comment">//使用花括号初始化</span></span><br></pre></td></tr></table></figure>
+<p>你也可以使用{}与&#x3D;的组合</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> z = &#123; <span class="number">0</span> &#125;;          <span class="comment">//使用&quot;=&quot;和花括号</span></span><br></pre></td></tr></table></figure>
+
+<p>当我们看到&#x3D;时，第一时间想到的可能是赋值运算。这是不确定的：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Widget w1;              <span class="comment">//调用默认构造函数</span></span><br><span class="line">Widget w2 = w1;         <span class="comment">//不是赋值运算，调用拷贝构造函数</span></span><br><span class="line">w1 = w2;                <span class="comment">//是赋值运算，调用拷贝赋值运算符（copy operator=）</span></span><br></pre></td></tr></table></figure>
+
+<p>C++11使用统一初始化来管理这些语法。</p>
+<p>括号初始化可以表达以前表达不出的东西，例如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">std::vector&lt;<span class="type">int</span>&gt; v&#123; <span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span> &#125;; <span class="comment">//使用1，3，5初始化v</span></span><br></pre></td></tr></table></figure>
+
+<p>括号初始化也能被用于为非静态数据成员指定默认初始值。C++11允许”&#x3D;”初始化不加花括号也拥有这种能力：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Widget</span>&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> x&#123; <span class="number">0</span> &#125;;                 <span class="comment">//没问题，x初始值为0</span></span><br><span class="line">    <span class="type">int</span> y = <span class="number">0</span>;                  <span class="comment">//也可以</span></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">z</span><span class="params">(<span class="number">0</span>)</span></span>;                   <span class="comment">//错误！</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>因此我们很容易理解为什么括号初始化又叫统一初始化，在C++中这三种方式都被指派为初始化表达式，但是只有括号任何地方都能被使用。</p>
+<p>括号表达式有一个异常的特性，它不允许内置类型间隐式的变窄转换</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">double</span> x, y, z;</span><br><span class="line"><span class="type">int</span> sum1&#123; x + y + z &#125;;          <span class="comment">//错误！double的和可能不能表示为int</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">sum2</span><span class="params">(x + y +z)</span></span>;             <span class="comment">//可以（表达式的值被截为int）</span></span><br><span class="line"><span class="type">int</span> sum3 = x + y + z;           <span class="comment">//同上</span></span><br></pre></td></tr></table></figure>
+
+<p>另一个值得注意的特性是括号表达式对于C++最令人头疼的解析问题有天生的免疫性。例如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Widget <span class="title">w1</span><span class="params">(<span class="number">10</span>)</span></span>;                  <span class="comment">//使用实参10调用Widget的一个构造函数</span></span><br><span class="line"></span><br><span class="line"><span class="function">Widget <span class="title">w2</span><span class="params">()</span></span>;                    <span class="comment">//最令人头疼的解析！声明一个函数w2，返回Widget</span></span><br></pre></td></tr></table></figure>
+
+<p>由于函数声明中形参列表不能使用花括号，所以使用花括号初始化表明你想调用默认构造函数构造对象就没有问题：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Widget w3&#123;&#125;;                    <span class="comment">//调用没有参数的构造函数构造对象</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>括号初始化的缺点也非常明显，就是其在括号初始化、<code>std::initializer_list</code>和构造函数重载之间的关系进一步混乱。</p>
+<p>当<code>auto</code>声明的变量使用花括号初始化，变量类型就会被推导为<code>std::initializer_list</code>，尽管使用相同内容的其他初始化方式会产生正常的结果。所以，你越喜欢用<code>auto</code>，你就越不能用括号初始化。</p>
+<p>看一下例子：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Widget</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:  </span><br><span class="line">    <span class="built_in">Widget</span>(<span class="type">int</span> i, <span class="type">bool</span> b);      <span class="comment">//同上</span></span><br><span class="line">    <span class="built_in">Widget</span>(<span class="type">int</span> i, <span class="type">double</span> d);    <span class="comment">//同上</span></span><br><span class="line">    <span class="built_in">Widget</span>(std::initializer_list&lt;<span class="type">long</span> <span class="type">double</span>&gt; il);      <span class="comment">//新添加的</span></span><br><span class="line">    …</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function">Widget <span class="title">w1</span><span class="params">(<span class="number">10</span>, <span class="literal">true</span>)</span></span>;    <span class="comment">//使用小括号初始化，同之前一样</span></span><br><span class="line">                        <span class="comment">//调用第一个构造函</span></span><br><span class="line">Widget w2&#123;<span class="number">10</span>, <span class="literal">true</span>&#125;;    <span class="comment">//使用花括号初始化，但是现在</span></span><br><span class="line">                        <span class="comment">//调用std::initializer_list版本构造函数</span></span><br><span class="line">                        <span class="comment">//(10 和 true 转化为long double)</span></span><br><span class="line"><span class="function">Widget <span class="title">w3</span><span class="params">(<span class="number">10</span>, <span class="number">5.0</span>)</span></span>;     <span class="comment">//使用小括号初始化，同之前一样</span></span><br><span class="line">                        <span class="comment">//调用第二个构造函数</span></span><br><span class="line">Widget w4&#123;<span class="number">10</span>, <span class="number">5.0</span>&#125;;     <span class="comment">//使用花括号初始化，但是现在</span></span><br><span class="line">                        <span class="comment">//调用std::initializer_list版本构造函数</span></span><br><span class="line">                        <span class="comment">//(10 和 5.0 转化为long double)          </span></span><br></pre></td></tr></table></figure>
+
+<p>如果类中有了列表初始化，编译器热衷于把括号初始化与使<code>std::initializer_list</code>构造函数匹配了，尽管他可能是错的。例如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Widget</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Widget</span>(<span class="type">int</span> i, <span class="type">bool</span> b);                      <span class="comment">//同之前一样</span></span><br><span class="line">    <span class="built_in">Widget</span>(<span class="type">int</span> i, <span class="type">double</span> d);                    <span class="comment">//同之前一样</span></span><br><span class="line">    <span class="built_in">Widget</span>(std::initializer_list&lt;<span class="type">bool</span>&gt; il);     <span class="comment">//现在元素类型为bool</span></span><br><span class="line">    …                                           <span class="comment">//没有隐式转换函数</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Widget w&#123;<span class="number">10</span>, <span class="number">5.0</span>&#125;;              <span class="comment">//错误！要求变窄转换</span></span><br></pre></td></tr></table></figure>
+
+<p>Widget w{10, 5.0}  完全可以调用Widget(int i, double d)，但花括号就是匹配到了std::initializer_list，尽管他是错的。</p>
+<p><strong>请记住：</strong></p>
+<ul>
+<li><p>括号初始化是最广泛使用的初始化语法，它防止变窄转换，并且对于C++最令人头疼的解析有天生的免疫性</p>
+</li>
+<li><p>在构造函数重载决议中，括号初始化尽最大可能与<code>std::initializer_list</code>参数匹配，即便其他构造函数看起来是更好的选择</p>
+</li>
+<li><p>对于数值类型的<code>std::vector</code>来说使用花括号初始化和小括号初始化会造成巨大的不同</p>
+</li>
+<li><p>在模板类选择使用小括号初始化或使用花括号初始化创建对象是一个挑战。</p>
+</li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>HanKangKai</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2024/02/29/%E5%8C%BA%E5%88%AB%E4%BD%BF%E7%94%A8-%E5%92%8C-%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1/">http://example.com/2024/02/29/%E5%8C%BA%E5%88%AB%E4%BD%BF%E7%94%A8-%E5%92%8C-%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA/"># 对象创建</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2024/02/29/%E7%90%86%E8%A7%A3%E7%89%B9%E6%AE%8A%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0%E7%9A%84%E7%94%9F%E6%88%90/">理解特殊成员函数的生成</a>
+            
+            
+            <a class="next" rel="next" href="/2024/02/29/%E4%BC%98%E5%85%88%E8%80%83%E8%99%91nullptr%E8%80%8C%E9%9D%9E0%E5%92%8CNULL/">优先考虑nullptr而非0和NULL</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© HanKangKai | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

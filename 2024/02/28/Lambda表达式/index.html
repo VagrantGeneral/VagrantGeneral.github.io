@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="HanKangKai">
+
+
+
+    <meta name="description" content="流浪者">
+
+
+
+<title>Lambda表达式 | Wandergeneral</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+    <script>
+    !
+    function() {
+        function n(n, e, t) {
+            return n.getAttribute(e) || t
+        }
+        function e(n) {
+            return document.getElementsByTagName(n)
+        }
+        function t() {
+            var t = e("script"),
+                o = t.length,
+                i = t[o - 1];
+            return {
+                l: o,
+                z: n(i, "zIndex", -1), //置于主页面背后
+                o: n(i, "opacity", .5), //线条透明度
+                c: n(i, "color", "0,0,0"), //线条颜色
+                n: n(i, "count", 100) //线条数量
+            }
+        }
+        function o() {
+            a = m.width = window.innerWidth ||
+    document.documentElement.clientWidth || document.body.clientWidth,
+            c = m.height = window.innerHeight ||
+    document.documentElement.clientHeight || document.body.clientHeight
+        }
+        function i() {
+            r.clearRect(0, 0, a, c);
+            var n, e, t, o, m, l;
+            s.forEach(function(i, x) {
+                for (i.x += i.xa, i.y += i.ya, i.xa *= i.x > a || i.x < 0 ? -1 :
+1, i.ya *= i.y > c || i.y < 0 ? -1 : 1, r.fillRect(i.x - .5, i.y - .5, 1,
+1), e = x + 1; e < u.length; e++) n = u[e],
+                null !== n.x && null !== n.y && (o = i.x - n.x, m = i.y - n.y, l
+= o * o + m * m, l < n.max && (n === y && l >= n.max / 2 && (i.x -= .03 * o,
+i.y -= .03 * m), t = (n.max - l) / n.max, r.beginPath(), r.lineWidth = t /
+2, r.strokeStyle = "rgba(" + d.c + "," + (t + .2) + ")", r.moveTo(i.x, i.y),
+r.lineTo(n.x, n.y), r.stroke()))
+            }),
+            x(i)
+        }
+            var a, c, u, m = document.createElement("canvas"),
+                d = t(),
+                l = "c_n" + d.l,
+                r = m.getContext("2d"),
+                x = window.requestAnimationFrame || window.webkitRequestAnimationFrame
+|| window.mozRequestAnimationFrame || window.oRequestAnimationFrame ||
+window.msRequestAnimationFrame ||
+                function(n) {
+                    window.setTimeout(n, 1e3 / 45)
+                },
+                w = Math.random,
+                y = {
+                    x: null,
+                    y: null,
+                    max: 2e4
+                };
+            m.id = l,
+            m.style.cssText = "position:fixed;top:0;left:0;z-index:" + d.z +
+";opacity:" + d.o,
+            e("body")[0].appendChild(m),
+            o(),
+            window.onresize = o,
+            window.onmousemove = function(n) {
+                n = n || window.event,
+                    y.x = n.clientX,
+                    y.y = n.clientY
+                评论区采用的时Valine https://valine.js.org/ 和LeanCloud
+            },
+            window.onmouseout = function() {
+                y.x = null,
+                y.y = null
+            };
+            for (var s = [], f = 0; d.n > f; f++) {
+                var h = w() * a,
+                    g = w() * c,
+                    v = 2 * w() - 1,
+                    p = 2 * w() - 1;
+                    s.push({
+                        x: h,
+                        y: g,
+                        xa: v,
+                        ya: p,
+                        max: 6e3
+                    })
+            }
+            u = s.concat([y]),
+            setTimeout(function() {
+                i()
+            },
+            100)
+        } ();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">HanKangKai&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">HanKangKai&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Lambda表达式</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">HanKangKai</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">二月 28, 2024&nbsp;&nbsp;22:25:14</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E5%8F%AF%E8%B0%83%E7%94%A8%E5%AF%B9%E8%B1%A1/">可调用对象</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p><img src="/Pictures/C++%E8%A1%A5%E5%AE%8C%E8%AE%A1%E5%88%92%E8%83%8C%E6%99%AF.png" alt="C++补完计划背景"></p>
+<p>Lambda 表达式在表达能力上和仿函数是等价的。编译器一般也是通过自动生成类似仿函数的代码来实现 Lambda 表达式的。</p>
+<p>一个完整的 Lambda 表达式的组成如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[ capture-list ] ( params ) <span class="built_in">mutable</span>(optional) <span class="built_in">exception</span>(optional) <span class="built_in">attribute</span>(optional) -&gt; <span class="built_in">ret</span>(optional) &#123; body &#125; </span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>capture-list：捕获列表。前面的例子 <code>auto Plus = [](int a, int b) &#123; return a + b; &#125;;</code> 没有捕获任何变量。</li>
+<li>params：和普通函数一样的参数。</li>
+<li>mutable：只有这个 Lambda 表达式是 mutable 的才允许修改按值捕获的参数。</li>
+<li>exception：异常标识。暂时不必理解。</li>
+<li>attribute：属性标识。暂时不必理解。</li>
+<li>ret：返回值类型，可以省略，让编译器通过 return 语句自动推导。</li>
+<li>body：函数的具体逻辑。</li>
+</ol>
+<p>除了捕获列表，Lambda 表达式的其它地方其实和普通的函数基本一样。</p>
+<p>Lambda 表达式的捕获，其实就是将局部自动变量保存到 Lambda 表达式内部（Lambda 表达式不能捕获全局变量或 static 变量）。</p>
+<p>下面我们用一个简单的例子来说明 Lambda 表达式的用法。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Book</span> &#123;</span><br><span class="line">    <span class="type">int</span> id; </span><br><span class="line">    std::string title;</span><br><span class="line">    <span class="type">double</span> price;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">std::vector&lt;Book&gt; books;</span><br><span class="line"></span><br><span class="line">std::string target = <span class="string">&quot;C++&quot;</span>;  <span class="comment">// 找出其中 title 包含“C++”的书本的数量</span></span><br></pre></td></tr></table></figure>
+
+<p>Lambda 表达式的最基本的两种捕获方式是：按值捕获（Capture by Value）和按引用捕获（Capture by Reference）。</p>
+<ul>
+<li>按值捕获</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> cnt =</span><br><span class="line">    std::<span class="built_in">count_if</span>(books.<span class="built_in">begin</span>(), books.<span class="built_in">end</span>(), [target](<span class="type">const</span> Book&amp; book) &#123;</span><br><span class="line">        <span class="keyword">return</span> book.title.<span class="built_in">find</span>(target) != std::string::npos;</span><br><span class="line">    &#125;); </span><br></pre></td></tr></table></figure>
+
+<p><code>[target]</code> 表示按值捕获 target。Lambda 表达式内部会保存一份 target 的副本，名字也叫 target。</p>
+<ul>
+<li>按引用捕获</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> cnt =</span><br><span class="line">    std::<span class="built_in">count_if</span>(books.<span class="built_in">begin</span>(), books.<span class="built_in">end</span>(), [&amp;target](<span class="type">const</span> Book&amp; book) &#123;</span><br><span class="line">        <span class="keyword">return</span> book.title.<span class="built_in">find</span>(target) != std::string::npos;</span><br><span class="line">    &#125;); </span><br></pre></td></tr></table></figure>
+
+<p><code>[&amp;target]</code> 表示按引用捕获 target——不会复制多一份副本。</p>
+<ul>
+<li>捕获列表初始化（Capture Initializers）</li>
+</ul>
+<p>C++ 14 支持 lambda capture initializers。比如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 按值捕获 target，但是在 Lambda 内部的变量名叫做 v</span></span><br><span class="line"><span class="keyword">auto</span> cnt =</span><br><span class="line">    std::<span class="built_in">count_if</span>(books.<span class="built_in">begin</span>(), books.<span class="built_in">end</span>(), [v = target](<span class="type">const</span> Book&amp; book) &#123;</span><br><span class="line">        <span class="keyword">return</span> book.title.<span class="built_in">find</span>(v) != std::string::npos;</span><br><span class="line">    &#125;); </span><br><span class="line"></span><br><span class="line"><span class="comment">// 按引用捕获 target，但是在 Lambda 内部的名字叫做 r</span></span><br><span class="line"><span class="keyword">auto</span> cnt =</span><br><span class="line">    std::<span class="built_in">count_if</span>(books.<span class="built_in">begin</span>(), books.<span class="built_in">end</span>(), [&amp;r = target](<span class="type">const</span> Book&amp; book) &#123;</span><br><span class="line">        <span class="keyword">return</span> book.title.<span class="built_in">find</span>(r) != std::string::npos;</span><br><span class="line">    &#125;); </span><br></pre></td></tr></table></figure>
+
+<p>Lambda 捕获列表初始化最最最重要的一点是“支持 Capture by Move”。在 C++14 之前，Lambda 是不支持捕获一个 Move-Only 的对象的，比如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">std::unique_ptr&lt;<span class="type">int</span>&gt; uptr = std::<span class="built_in">make_unique</span>&lt;<span class="type">int</span>&gt;(<span class="number">123</span>);</span><br><span class="line"><span class="keyword">auto</span> callback = [uptr]() &#123;                               <span class="comment">// 编译错误，uptr is move-only</span></span><br><span class="line">    std::cout &lt;&lt; *uptr &lt;&lt; std::endl;</span><br><span class="line">&#125;;  </span><br></pre></td></tr></table></figure>
+
+<p>按引用捕获虽然可以编译通过，但往往是不符合要求的。比如下面的例子，离开作用域之后 uptr 会被析构掉。但是 callback 对象已经被传给另一个线程。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">std::unique_ptr&lt;<span class="type">int</span>&gt; uptr = std::<span class="built_in">make_unique</span>&lt;<span class="type">int</span>&gt;(<span class="number">123</span>);</span><br><span class="line"><span class="keyword">auto</span> callback = [&amp;uptr]() &#123;                               </span><br><span class="line">    std::cout &lt;&lt; *uptr &lt;&lt; std::endl;</span><br><span class="line">&#125;;  </span><br><span class="line"><span class="comment">// ... 将 callback 传给另一个线程</span></span><br><span class="line"><span class="comment">// return =&gt; uptr delete 掉指向的内存</span></span><br></pre></td></tr></table></figure>
+
+<p>通过捕获列表初始化，完成 Move-Only 对象的“Capture by Move”。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">std::unique_ptr&lt;<span class="type">int</span>&gt; uptr = std::<span class="built_in">make_unique</span>&lt;<span class="type">int</span>&gt;(<span class="number">123</span>);</span><br><span class="line"><span class="keyword">auto</span> callback = [uptr = std::<span class="built_in">move</span>(uptr)]() &#123;    <span class="comment">// 将 uptr 移动给 Lambda 表达式中的参数</span></span><br><span class="line">    std::cout &lt;&lt; *uptr &lt;&lt; std::endl;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// ... 将 callback 传给另一个线程</span></span><br><span class="line"><span class="comment">// return =&gt; uptr 是 nullptr</span></span><br></pre></td></tr></table></figure>
+
+<p>通过捕获列表初始化，我们还可以捕获一个指针“Capture by Pointer”。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> cnt =</span><br><span class="line">    std::<span class="built_in">count_if</span>(books.<span class="built_in">begin</span>(), books.<span class="built_in">end</span>(), [p = &amp;target](<span class="type">const</span> Book&amp; book) &#123;</span><br><span class="line">        <span class="keyword">return</span> book.title.<span class="built_in">find</span>(*p) != std::string::npos;</span><br><span class="line">    &#125;); </span><br></pre></td></tr></table></figure>
+
+<p><code>[p = &amp;target]</code> 表示捕获 target 的指针，命名为 p。</p>
+<ul>
+<li>Default Capture</li>
+</ul>
+<p>Lambda 表示支持两种 default capture 的模式：</p>
+<ol>
+<li><code>[=]</code> 表示 default capture by value。按值捕获可见范围内的所有局部变量。</li>
+<li><code>[&amp;]</code> 表示 default capture by reference。按引用捕获可见范围内的所有局部变量。</li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>HanKangKai</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2024/02/28/Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/">http://example.com/2024/02/28/Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Lambda/"># Lambda</a>
+                    
+                        <a href="/tags/c-c/"># c/c++</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2024/02/29/extern%E5%85%B3%E9%94%AE%E5%AD%97/">extern关键字</a>
+            
+            
+            <a class="next" rel="next" href="/2024/02/28/%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88/">函数指针</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© HanKangKai | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

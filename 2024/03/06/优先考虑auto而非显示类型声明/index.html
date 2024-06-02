@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="HanKangKai">
+
+
+
+    <meta name="description" content="流浪者">
+
+
+
+<title>优先考虑auto而非显示类型声明 | Wandergeneral</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+    <script>
+    !
+    function() {
+        function n(n, e, t) {
+            return n.getAttribute(e) || t
+        }
+        function e(n) {
+            return document.getElementsByTagName(n)
+        }
+        function t() {
+            var t = e("script"),
+                o = t.length,
+                i = t[o - 1];
+            return {
+                l: o,
+                z: n(i, "zIndex", -1), //置于主页面背后
+                o: n(i, "opacity", .5), //线条透明度
+                c: n(i, "color", "0,0,0"), //线条颜色
+                n: n(i, "count", 100) //线条数量
+            }
+        }
+        function o() {
+            a = m.width = window.innerWidth ||
+    document.documentElement.clientWidth || document.body.clientWidth,
+            c = m.height = window.innerHeight ||
+    document.documentElement.clientHeight || document.body.clientHeight
+        }
+        function i() {
+            r.clearRect(0, 0, a, c);
+            var n, e, t, o, m, l;
+            s.forEach(function(i, x) {
+                for (i.x += i.xa, i.y += i.ya, i.xa *= i.x > a || i.x < 0 ? -1 :
+1, i.ya *= i.y > c || i.y < 0 ? -1 : 1, r.fillRect(i.x - .5, i.y - .5, 1,
+1), e = x + 1; e < u.length; e++) n = u[e],
+                null !== n.x && null !== n.y && (o = i.x - n.x, m = i.y - n.y, l
+= o * o + m * m, l < n.max && (n === y && l >= n.max / 2 && (i.x -= .03 * o,
+i.y -= .03 * m), t = (n.max - l) / n.max, r.beginPath(), r.lineWidth = t /
+2, r.strokeStyle = "rgba(" + d.c + "," + (t + .2) + ")", r.moveTo(i.x, i.y),
+r.lineTo(n.x, n.y), r.stroke()))
+            }),
+            x(i)
+        }
+            var a, c, u, m = document.createElement("canvas"),
+                d = t(),
+                l = "c_n" + d.l,
+                r = m.getContext("2d"),
+                x = window.requestAnimationFrame || window.webkitRequestAnimationFrame
+|| window.mozRequestAnimationFrame || window.oRequestAnimationFrame ||
+window.msRequestAnimationFrame ||
+                function(n) {
+                    window.setTimeout(n, 1e3 / 45)
+                },
+                w = Math.random,
+                y = {
+                    x: null,
+                    y: null,
+                    max: 2e4
+                };
+            m.id = l,
+            m.style.cssText = "position:fixed;top:0;left:0;z-index:" + d.z +
+";opacity:" + d.o,
+            e("body")[0].appendChild(m),
+            o(),
+            window.onresize = o,
+            window.onmousemove = function(n) {
+                n = n || window.event,
+                    y.x = n.clientX,
+                    y.y = n.clientY
+                评论区采用的时Valine https://valine.js.org/ 和LeanCloud
+            },
+            window.onmouseout = function() {
+                y.x = null,
+                y.y = null
+            };
+            for (var s = [], f = 0; d.n > f; f++) {
+                var h = w() * a,
+                    g = w() * c,
+                    v = 2 * w() - 1,
+                    p = 2 * w() - 1;
+                    s.push({
+                        x: h,
+                        y: g,
+                        xa: v,
+                        ya: p,
+                        max: 6e3
+                    })
+            }
+            u = s.concat([y]),
+            setTimeout(function() {
+                i()
+            },
+            100)
+        } ();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">HanKangKai&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">HanKangKai&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">优先考虑auto而非显示类型声明</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">HanKangKai</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">三月 6, 2024&nbsp;&nbsp;20:53:25</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%9D%A1%E6%AC%BE/">设计条款</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p><img src="/Pictures/C++%E8%A1%A5%E5%AE%8C%E8%AE%A1%E5%88%92%E8%83%8C%E6%99%AF.png" alt="C++补完计划背景"></p>
+<p>首先对一个局部变量使用解引用迭代器的方式初始化：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> It&gt;           <span class="comment">//对从b到e的所有元素使用</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">dwim</span><span class="params">(It b, It e)</span>           <span class="comment">//dwim（“do what I mean”）算法</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (b != e) &#123;</span><br><span class="line">        <span class="keyword">typename</span> std::iterator_traits&lt;It&gt;::value_type</span><br><span class="line">        currValue = *b;</span><br><span class="line">        …</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><code>typename std::iterator_traits&lt;It&gt;::value_type</code>是想表达迭代器指向的元素的值的类型。<br><code>auto</code>变量从初始化表达式中推导出类型，所以我们必须初始化。这意味着当你在现代化C++的高速公路上飞奔的同时你不得不对只声明不初始化变量的老旧方法说拜拜：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> x1;                         <span class="comment">//潜在的未初始化的变量</span></span><br><span class="line"><span class="keyword">auto</span> x2;                        <span class="comment">//错误！必须要初始化</span></span><br><span class="line"><span class="keyword">auto</span> x3 = <span class="number">0</span>;                    <span class="comment">//没问题，x已经定义了</span></span><br></pre></td></tr></table></figure>
+
+<p><code>auto</code>类型推导技术，它甚至能表示一些只有编译器才知道的类型：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> derefUPLess =</span><br><span class="line">    [](<span class="type">const</span> std::unique_ptr&lt;Widget&gt; &amp;p1,       <span class="comment">//用于std::unique_ptr</span></span><br><span class="line">       <span class="type">const</span> std::unique_ptr&lt;Widget&gt; &amp;p2)       <span class="comment">//指向的Widget类型的</span></span><br><span class="line">    &#123; <span class="keyword">return</span> *p1 &lt; *p2; &#125;;                      <span class="comment">//比较函数</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>如果使用C++14，将会变得更酷，因为<em>lambda</em>表达式中的形参也可以使用<code>auto</code>：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> derefLess =                                <span class="comment">//C++14版本</span></span><br><span class="line">    [](<span class="type">const</span> <span class="keyword">auto</span>&amp; p1,                          <span class="comment">//被任何像指针一样的东西</span></span><br><span class="line">       <span class="type">const</span> <span class="keyword">auto</span>&amp; p2)                          <span class="comment">//指向的值的比较函数</span></span><br><span class="line">    &#123; <span class="keyword">return</span> *p1 &lt; *p2; &#125;;</span><br></pre></td></tr></table></figure>
+
+<p>使用<code>auto</code>除了可以避免未初始化的无效变量，省略冗长的声明类型，直接保存闭包外，它还有一个好处是可以避免一个问题，我称之为与类型快捷方式（type shortcuts）有关的问题。你将看到这样的代码——甚至你会这么写：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">std::vector&lt;<span class="type">int</span>&gt; v;</span><br><span class="line">…</span><br><span class="line"><span class="type">unsigned</span> sz = v.<span class="built_in">size</span>();</span><br></pre></td></tr></table></figure>
+
+<p><code>v.size()</code>的标准返回类型是<code>std::vector&lt;int&gt;::size_type</code>，但是只有少数开发者意识到这点。<code>std::vector&lt;int&gt;::size_type</code>实际上被指定为无符号整型，所以很多人都认为用<code>unsigned</code>就足够了，写下了上述的代码。这会造成一些有趣的结果。举个例子，在<strong>Windows 32-bit</strong>上<code>std::vector&lt;int&gt;::size_type</code>和<code>unsigned</code>是一样的大小，但是在<strong>Windows 64-bit</strong>上<code>std::vector&lt;int&gt;::size_type</code>是64位，<code>unsigned</code>是32位。这意味着这段代码在Windows 32-bit上正常工作，但是当把应用程序移植到Windows 64-bit上时就可能会出现一些问题。谁愿意花时间处理这些细枝末节的问题呢？</p>
+<p>所以使用<code>auto</code>可以确保你不需要浪费时间：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> sz =v.<span class="built_in">size</span>();                      <span class="comment">//sz的类型是std::vector&lt;int&gt;::size_type</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">std::unordered_map&lt;std::string, <span class="type">int</span>&gt; m;</span><br><span class="line">…</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="type">const</span> std::pair&lt;std::string, <span class="type">int</span>&gt;&amp; p : m)</span><br><span class="line">&#123;</span><br><span class="line">    …                                   <span class="comment">//用p做一些事</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>看起来好像很合情合理的表达，但是这里有一个问题，你看到了吗？</p>
+<p>要想看到错误你就得知道<code>std::unordered_map</code>的<em>key</em>是<code>const</code>的，所以<em>hash table</em>（<code>std::unordered_map</code>本质上的东西）中的<code>std::pair</code>的类型不是<code>std::pair&lt;std::string, int&gt;</code>，而是<code>std::pair&lt;const std::string, int&gt;</code>。但那不是在循环中的变量<code>p</code>声明的类型。编译器会努力的找到一种方法把<code>std::pair&lt;const std::string, int&gt;</code>（即<em>hash table</em>中的东西）转换为<code>std::pair&lt;std::string, int&gt;</code>（<code>p</code>的声明类型）。它会成功的，因为它会通过拷贝<code>m</code>中的对象创建一个临时对象，这个临时对象的类型是<code>p</code>想绑定到的对象的类型，即<code>m</code>中元素的类型，然后把<code>p</code>的引用绑定到这个临时对象上。在每个循环迭代结束时，临时对象将会销毁，如果你写了这样的一个循环，你可能会对它的一些行为感到非常惊讶，因为你确信你只是让成为<code>p</code>指向<code>m</code>中各个元素的引用而已。</p>
+<p>使用<code>auto</code>可以避免这些很难被意识到的类型不匹配的错误：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="type">const</span> <span class="keyword">auto</span>&amp; p : m)</span><br><span class="line">&#123;</span><br><span class="line">    …                                   <span class="comment">//如之前一样</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样无疑更具效率，且更容易书写。而且，这个代码有一个非常吸引人的特性，如果你获取<code>p</code>的地址，你确实会得到一个指向<code>m</code>中元素的指针。在没有<code>auto</code>的版本中<code>p</code>会指向一个临时变量，这个临时变量在每次迭代完成时会被销毁。</p>
+<p>后面这两个例子——应当写<code>std::vector&lt;int&gt;::size_type</code>时写了<code>unsigned</code>，应当写<code>std::pair&lt;const std::string, int&gt;</code>时写了<code>std::pair&lt;std::string, int&gt;</code>——说明了显式的指定类型可能会导致你不像看到的类型转换。如果你使用<code>auto</code>声明目标变量你就不必担心这个问题。</p>
+<p>基于这些原因我建议你优先考虑<code>auto</code>而非显式类型声明。然而<code>auto</code>也不是完美的。每个<code>auto</code>变量都从初始化表达式中推导类型，有一些表达式的类型和我们期望的大相径庭。</p>
+<p><code>auto</code>是<strong>可选项</strong>，不是<strong>命令</strong>，在某些情况下如果你的专业判断告诉你使用显式类型声明比<code>auto</code>要更清晰更易维护，那你就不必再坚持使用<code>auto</code>。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>HanKangKai</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2024/03/06/%E4%BC%98%E5%85%88%E8%80%83%E8%99%91auto%E8%80%8C%E9%9D%9E%E6%98%BE%E7%A4%BA%E7%B1%BB%E5%9E%8B%E5%A3%B0%E6%98%8E/">http://example.com/2024/03/06/%E4%BC%98%E5%85%88%E8%80%83%E8%99%91auto%E8%80%8C%E9%9D%9E%E6%98%BE%E7%A4%BA%E7%B1%BB%E5%9E%8B%E5%A3%B0%E6%98%8E/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/auto/"># auto</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2024/03/09/%E7%90%86%E8%A7%A3std-move%E5%92%8Cstd-forward/">理解std_move和std_forward</a>
+            
+            
+            <a class="next" rel="next" href="/2024/03/06/%E7%B1%BB%E5%9E%8B%E8%90%83%E5%8F%96/">类型萃取</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© HanKangKai | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

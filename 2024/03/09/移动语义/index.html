@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="HanKangKai">
+
+
+
+    <meta name="description" content="流浪者">
+
+
+
+<title>移动语义 | Wandergeneral</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+    <script>
+    !
+    function() {
+        function n(n, e, t) {
+            return n.getAttribute(e) || t
+        }
+        function e(n) {
+            return document.getElementsByTagName(n)
+        }
+        function t() {
+            var t = e("script"),
+                o = t.length,
+                i = t[o - 1];
+            return {
+                l: o,
+                z: n(i, "zIndex", -1), //置于主页面背后
+                o: n(i, "opacity", .5), //线条透明度
+                c: n(i, "color", "0,0,0"), //线条颜色
+                n: n(i, "count", 100) //线条数量
+            }
+        }
+        function o() {
+            a = m.width = window.innerWidth ||
+    document.documentElement.clientWidth || document.body.clientWidth,
+            c = m.height = window.innerHeight ||
+    document.documentElement.clientHeight || document.body.clientHeight
+        }
+        function i() {
+            r.clearRect(0, 0, a, c);
+            var n, e, t, o, m, l;
+            s.forEach(function(i, x) {
+                for (i.x += i.xa, i.y += i.ya, i.xa *= i.x > a || i.x < 0 ? -1 :
+1, i.ya *= i.y > c || i.y < 0 ? -1 : 1, r.fillRect(i.x - .5, i.y - .5, 1,
+1), e = x + 1; e < u.length; e++) n = u[e],
+                null !== n.x && null !== n.y && (o = i.x - n.x, m = i.y - n.y, l
+= o * o + m * m, l < n.max && (n === y && l >= n.max / 2 && (i.x -= .03 * o,
+i.y -= .03 * m), t = (n.max - l) / n.max, r.beginPath(), r.lineWidth = t /
+2, r.strokeStyle = "rgba(" + d.c + "," + (t + .2) + ")", r.moveTo(i.x, i.y),
+r.lineTo(n.x, n.y), r.stroke()))
+            }),
+            x(i)
+        }
+            var a, c, u, m = document.createElement("canvas"),
+                d = t(),
+                l = "c_n" + d.l,
+                r = m.getContext("2d"),
+                x = window.requestAnimationFrame || window.webkitRequestAnimationFrame
+|| window.mozRequestAnimationFrame || window.oRequestAnimationFrame ||
+window.msRequestAnimationFrame ||
+                function(n) {
+                    window.setTimeout(n, 1e3 / 45)
+                },
+                w = Math.random,
+                y = {
+                    x: null,
+                    y: null,
+                    max: 2e4
+                };
+            m.id = l,
+            m.style.cssText = "position:fixed;top:0;left:0;z-index:" + d.z +
+";opacity:" + d.o,
+            e("body")[0].appendChild(m),
+            o(),
+            window.onresize = o,
+            window.onmousemove = function(n) {
+                n = n || window.event,
+                    y.x = n.clientX,
+                    y.y = n.clientY
+                评论区采用的时Valine https://valine.js.org/ 和LeanCloud
+            },
+            window.onmouseout = function() {
+                y.x = null,
+                y.y = null
+            };
+            for (var s = [], f = 0; d.n > f; f++) {
+                var h = w() * a,
+                    g = w() * c,
+                    v = 2 * w() - 1,
+                    p = 2 * w() - 1;
+                    s.push({
+                        x: h,
+                        y: g,
+                        xa: v,
+                        ya: p,
+                        max: 6e3
+                    })
+            }
+            u = s.concat([y]),
+            setTimeout(function() {
+                i()
+            },
+            100)
+        } ();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">HanKangKai&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">HanKangKai&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">移动语义</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">HanKangKai</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">三月 9, 2024&nbsp;&nbsp;16:35:01</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%9D%A1%E6%AC%BE/">设计条款</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p><img src="/Pictures/C++%E8%A1%A5%E5%AE%8C%E8%AE%A1%E5%88%92%E8%83%8C%E6%99%AF.png" alt="C++补完计划背景"></p>
+<p><code>移动语义</code>使编译器有可能用廉价的移动操作来代替昂贵的拷贝操作。正如拷贝构造函数和拷贝赋值操作符给了你控制拷贝语义的权力，移动构造函数和移动赋值操作符也给了你控制移动语义的权力。</p>
+<h3 id="从拷贝说起"><a href="#从拷贝说起" class="headerlink" title="从拷贝说起"></a>从拷贝说起</h3><p>在C++中有拷贝构造函数和拷贝赋值运算符。那既然是<code>拷贝</code>，听上去就是<code>开销很大</code>的操作。所谓拷贝，就是申请一块新的内存空间，然后将数据复制到新的内存空间中。 如果一个对象中都是一些基本类型的数据的话，由于数据量很小，那执行拷贝操作没啥毛病。但如果对象中涉及其他对象或指针数据的话，那么执行拷贝操作就可能会是一个很耗时的过程。</p>
+<p>假设我们有个类，该类中有一个string类型的成员变量，定义如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyClass</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">MyClass</span>(<span class="type">const</span> std::string&amp; s)</span><br><span class="line">        : str&#123; s &#125;</span><br><span class="line">    &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::string str;</span><br><span class="line">&#125;;</span><br><span class="line">MyClass A&#123; <span class="string">&quot;hello&quot;</span> &#125;;</span><br></pre></td></tr></table></figure>
+<p>当我们新建一个该类的对象A，并传递参数”hello”时，对象A的成员变量str中会存储字符串”hello”。而为了存储字符串，string类型会为其分配内存空间。因此，当前内存中的数据如图所示：</p>
+<p><img src="/Pictures/create.png" alt="create"></p>
+<p>现在，当我们定义了一个该类的新对象B，且把对象A赋值给对象B时，会发生什么？即，我们执行如下语句：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MyClass B = A;</span><br></pre></td></tr></table></figure>
+
+<p>没错，此时，拷贝便发生了！</p>
+<p>当拷贝发生时，为了让B对象中的成员变量str也能够存储字符串”hello”，string类型会为其分配内存空间，并将对象A的str中存储的数据复制过来。因此，经过拷贝操作后，此时内存中的数据如图所示：</p>
+<p><img src="/Pictures/copy.png" alt="copy"></p>
+<p>这个拷贝操作无可厚非，毕竟我们希望A对象和B对象是完全独立无关的对象，对B对象的修改不会影响A对象，反之亦然。</p>
+<h3 id="左值引用与右值引用"><a href="#左值引用与右值引用" class="headerlink" title="左值引用与右值引用"></a>左值引用与右值引用</h3><p>我们先了解2个概念，即”左值引用”与”右值引用”。</p>
+<p>为了支持移动语义，C++11引入了一种新的引用类型，称为”右值引用”，使用”&amp;&amp;”来声明。而我们最常使用的，使用”&amp;”声明的引用，现在则称为”左值引用”。</p>
+<p>右值引用能够引用没有名称的临时对象以及使用std::move标记的对象：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> val&#123; <span class="number">0</span> &#125;;</span><br><span class="line"><span class="type">int</span>&amp;&amp; rRef0&#123; <span class="built_in">getTempValue</span>() &#125;;  <span class="comment">// OK，引用临时对象</span></span><br><span class="line"><span class="type">int</span>&amp;&amp; rRef1&#123; val &#125;;  <span class="comment">// Error，不能引用左值</span></span><br><span class="line"><span class="type">int</span>&amp;&amp; rRef2&#123; std::<span class="built_in">move</span>(val) &#125;;  <span class="comment">// OK，引用使用std::move标记的对象</span></span><br></pre></td></tr></table></figure>
+
+<p>移动语义的实现需要用到右值引用，我们在后文会详细的说。现在我们需要知道，以下2种情况会让编译器将对象匹配为右值引用：</p>
+<ol>
+<li><p><strong>一个在语句执行完毕后就会被自动销毁的临时对象</strong></p>
+</li>
+<li><p><strong>由std::move标记的非const对象</strong></p>
+</li>
+</ol>
+<p>让编译器将对象匹配为右值引用，是一切的基础。</p>
+<h3 id="区分拷贝操作与移动操作"><a href="#区分拷贝操作与移动操作" class="headerlink" title="区分拷贝操作与移动操作"></a>区分拷贝操作与移动操作</h3><p>对于myClasses容器的第一次push_back，我们期望执行的是拷贝操作，而对于myClasses容器的第二次push_back，由于之后我们不再需要tmp对象了，因此我们期望执行的是移动操作：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyClass</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">MyClass</span>(<span class="type">const</span> std::string&amp; s)</span><br><span class="line">        : str&#123; s &#125;</span><br><span class="line">    &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 假设已经实现了移动语义</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::string str;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">std::vector&lt;MyClass&gt; myClasses;</span><br><span class="line">MyClass tmp&#123; <span class="string">&quot;hello&quot;</span> &#125;;</span><br><span class="line">myClasses.<span class="built_in">push_back</span>(tmp);  <span class="comment">// 这里执行拷贝操作，将tmp中的数据拷贝给容器中的元素</span></span><br><span class="line">myClasses.<span class="built_in">push_back</span>(std::<span class="built_in">move</span>(tmp));  <span class="comment">// 这里执行移动操作，容器中的元素直接将tmp的数据转移给自己</span></span><br></pre></td></tr></table></figure>
+
+<p>现在我们已经知道，移动操作执行的是对象数据的转移，那么它一定是与拷贝操作不一样的。因此，为了能够将拷贝操作与移动操作区分执行，就需要用到我们上一节的主题：左值引用与右值引用。</p>
+<p>因此，对于容器的push_back函数来说，它一定针对拷贝操作和移动操作有不同的重载实现，而重载用到的即是左值引用与右值引用。伪代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">vector</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">push_back</span><span class="params">(<span class="type">const</span> MyClass&amp; value)</span>  <span class="comment">// const MyClass&amp; 左值引用</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 执行拷贝操作</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">push_back</span><span class="params">(MyClass&amp;&amp; value)</span>  <span class="comment">// MyClass&amp;&amp; 右值引用</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 执行移动操作</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>通过传递左值引用或右值引用，我们就能够根据需要调用不同的push_back重载函数了。那么下一个问题来了，我们知道std::vector是模板类，可以用于任意类型。所以，std::vector不可能自己去实现拷贝操作或移动操作，因为它不知道自己会用在哪些类型上。因此，std::vector真正做的，是委托具体类型自己去执行拷贝操作与移动操作。</p>
+<h3 id="移动构造函数"><a href="#移动构造函数" class="headerlink" title="移动构造函数"></a>移动构造函数</h3><p>当通过push_back向容器中添加一个新的元素时，如果是通过拷贝的方式，那么对应执行的会是容器元素类型的拷贝构造函数。关于拷贝构造函数，它是C++一直以来都包含的功能，相信大家已经很熟悉了，因此在这里就不展开了。</p>
+<p>当通过push_back向容器中添加一个新的元素时，如果是通过移动的方式，那么对应执行的会是容器元素类型的”移动构造函数”（敲黑板，划重点）。</p>
+<p>移动构造函数是C++11引入的一种新的构造函数，它接收右值引用。以我们前文的MyClass例子来说，为其定义移动构造函数：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyClass</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// 移动构造函数</span></span><br><span class="line">    <span class="built_in">MyClass</span>(MyClass&amp;&amp; rValue) <span class="keyword">noexcept</span>  <span class="comment">// 关于noexcept我们稍后会介绍</span></span><br><span class="line">        : str&#123; std::<span class="built_in">move</span>(rValue.str) &#125;  <span class="comment">// 看这里，调用std::string类型的移动构造函数</span></span><br><span class="line">    &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">MyClass</span>(<span class="type">const</span> std::string&amp; s)</span><br><span class="line">        : str&#123; s &#125;</span><br><span class="line">    &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::string str;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>在移动构造函数中，我们要做的就是转移成员数据。我们的MyClass有一个std::string类型的成员，该类型自身实现了移动语义，因此我们可以继续调用std::string类型的移动构造函数。</p>
+<p>在有了移动构造函数之后，我们就可以在需要时通过它来创建新的对象，从而避免拷贝操作的开销。以如下代码为例：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MyClass tmp&#123; <span class="string">&quot;hello&quot;</span> &#125;;</span><br><span class="line">MyClass A&#123; std::<span class="built_in">move</span>(tmp) &#125;;  <span class="comment">// 调用移动构造函数</span></span><br></pre></td></tr></table></figure>
+
+<p>首先我们创建了一个tmp对象，接着我们通过tmp对象来创建A对象，此时传递给构造函数的参数为std::move(tmp)。还记得我们前文提及的编译器匹配右值引用的情况之一嘛，即<strong>由std::move标记的非const对象</strong>，因此编译器会调用执行移动构造函数，我们就完成了将tmp对象的数据转移到对象A上的操作：</p>
+<p><img src="/Pictures/move-1711365332028.png" alt="move"></p>
+<h3 id="自己动手实现移动语义"><a href="#自己动手实现移动语义" class="headerlink" title="自己动手实现移动语义"></a>自己动手实现移动语义</h3><p>在前文的MyClass例子中，我们将移动操作交由std::string类型去完成。那如果我们的类有成员数据需要我们自己去实现数据转移的话，通常该怎么做呢？</p>
+<p>我们来举个例子，假设我们定义的类型中包含了一个int类型的数据以及一个char*类型的指针：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyClass</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">MyClass</span>()</span><br><span class="line">        : val&#123; <span class="number">998</span> &#125;</span><br><span class="line">    &#123;</span><br><span class="line">        name = <span class="keyword">new</span> <span class="type">char</span>[] &#123; <span class="string">&quot;Peter&quot;</span> &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ~<span class="built_in">MyClass</span>()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="literal">nullptr</span> != name)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">delete</span>[] name;</span><br><span class="line">            name = <span class="literal">nullptr</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> val;</span><br><span class="line">    <span class="type">char</span>* name;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">MyClass A&#123;&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>现在我们来为MyClass类型实现移动构造函数，代码如下所示：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyClass</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">MyClass</span>()</span><br><span class="line">        : val&#123; <span class="number">998</span> &#125;</span><br><span class="line">    &#123;</span><br><span class="line">        name = <span class="keyword">new</span> <span class="type">char</span>[] &#123; <span class="string">&quot;Peter&quot;</span> &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 实现移动构造函数</span></span><br><span class="line">    <span class="built_in">MyClass</span>(MyClass&amp;&amp; rValue) <span class="keyword">noexcept</span></span><br><span class="line">        : val&#123; std::<span class="built_in">move</span>(rValue.val) &#125;  <span class="comment">// 转移数据</span></span><br><span class="line">    &#123;</span><br><span class="line">        rValue.val = <span class="number">0</span>;  <span class="comment">// 清除被转移对象的数据</span></span><br><span class="line"></span><br><span class="line">        name = rValue.name;  <span class="comment">// 转移数据</span></span><br><span class="line">        rValue.name = <span class="literal">nullptr</span>;  <span class="comment">// 清除被转移对象的数据</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ~<span class="built_in">MyClass</span>()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="literal">nullptr</span> != name)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">delete</span>[] name;</span><br><span class="line">            name = <span class="literal">nullptr</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> val;</span><br><span class="line">    <span class="type">char</span>* name;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">MyClass A&#123;&#125;;</span><br><span class="line">MyClass B&#123; std::<span class="built_in">move</span>(A) &#125;;  <span class="comment">// 通过移动构造函数创建新对象B</span></span><br></pre></td></tr></table></figure>
+
+<p>还记得移动语义的精髓嘛？数据拿过来用就完事儿了。因此，在移动构造函数中，我们将传入对象A的数据转移给新创建的对象B。同时，还需要关注的重点在于，<strong>我们需要把传入对象A的数据清除</strong>，不然就会产生多个对象共享同一份数据的问题。被转移数据的对象会处于”有效但未定义（valid but unspecified）”的状态（稍后会介绍）。</p>
+<p>通过移动构造函数创建对象B之后，内存中的布局如图所示：<img src="/Pictures/move_create.png" alt="move_create"></p>
+<h3 id="移动赋值运算符"><a href="#移动赋值运算符" class="headerlink" title="移动赋值运算符"></a>移动赋值运算符</h3><p>与拷贝构造函数和拷贝赋值运算符一样，除了移动构造函数之外，C++11还引入了移动赋值运算符。移动赋值运算符也是接收右值引用，它的实现和移动构造函数基本一致。在移动赋值运算符中，我们也是从传入的对象中转移数据，并将该对象的数据清除：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyClass</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">MyClass</span>()</span><br><span class="line">        : val&#123; <span class="number">998</span> &#125;</span><br><span class="line">    &#123;</span><br><span class="line">        name = <span class="keyword">new</span> <span class="type">char</span>[] &#123; <span class="string">&quot;Peter&quot;</span> &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">MyClass</span>(MyClass&amp;&amp; rValue) <span class="keyword">noexcept</span></span><br><span class="line">        : val&#123; std::<span class="built_in">move</span>(rValue.val) &#125;</span><br><span class="line">    &#123;</span><br><span class="line">        rValue.val = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        name = rValue.name;</span><br><span class="line">        rValue.name = <span class="literal">nullptr</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 移动赋值运算符</span></span><br><span class="line">    MyClass&amp; <span class="keyword">operator</span>=(MyClass&amp;&amp; myClass) <span class="keyword">noexcept</span></span><br><span class="line">    &#123;</span><br><span class="line">        val = myClass.val;</span><br><span class="line">        myClass.val = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        name = myClass.name;</span><br><span class="line">        myClass.name = <span class="literal">nullptr</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ~<span class="built_in">MyClass</span>()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="literal">nullptr</span> != name)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">delete</span>[] name;</span><br><span class="line">            name = <span class="literal">nullptr</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> val;</span><br><span class="line">    <span class="type">char</span>* name;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">MyClass A&#123;&#125;;</span><br><span class="line">MyClass B&#123;&#125;;</span><br><span class="line">B = std::<span class="built_in">move</span>(A);  <span class="comment">// 使用移动赋值运算符将对象A赋值给对象B</span></span><br></pre></td></tr></table></figure>
+
+<p>在C++11之前，我们拥有4个特殊成员函数，即构造函数、析构函数、拷贝构造函数以及拷贝赋值运算符。从C++11开始，我们多了2个特殊成员函数，即移动构造函数和移动赋值运算符。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>HanKangKai</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2024/03/09/%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89/">http://example.com/2024/03/09/%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/move/"># move</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2024/03/09/%E5%AE%8C%E7%BE%8E%E8%BD%AC%E5%8F%91/">完美转发</a>
+            
+            
+            <a class="next" rel="next" href="/2024/03/09/%E5%AF%B9%E4%B8%87%E8%83%BD%E5%BC%95%E7%94%A8%E4%BD%BF%E7%94%A8std-forward/">对万能引用使用std_forward</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© HanKangKai | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

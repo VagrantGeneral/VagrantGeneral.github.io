@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="HanKangKai">
+
+
+
+    <meta name="description" content="流浪者">
+
+
+
+<title>MySQL进阶篇 | Wandergeneral</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+    <script>
+    !
+    function() {
+        function n(n, e, t) {
+            return n.getAttribute(e) || t
+        }
+        function e(n) {
+            return document.getElementsByTagName(n)
+        }
+        function t() {
+            var t = e("script"),
+                o = t.length,
+                i = t[o - 1];
+            return {
+                l: o,
+                z: n(i, "zIndex", -1), //置于主页面背后
+                o: n(i, "opacity", .5), //线条透明度
+                c: n(i, "color", "0,0,0"), //线条颜色
+                n: n(i, "count", 100) //线条数量
+            }
+        }
+        function o() {
+            a = m.width = window.innerWidth ||
+    document.documentElement.clientWidth || document.body.clientWidth,
+            c = m.height = window.innerHeight ||
+    document.documentElement.clientHeight || document.body.clientHeight
+        }
+        function i() {
+            r.clearRect(0, 0, a, c);
+            var n, e, t, o, m, l;
+            s.forEach(function(i, x) {
+                for (i.x += i.xa, i.y += i.ya, i.xa *= i.x > a || i.x < 0 ? -1 :
+1, i.ya *= i.y > c || i.y < 0 ? -1 : 1, r.fillRect(i.x - .5, i.y - .5, 1,
+1), e = x + 1; e < u.length; e++) n = u[e],
+                null !== n.x && null !== n.y && (o = i.x - n.x, m = i.y - n.y, l
+= o * o + m * m, l < n.max && (n === y && l >= n.max / 2 && (i.x -= .03 * o,
+i.y -= .03 * m), t = (n.max - l) / n.max, r.beginPath(), r.lineWidth = t /
+2, r.strokeStyle = "rgba(" + d.c + "," + (t + .2) + ")", r.moveTo(i.x, i.y),
+r.lineTo(n.x, n.y), r.stroke()))
+            }),
+            x(i)
+        }
+            var a, c, u, m = document.createElement("canvas"),
+                d = t(),
+                l = "c_n" + d.l,
+                r = m.getContext("2d"),
+                x = window.requestAnimationFrame || window.webkitRequestAnimationFrame
+|| window.mozRequestAnimationFrame || window.oRequestAnimationFrame ||
+window.msRequestAnimationFrame ||
+                function(n) {
+                    window.setTimeout(n, 1e3 / 45)
+                },
+                w = Math.random,
+                y = {
+                    x: null,
+                    y: null,
+                    max: 2e4
+                };
+            m.id = l,
+            m.style.cssText = "position:fixed;top:0;left:0;z-index:" + d.z +
+";opacity:" + d.o,
+            e("body")[0].appendChild(m),
+            o(),
+            window.onresize = o,
+            window.onmousemove = function(n) {
+                n = n || window.event,
+                    y.x = n.clientX,
+                    y.y = n.clientY
+                评论区采用的时Valine https://valine.js.org/ 和LeanCloud
+            },
+            window.onmouseout = function() {
+                y.x = null,
+                y.y = null
+            };
+            for (var s = [], f = 0; d.n > f; f++) {
+                var h = w() * a,
+                    g = w() * c,
+                    v = 2 * w() - 1,
+                    p = 2 * w() - 1;
+                    s.push({
+                        x: h,
+                        y: g,
+                        xa: v,
+                        ya: p,
+                        max: 6e3
+                    })
+            }
+            u = s.concat([y]),
+            setTimeout(function() {
+                i()
+            },
+            100)
+        } ();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">HanKangKai&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">HanKangKai&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">MySQL进阶篇</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">HanKangKai</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">三月 16, 2024&nbsp;&nbsp;14:24:39</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/MySQL/">MySQL</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <ul>
+<li><p>一.存储引擎</p>
+<ul>
+<li><p>mysql体系结构<img src="/Pictures/1710571045671.png" alt="1710571045671"></p>
+</li>
+<li><p>存储引擎：存储数据，建立索引，更新&#x2F;查询数据等技术的实现方式。存储引擎是基于表的，并不是基于库，也被称为表类型</p>
+<ul>
+<li><p>show   create   table   account;      (查询建表时的语句，查看ENGINE，默认InnoDB。早期默认MyISAM)</p>
+</li>
+<li><p>show   engines;      （查看当前数据库支持的存储引擎）</p>
+</li>
+</ul>
+</li>
+<li><p>InnoDB引擎（DML操作遵循ACID（事务四大特点）模型，支持事务；行级锁，提高并发访问性能；支持外键）</p>
+<ul>
+<li><p>XXX.ibd文件      （XXX代表表名；InnoBD引擎的每张表都对应一个表空间文件，存储表结构（frm,sdi），数据和索引；）</p>
+<ul>
+<li><p>参数：innodb_file_per_table</p>
+</li>
+<li><p>逻辑存储结构（表空间Tablespace，段Segment，区Extent，页Page，行Row）<img src="/Pictures/1710571073262.png" alt="1710571073262"></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>MyISAM引擎（不支持事务，不支持外键；支持表锁，不支持行锁；访问速度快）</p>
+<ul>
+<li>XXX.sdi(表结构)   XXX.MYD(数据)   XXX.MYI(索引)</li>
+</ul>
+</li>
+<li><p>Memory引擎 （内存存放，hash索引）</p>
+</li>
+<li><p>引擎选择<img src="https://api2.mubu.com/v3/document_image/2183570a-3f8c-440c-a05d-04cc9ab637c8-16177255.jpg" alt="img"></p>
+</li>
+</ul>
+</li>
+<li><p>二.索引</p>
+<ul>
+<li>索引是帮助MySQL高效获取数据的数据结构（有序），这些数据结构以某种方式指向数据，以实现高级查找</li>
+</ul>
+</li>
+<li><p>树结构</p>
+</li>
+<li><p>索引结构<img src="/Pictures/1710571098241.png" alt="1710571098241"><img src="/Pictures/1710571128855.png" alt="1710571128855"></p>
+</li>
+<li><p>索引分类</p>
+<p><img src="/Pictures/1710570709973.png" alt="1710570709973"></p>
+<ul>
+<li><p>InnoDB存储引擎的索引</p>
+<p><img src="/Pictures/1710570650947.png" alt="1710570650947"></p>
+<ul>
+<li><p>聚焦索引：将数据存储与索引放在一起，索引结构的叶子节点保存了行数据（必须会有，而且只有一个）<br>1.如果存在主键，主键索引就是聚焦索引。<br>2.如果不存在主键，将使用第一个唯一（UNIQUE) 索引作为聚焦索引<br>3.如果表没有主键，或没有合适的唯一索引，则InnoDB会自动生成一个rowid作为隐藏的聚焦索引</p>
+</li>
+<li><p>二级索引：将数据与索引分开存储，索引结构的叶子节点关联的是对应的主键（可以存在多个）</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>语法</p>
+<ul>
+<li>创建索引：create   [UNIQUE |  FULLTEXT]  index  index_name   on  table_name  (index_col_name,…);</li>
+</ul>
+<p>​       查看索引：show   index from   table_name;</p>
+<ul>
+<li>删除索引：drop   index    index_name   on   table_name;</li>
+</ul>
+</li>
+<li><p>SQL性能分析</p>
+<ul>
+<li><p>执行频率   show   global   status   like   ‘Com_______’;</p>
+<ul>
+<li><p>慢查询日志（记录了所有执行时间超过指定参数（long_query_time，秒，默认10秒）的所有SQL语句的日志）<br>查看慢查询日志的开关：show   variables   like   ‘slow_query_log’;<br>​</p>
+</li>
+<li><p>profile详情（查看SQL语句的耗时）</p>
+</li>
+</ul>
+</li>
+<li><p>explain执行计划（查看SQL执行时是否执行索引以及表的连接情况）</p>
+</li>
+</ul>
+</li>
+<li><p>三.SQL优化</p>
+<ul>
+<li>​	&#x2F;&#x2F;</li>
+</ul>
+</li>
+<li><p>四.视图&#x2F;存储过程&#x2F;触发器</p>
+<ul>
+<li><p>视图   （视图是一种虚拟存在的表。其中数据并不在库中实际存在）</p>
+</li>
+<li><p>创建视图：create [or replace] view 视图名称[(列名列表)] as   select语句   [with[cascaded  |  local ]check   option]</p>
+</li>
+<li><p>&#x2F;&#x2F;</p>
+</li>
+</ul>
+</li>
+<li><p>五.锁</p>
+<ul>
+<li>&#x2F;&#x2F;</li>
+</ul>
+</li>
+<li><p>六.InnoDB引擎</p>
+</li>
+<li><p>七.MySQL管理</p>
+</li>
+<li><p>&#x2F;&#x2F;</p>
+</li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>HanKangKai</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2024/03/16/MySQL%E8%BF%9B%E9%98%B6%E7%AF%87/">http://example.com/2024/03/16/MySQL%E8%BF%9B%E9%98%B6%E7%AF%87/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/MySQL/"># MySQL</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2024/03/16/MySQL%E5%9F%BA%E7%A1%80%E7%AF%87/">MySQL基础篇</a>
+            
+            
+            <a class="next" rel="next" href="/2024/03/09/%E9%87%8D%E5%86%99new%E7%9A%84%E7%AE%80%E5%8D%95%E5%AE%9E%E4%BE%8B/">重写new的简单实例</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© HanKangKai | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
