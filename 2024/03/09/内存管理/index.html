@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="HanKangKai">
+
+
+
+    <meta name="description" content="流浪者">
+
+
+
+<title>内存管理 | Wandergeneral</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+    <script>
+    !
+    function() {
+        function n(n, e, t) {
+            return n.getAttribute(e) || t
+        }
+        function e(n) {
+            return document.getElementsByTagName(n)
+        }
+        function t() {
+            var t = e("script"),
+                o = t.length,
+                i = t[o - 1];
+            return {
+                l: o,
+                z: n(i, "zIndex", -1), //置于主页面背后
+                o: n(i, "opacity", .5), //线条透明度
+                c: n(i, "color", "0,0,0"), //线条颜色
+                n: n(i, "count", 100) //线条数量
+            }
+        }
+        function o() {
+            a = m.width = window.innerWidth ||
+    document.documentElement.clientWidth || document.body.clientWidth,
+            c = m.height = window.innerHeight ||
+    document.documentElement.clientHeight || document.body.clientHeight
+        }
+        function i() {
+            r.clearRect(0, 0, a, c);
+            var n, e, t, o, m, l;
+            s.forEach(function(i, x) {
+                for (i.x += i.xa, i.y += i.ya, i.xa *= i.x > a || i.x < 0 ? -1 :
+1, i.ya *= i.y > c || i.y < 0 ? -1 : 1, r.fillRect(i.x - .5, i.y - .5, 1,
+1), e = x + 1; e < u.length; e++) n = u[e],
+                null !== n.x && null !== n.y && (o = i.x - n.x, m = i.y - n.y, l
+= o * o + m * m, l < n.max && (n === y && l >= n.max / 2 && (i.x -= .03 * o,
+i.y -= .03 * m), t = (n.max - l) / n.max, r.beginPath(), r.lineWidth = t /
+2, r.strokeStyle = "rgba(" + d.c + "," + (t + .2) + ")", r.moveTo(i.x, i.y),
+r.lineTo(n.x, n.y), r.stroke()))
+            }),
+            x(i)
+        }
+            var a, c, u, m = document.createElement("canvas"),
+                d = t(),
+                l = "c_n" + d.l,
+                r = m.getContext("2d"),
+                x = window.requestAnimationFrame || window.webkitRequestAnimationFrame
+|| window.mozRequestAnimationFrame || window.oRequestAnimationFrame ||
+window.msRequestAnimationFrame ||
+                function(n) {
+                    window.setTimeout(n, 1e3 / 45)
+                },
+                w = Math.random,
+                y = {
+                    x: null,
+                    y: null,
+                    max: 2e4
+                };
+            m.id = l,
+            m.style.cssText = "position:fixed;top:0;left:0;z-index:" + d.z +
+";opacity:" + d.o,
+            e("body")[0].appendChild(m),
+            o(),
+            window.onresize = o,
+            window.onmousemove = function(n) {
+                n = n || window.event,
+                    y.x = n.clientX,
+                    y.y = n.clientY
+                评论区采用的时Valine https://valine.js.org/ 和LeanCloud
+            },
+            window.onmouseout = function() {
+                y.x = null,
+                y.y = null
+            };
+            for (var s = [], f = 0; d.n > f; f++) {
+                var h = w() * a,
+                    g = w() * c,
+                    v = 2 * w() - 1,
+                    p = 2 * w() - 1;
+                    s.push({
+                        x: h,
+                        y: g,
+                        xa: v,
+                        ya: p,
+                        max: 6e3
+                    })
+            }
+            u = s.concat([y]),
+            setTimeout(function() {
+                i()
+            },
+            100)
+        } ();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">HanKangKai&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">HanKangKai&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">内存管理</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">HanKangKai</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">三月 9, 2024&nbsp;&nbsp;16:37:09</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">内存管理</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p><img src="/Pictures/C++%E8%A1%A5%E5%AE%8C%E8%AE%A1%E5%88%92%E8%83%8C%E6%99%AF-1713625821724.png" alt="C++补完计划背景"></p>
+<p>内存管理是C++最令人切齿痛恨的问题，也是C++最有争议的问题，一部分人从中获得了更好的性能，更大的自由，另一部分人则是收获了对C++的憎恨，但内存管理在C++中无处不在，内存泄漏几乎在每个C++程序中都会发生，因此要想成为C++高手，内存管理这一关必须要过的。</p>
+<p>本篇将从内存管理，内存泄露，内存回收三方面探讨C++内存管理问题。</p>
+<h1 id="1-内存管理"><a href="#1-内存管理" class="headerlink" title="1.内存管理"></a>1.内存管理</h1><p><em>程序员经常写内存管理程序，往往提心吊胆。如果不想触雷，唯一的解决办法就是发现所有潜伏的地雷并且排除它们。</em></p>
+<h2 id="1-1内存管理详解"><a href="#1-1内存管理详解" class="headerlink" title="1.1内存管理详解"></a>1.1内存管理详解</h2><p>首先我们必须了解[[C++中的内存分区]],这会在一定程度上理清内存在调用时的状态。</p>
+<h3 id="1-1-1明确区分堆与栈"><a href="#1-1-1明确区分堆与栈" class="headerlink" title="1.1.1明确区分堆与栈"></a>1.1.1明确区分堆与栈</h3><p>堆与栈的区分问题，似乎是一个永恒的话题。</p>
+<p>首先，我们举一个例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void f() &#123; int* p = new int[5]; &#125;</span><br></pre></td></tr></table></figure>
+<p>短短一行代码就包含了堆与栈。<br>在栈内存中开辟空间存放一个指向堆内存的指针p。（在程序中先确定在堆中分配内存，然后调用operator new分配内存，然后返回这块内存的首地址，放入栈中）</p>
+<p>栈与堆的具体的区别[[堆与栈的对比]]<br>1.管理方式不同<br>2.空间大小不同<br>3.产生碎片不同<br>4.生长方向不同<br>5.分配方式不同<br>6.分配效率不同<br>因此，我们推荐大家尽量使用栈，若不是堆。<br>虽然栈有如此众多的好处，但由于和堆比不是那么灵活，有时候分配大量的内存空间，还是用堆好一些。</p>
+<h3 id="1-1-2申请内存的方式"><a href="#1-1-2申请内存的方式" class="headerlink" title="1.1.2申请内存的方式"></a>1.1.2申请内存的方式</h3><p>申请内存的方式包括两种<br>1.[[内存分配|内存的手动申请与释放]] </p>
+<p>2.[[内存分配|完全掌握内存的申请与释放]]</p>
+<h3 id="1-1-3控制C-的内存分配"><a href="#1-1-3控制C-的内存分配" class="headerlink" title="1.1.3控制C++的内存分配"></a>1.1.3控制C++的内存分配</h3><p>在嵌入式系统中使用C++的一个常见问题是[[内存分配]]，即对new和delete操作符的失控。</p>
+<p>具有讽刺意味的是，问题的根源却是C++对内存的管理非常容易而且安全。具体地说，当一个对象被消除时，它的析构函数能够安全的释放所分配的内存。</p>
+<p>在嵌入式系统中，由于内存的限制，频繁的动态分配不定大小的内存会引起很大的问题以及[[堆破碎]]的风险。<em>作为忠告，保守的使用内存分配是嵌入式环境中的第一原则</em>。但当你必须使用new和delete时，你不得不控制C++中的内存分配。因此，我们需要用一个全局的new和delete来代替系统的内存分配符，并且一个类一个类的<code>重写operator new与delete</code></p>
+<h3 id="1-1-4常见的内存错误及其对策"><a href="#1-1-4常见的内存错误及其对策" class="headerlink" title="1.1.4常见的内存错误及其对策"></a>1.1.4常见的内存错误及其对策</h3><p>发生内存错误是件非常麻烦的事情。但往往是在运行时才能捕捉到，而这些错误大多没有明显的症状，时隐时现，增加了改错的难度。[[常见的内存错误及其对策]]</p>
+<h3 id="1-1-5指针参数如何传递内存"><a href="#1-1-5指针参数如何传递内存" class="headerlink" title="1.1.5指针参数如何传递内存"></a>1.1.5指针参数如何传递内存</h3><p>如果函数的参数是一个指针，不要指望用该指针去申请动态内存。<br>[[函数参数传递内存]]</p>
+<h3 id="1-1-6杜绝“野指针”"><a href="#1-1-6杜绝“野指针”" class="headerlink" title="1.1.6杜绝“野指针”"></a>1.1.6杜绝“野指针”</h3><p>[[野指针]]不是NULL指针，是指向“垃圾”内存的指针</p>
+<h3 id="1-1-7有了malloc-free为什么还要new-delete"><a href="#1-1-7有了malloc-free为什么还要new-delete" class="headerlink" title="1.1.7有了malloc&#x2F;free为什么还要new&#x2F;delete?"></a>1.1.7有了malloc&#x2F;free为什么还要new&#x2F;delete?</h3><p>首先，我们要了解[[malloc与free]]的用法以及[[new与delete]]的用法。</p>
+<p>首先，new与delete和malloc与free都可以<em>动态申请和释放内存</em>。对于内置类型，因为没有构造和析构函数，所以malloc与new是等价的；</p>
+<p>但对于非内置类型，申请内存后需要执行构造，在释放内存前需要执行析构；</p>
+<p>因此，不要企图用malloc与free来完成动态对象的内存管理，new和delete就代替了malloc和free。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>HanKangKai</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2024/03/09/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">http://example.com/2024/03/09/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/C-C/"># C/C++</a>
+                    
+                        <a href="/tags/%E5%86%85%E5%AD%98/"># 内存</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2024/03/09/%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F/">内存泄漏</a>
+            
+            
+            <a class="next" rel="next" href="/2024/03/09/%E5%AE%8C%E7%BE%8E%E8%BD%AC%E5%8F%91/">完美转发</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© HanKangKai | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

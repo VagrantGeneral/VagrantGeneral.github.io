@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="HanKangKai">
+
+
+
+    <meta name="description" content="流浪者">
+
+
+
+<title>优先考虑别名声明而非typedef | Wandergeneral</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+    <script>
+    !
+    function() {
+        function n(n, e, t) {
+            return n.getAttribute(e) || t
+        }
+        function e(n) {
+            return document.getElementsByTagName(n)
+        }
+        function t() {
+            var t = e("script"),
+                o = t.length,
+                i = t[o - 1];
+            return {
+                l: o,
+                z: n(i, "zIndex", -1), //置于主页面背后
+                o: n(i, "opacity", .5), //线条透明度
+                c: n(i, "color", "0,0,0"), //线条颜色
+                n: n(i, "count", 100) //线条数量
+            }
+        }
+        function o() {
+            a = m.width = window.innerWidth ||
+    document.documentElement.clientWidth || document.body.clientWidth,
+            c = m.height = window.innerHeight ||
+    document.documentElement.clientHeight || document.body.clientHeight
+        }
+        function i() {
+            r.clearRect(0, 0, a, c);
+            var n, e, t, o, m, l;
+            s.forEach(function(i, x) {
+                for (i.x += i.xa, i.y += i.ya, i.xa *= i.x > a || i.x < 0 ? -1 :
+1, i.ya *= i.y > c || i.y < 0 ? -1 : 1, r.fillRect(i.x - .5, i.y - .5, 1,
+1), e = x + 1; e < u.length; e++) n = u[e],
+                null !== n.x && null !== n.y && (o = i.x - n.x, m = i.y - n.y, l
+= o * o + m * m, l < n.max && (n === y && l >= n.max / 2 && (i.x -= .03 * o,
+i.y -= .03 * m), t = (n.max - l) / n.max, r.beginPath(), r.lineWidth = t /
+2, r.strokeStyle = "rgba(" + d.c + "," + (t + .2) + ")", r.moveTo(i.x, i.y),
+r.lineTo(n.x, n.y), r.stroke()))
+            }),
+            x(i)
+        }
+            var a, c, u, m = document.createElement("canvas"),
+                d = t(),
+                l = "c_n" + d.l,
+                r = m.getContext("2d"),
+                x = window.requestAnimationFrame || window.webkitRequestAnimationFrame
+|| window.mozRequestAnimationFrame || window.oRequestAnimationFrame ||
+window.msRequestAnimationFrame ||
+                function(n) {
+                    window.setTimeout(n, 1e3 / 45)
+                },
+                w = Math.random,
+                y = {
+                    x: null,
+                    y: null,
+                    max: 2e4
+                };
+            m.id = l,
+            m.style.cssText = "position:fixed;top:0;left:0;z-index:" + d.z +
+";opacity:" + d.o,
+            e("body")[0].appendChild(m),
+            o(),
+            window.onresize = o,
+            window.onmousemove = function(n) {
+                n = n || window.event,
+                    y.x = n.clientX,
+                    y.y = n.clientY
+                评论区采用的时Valine https://valine.js.org/ 和LeanCloud
+            },
+            window.onmouseout = function() {
+                y.x = null,
+                y.y = null
+            };
+            for (var s = [], f = 0; d.n > f; f++) {
+                var h = w() * a,
+                    g = w() * c,
+                    v = 2 * w() - 1,
+                    p = 2 * w() - 1;
+                    s.push({
+                        x: h,
+                        y: g,
+                        xa: v,
+                        ya: p,
+                        max: 6e3
+                    })
+            }
+            u = s.concat([y]),
+            setTimeout(function() {
+                i()
+            },
+            100)
+        } ();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">HanKangKai&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">HanKangKai&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">优先考虑别名声明而非typedef</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">HanKangKai</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">二月 29, 2024&nbsp;&nbsp;18:48:54</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%9D%A1%E6%AC%BE/">设计条款</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p><img src="/Pictures/C++%E8%A1%A5%E5%AE%8C%E8%AE%A1%E5%88%92%E8%83%8C%E6%99%AF.png" alt="C++补完计划背景"></p>
+<p>我相信每个人都同意使用STL容器是个好主意，并且我希望能说服你让你觉得使用<code>std:unique_ptr</code>也是个好主意，但我猜没有人喜欢写上几次 <code>std::unique_ptr&lt;std::unordered_map&lt;std::string, std::string&gt;&gt;</code>这样的类型，它可能会让你患上腕管综合征的风险大大增加。</p>
+<p>避免上述问题，引入<code>typedef</code>即可：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span></span><br><span class="line">    std::unique_ptr&lt;std::unordered_map&lt;std::string, std::string&gt;&gt;</span><br><span class="line">    UPtrMapSS;</span><br></pre></td></tr></table></figure>
+
+<p>但<code>typedef</code>是C++98的东西。虽然它可以在C++11中工作，但是C++11也提供了一个别名声明：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> UPtrMapSS =</span><br><span class="line">    std::unique_ptr&lt;std::unordered_map&lt;std::string, std::string&gt;&gt;;</span><br></pre></td></tr></table></figure>
+<p>这里给出的<code>typedef</code>和别名声明做的都是完全一样的事情。</p>
+<p>但当声明一个函数指针时别名声明更容易理解：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//FP是一个指向函数的指针的同义词，它指向的函数带有</span></span><br><span class="line"><span class="comment">//int和const std::string&amp;形参，不返回任何东西</span></span><br><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">void</span> <span class="params">(*FP)</span><span class="params">(<span class="type">int</span>, <span class="type">const</span> std::string&amp;)</span></span>;    <span class="comment">//typedef</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//含义同上</span></span><br><span class="line"><span class="keyword">using</span> FP = <span class="built_in">void</span> (*)(<span class="type">int</span>, <span class="type">const</span> std::string&amp;);   <span class="comment">//别名声明</span></span><br></pre></td></tr></table></figure>
+<p>这并不能让你完全认同别名声明比typedef更好。但看以下<code>模板</code>就会有更清晰的认同。特别地，别名声明可以被模板化，但是<code>typedef</code>不能。这使得C++11程序员可以很直接的表达一些C++98中只能把<code>typedef</code>嵌套进模板化的<code>struct</code>才能表达的东西。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;                            <span class="comment">//MyAllocList&lt;T&gt;是</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> MyAllocList = std::list&lt;T, MyAlloc&lt;T&gt;&gt;;   <span class="comment">//std::list&lt;T, MyAlloc&lt;T&gt;&gt;</span></span><br><span class="line">                                                <span class="comment">//的同义词</span></span><br><span class="line">MyAllocList&lt;Widget&gt; lw;                         <span class="comment">//用户代码</span></span><br></pre></td></tr></table></figure>
+
+<p>使用<code>typedef</code>，你就只能从头开始：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;                            <span class="comment">//MyAllocList&lt;T&gt;是</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">MyAllocList</span> &#123;                            <span class="comment">//std::list&lt;T, MyAlloc&lt;T&gt;&gt;</span></span><br><span class="line">    <span class="keyword">typedef</span> std::list&lt;T, MyAlloc&lt;T&gt;&gt; type;      <span class="comment">//的同义词  </span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">MyAllocList&lt;Widget&gt;::type lw;                   <span class="comment">//用户代码</span></span><br></pre></td></tr></table></figure>
+
+<p>更糟糕的是，如果你想使用在一个模板内使用<code>typedef</code>声明一个链表对象，而这个对象又使用了模板形参，你就不得不在<code>typedef</code>前面加上<code>typename</code>：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Widget</span> &#123;                              <span class="comment">//Widget&lt;T&gt;含有一个</span></span><br><span class="line"><span class="keyword">private</span>:                                    <span class="comment">//MyAllocLIst&lt;T&gt;对象</span></span><br><span class="line">    <span class="keyword">typename</span> MyAllocList&lt;T&gt;::type list;     <span class="comment">//作为数据成员</span></span><br><span class="line">    …</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这里<code>MyAllocList&lt;T&gt;::type</code>使用了一个类型，这个类型依赖于模板参数<code>T</code>。因此<code>MyAllocList&lt;T&gt;::type</code>是一个依赖类型（<em>dependent type</em>），在C++很多讨人喜欢的规则中的一个提到必须要在依赖类型名前加上<code>typename</code>。</p>
+<p>如果使用别名声明定义一个<code>MyAllocList</code>，就不需要使用<code>typename</code>（同时省略麻烦的“<code>::type</code>”后缀）。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">using</span> MyAllocList = std::list&lt;T, MyAlloc&lt;T&gt;&gt;;   <span class="comment">//同之前一样</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Widget</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    MyAllocList&lt;T&gt; list;                        <span class="comment">//没有“typename”</span></span><br><span class="line">    …                                           <span class="comment">//没有“::type”</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>对你来说，<code>MyAllocList&lt;T&gt;</code>（使用了模板别名声明的版本）可能看起来和<code>MyAllocList&lt;T&gt;::type</code>（使用<code>typedef</code>的版本）一样都应该依赖模板参数<code>T</code>，但是你不是编译器。当编译器处理<code>Widget</code>模板时遇到<code>MyAllocList&lt;T&gt;</code>（使用模板别名声明的版本），它们知道<code>MyAllocList&lt;T&gt;</code>是一个类型名，因为<code>MyAllocList</code>是一个别名模板：它<strong>一定</strong>是一个类型名。因此<code>MyAllocList&lt;T&gt;</code>就是一个<strong>非依赖类型</strong>（<em>non-dependent type</em>），就不需要也不允许使用<code>typename</code>修饰符。</p>
+<p>当编译器在<code>Widget</code>的模板中看到<code>MyAllocList&lt;T&gt;::type</code>（使用<code>typedef</code>的版本），它不能确定那是一个类型的名称。因为可能存在一个<code>MyAllocList</code>的它们没见到的特化版本，那个版本的<code>MyAllocList&lt;T&gt;::type</code>指代了一种不是类型的东西。那听起来很不可思议，但不要责备编译器穷尽考虑所有可能。因为人确实能写出这样的代码。</p>
+<p>举个例子，一个误入歧途的人可能写出这样的代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Wine</span> &#123; … &#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;&gt;                          <span class="comment">//当T是Wine</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyAllocList</span>&lt;Wine&gt; &#123;           <span class="comment">//特化MyAllocList</span></span><br><span class="line"><span class="keyword">private</span>:  </span><br><span class="line">    <span class="keyword">enum class</span> <span class="title class_">WineType</span>             <span class="comment">//参见Item10了解  </span></span><br><span class="line">    &#123; White, Red, Rose &#125;;           <span class="comment">//&quot;enum class&quot;</span></span><br><span class="line"></span><br><span class="line">    WineType type;                  <span class="comment">//在这个类中，type是</span></span><br><span class="line">    …                               <span class="comment">//一个数据成员！</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>就像你看到的，<code>MyAllocList&lt;Wine&gt;::type</code>不是一个类型。如果<code>Widget</code>使用<code>Wine</code>实例化，在<code>Widget</code>模板中的<code>MyAllocList&lt;Wine&gt;::type</code>将会是一个数据成员，不是一个类型。在<code>Widget</code>模板内，<code>MyAllocList&lt;T&gt;::type</code>是否表示一个类型取决于<code>T</code>是什么，这就是为什么编译器会坚持要求你在前面加上<code>typename</code>。</p>
+<p><strong>请记住：</strong></p>
+<ul>
+<li><p><code>typedef</code>不支持模板化，但是别名声明支持。</p>
+</li>
+<li><p>别名模板避免了使用“<code>::type</code>”后缀，而且在模板中使用<code>typedef</code>还需要在前面加上<code>typename</code></p>
+</li>
+<li><p>C++14提供了C++11所有<em>type traits</em>转换的别名声明版本</p>
+</li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>HanKangKai</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2024/02/29/%E4%BC%98%E5%85%88%E8%80%83%E8%99%91%E5%88%AB%E5%90%8D%E5%A3%B0%E6%98%8E%E8%80%8C%E9%9D%9Etypedef/">http://example.com/2024/02/29/%E4%BC%98%E5%85%88%E8%80%83%E8%99%91%E5%88%AB%E5%90%8D%E5%A3%B0%E6%98%8E%E8%80%8C%E9%9D%9Etypedef/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/typedef/"># typedef</a>
+                    
+                        <a href="/tags/%E5%88%AB%E5%90%8D%E5%A3%B0%E6%98%8E/"># 别名声明</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2024/02/29/%E4%BC%98%E5%85%88%E8%80%83%E8%99%91nullptr%E8%80%8C%E9%9D%9E0%E5%92%8CNULL/">优先考虑nullptr而非0和NULL</a>
+            
+            
+            <a class="next" rel="next" href="/2024/02/29/%E5%80%BC%E7%B1%BB%E5%9E%8B%E4%B8%8E%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8/">值类型与右值引用</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© HanKangKai | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

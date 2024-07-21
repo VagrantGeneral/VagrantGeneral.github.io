@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="HanKangKai">
+
+
+
+    <meta name="description" content="流浪者">
+
+
+
+<title>TCP连接 | Wandergeneral</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+    <script>
+    !
+    function() {
+        function n(n, e, t) {
+            return n.getAttribute(e) || t
+        }
+        function e(n) {
+            return document.getElementsByTagName(n)
+        }
+        function t() {
+            var t = e("script"),
+                o = t.length,
+                i = t[o - 1];
+            return {
+                l: o,
+                z: n(i, "zIndex", -1), //置于主页面背后
+                o: n(i, "opacity", .5), //线条透明度
+                c: n(i, "color", "0,0,0"), //线条颜色
+                n: n(i, "count", 100) //线条数量
+            }
+        }
+        function o() {
+            a = m.width = window.innerWidth ||
+    document.documentElement.clientWidth || document.body.clientWidth,
+            c = m.height = window.innerHeight ||
+    document.documentElement.clientHeight || document.body.clientHeight
+        }
+        function i() {
+            r.clearRect(0, 0, a, c);
+            var n, e, t, o, m, l;
+            s.forEach(function(i, x) {
+                for (i.x += i.xa, i.y += i.ya, i.xa *= i.x > a || i.x < 0 ? -1 :
+1, i.ya *= i.y > c || i.y < 0 ? -1 : 1, r.fillRect(i.x - .5, i.y - .5, 1,
+1), e = x + 1; e < u.length; e++) n = u[e],
+                null !== n.x && null !== n.y && (o = i.x - n.x, m = i.y - n.y, l
+= o * o + m * m, l < n.max && (n === y && l >= n.max / 2 && (i.x -= .03 * o,
+i.y -= .03 * m), t = (n.max - l) / n.max, r.beginPath(), r.lineWidth = t /
+2, r.strokeStyle = "rgba(" + d.c + "," + (t + .2) + ")", r.moveTo(i.x, i.y),
+r.lineTo(n.x, n.y), r.stroke()))
+            }),
+            x(i)
+        }
+            var a, c, u, m = document.createElement("canvas"),
+                d = t(),
+                l = "c_n" + d.l,
+                r = m.getContext("2d"),
+                x = window.requestAnimationFrame || window.webkitRequestAnimationFrame
+|| window.mozRequestAnimationFrame || window.oRequestAnimationFrame ||
+window.msRequestAnimationFrame ||
+                function(n) {
+                    window.setTimeout(n, 1e3 / 45)
+                },
+                w = Math.random,
+                y = {
+                    x: null,
+                    y: null,
+                    max: 2e4
+                };
+            m.id = l,
+            m.style.cssText = "position:fixed;top:0;left:0;z-index:" + d.z +
+";opacity:" + d.o,
+            e("body")[0].appendChild(m),
+            o(),
+            window.onresize = o,
+            window.onmousemove = function(n) {
+                n = n || window.event,
+                    y.x = n.clientX,
+                    y.y = n.clientY
+                评论区采用的时Valine https://valine.js.org/ 和LeanCloud
+            },
+            window.onmouseout = function() {
+                y.x = null,
+                y.y = null
+            };
+            for (var s = [], f = 0; d.n > f; f++) {
+                var h = w() * a,
+                    g = w() * c,
+                    v = 2 * w() - 1,
+                    p = 2 * w() - 1;
+                    s.push({
+                        x: h,
+                        y: g,
+                        xa: v,
+                        ya: p,
+                        max: 6e3
+                    })
+            }
+            u = s.concat([y]),
+            setTimeout(function() {
+                i()
+            },
+            100)
+        } ();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">HanKangKai&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">HanKangKai&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">TCP连接</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">HanKangKai</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">六月 4, 2024&nbsp;&nbsp;21:05:32</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p><img src="/Pictures/b2.jpg" alt="b2"></p>
+<p>要了解TCP的连接，首先要了解TCP报文段的格式。TCP报文段的格式如下：<img src="/Pictures/1717570559764.png" alt="1717570559764"></p>
+<p>但是，需要我们关注的是<strong>序号，确认号，以及标志位（SYN，FIN等）</strong>这三个。其他暂时无关紧要。</p>
+<ul>
+<li>序号：报文段首字节的字节流编号。seq</li>
+<li>确认号：期望从目标主机收到的下一字节的编号。ACK</li>
+<li>标志位：SYN—-连接建立，FIN—-连接断开。</li>
+</ul>
+<h3 id="TCP数据交换"><a href="#TCP数据交换" class="headerlink" title="TCP数据交换"></a>TCP数据交换</h3><p>TCP客户端与服务端的数据交换是建立在seq(发送序号)，ACK(确认应答)，标志位之上。</p>
+<p>举个例子，看下图的数据传输：<img src="/Pictures/1717571749555.png" alt="1717571749555"></p>
+<ol>
+<li>客户端发送报文段：数据内容为c。seq &#x3D; 42代表其为42号报文段（客户端）。ACK &#x3D; 79代表客户端已经接收到了79之前的所有报文段，并请求服务端发送79号报文段（服务端）。</li>
+<li>服务端发送报文段：数据内容为d。seq &#x3D; 79代表其为79号报文段（服务端）。ACK &#x3D; 43代表服务端已经接收到了43之前的所有报文段，并请求客户端发送43号报文段（客户端）。</li>
+<li>客户端发送报文段：数据内容为e。seq &#x3D; 43代表其为43号报文段（客户端）。ACK &#x3D; 80代表客户端已经接收到了80之前的所有报文段，并请求服务端发送80号报文段（服务端）。</li>
+</ol>
+<p>我们可以看到，对客户到服务器的数据的确认会被捎带在服务器到客户的报文段中。</p>
+<p>同时我们也可以看到一种叫做<strong>累计确认</strong>的机制。例如，客户端收到了30之前的所有数据，在未收到30前提前收到了31，那么31是不会被确认的，因为30未收到。</p>
+<h3 id="TCP的三次握手建立连接"><a href="#TCP的三次握手建立连接" class="headerlink" title="TCP的三次握手建立连接"></a>TCP的三次握手建立连接</h3><p>如图，在TCP建立连接时，会有三次报文交换，因此称为三次握手。<img src="/Pictures/1717577012534.png" alt="1717577012534"></p>
+<p>首先，服务端已经打开。客户端发起连接。</p>
+<ol>
+<li><strong>客户端发送请求报文。SYN置为1，代表此报文为请求连接的报文。seq为client_x，代表序号随机初始化值。</strong></li>
+<li><em>服务端收到客户端发来的请求报文时，为客户端分配缓存和变量。</em></li>
+<li><strong>服务端发送请求报文，携带确认信息。SYN置为1，代表此报文为请求连接的报文。ACK为client_x + 1代表服务端已经确认收到client_x + 1之前的所有数据，期望下次发送client_x + 1号的报文段。seq为serv_x，代表序号随机初始化值。</strong></li>
+<li><em>客户端收到服务端发来的请求报文时，为服务端分配缓存和变量。</em>此时双向通信已基本完成。</li>
+<li><strong>客户端发送响应报文。ACK为serv_x + 1代表客户端已经确认收到serv_x + 1之前的所有数据，期望下次发送serv_x + 1号的报文段。seq为client_x + 1，代表此报文序号为client_x + 1。</strong></li>
+</ol>
+<p>此时便可以看到三次握手在本质上还是在进行<strong>请求与确认</strong>。</p>
+<h3 id="TCP的四次挥手释放连接"><a href="#TCP的四次挥手释放连接" class="headerlink" title="TCP的四次挥手释放连接"></a>TCP的四次挥手释放连接</h3><p>有建立连接就会有释放连接，释放时会有四次的交流，因此被称为四次挥手。如图：<img src="/Pictures/1717592227398.png" alt="1717592227398"></p>
+<p>请求与应答报文不用再多说了</p>
+<h3 id="TCP状态"><a href="#TCP状态" class="headerlink" title="TCP状态"></a>TCP状态</h3><p>在一个TCP连接的生命周期内，每个主机上的TCP协议都有不同的状态，这种状态叫<strong>TCP状态</strong>。如图说明了一系列典型的TCP状态以及之间的变迁过程。<img src="/Pictures/TCP%E7%8A%B6%E6%80%81%E8%BF%9E%E6%8E%A5%E5%9B%BE.png" alt="TCP状态连接图"></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>HanKangKai</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2024/06/04/TCP%E8%BF%9E%E6%8E%A5/">http://example.com/2024/06/04/TCP%E8%BF%9E%E6%8E%A5/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"># 计算机网络</a>
+                    
+                        <a href="/tags/TCP%E5%8D%8F%E8%AE%AE/"># TCP协议</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2024/06/07/cache%E2%80%94%E2%80%94%E5%9B%9B%E4%B8%A4%E6%8B%A8%E5%8D%83%E6%96%A4/">cache——四两拨千斤</a>
+            
+            
+            <a class="next" rel="next" href="/2024/06/03/%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6%E2%80%94%E2%80%94Linux%E7%9A%84%E5%91%BD%E8%84%89/">文件描述符——Linux的命脉</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© HanKangKai | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

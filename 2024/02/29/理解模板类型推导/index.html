@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="HanKangKai">
+
+
+
+    <meta name="description" content="流浪者">
+
+
+
+<title>理解模板类型推导 | Wandergeneral</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+    <script>
+    !
+    function() {
+        function n(n, e, t) {
+            return n.getAttribute(e) || t
+        }
+        function e(n) {
+            return document.getElementsByTagName(n)
+        }
+        function t() {
+            var t = e("script"),
+                o = t.length,
+                i = t[o - 1];
+            return {
+                l: o,
+                z: n(i, "zIndex", -1), //置于主页面背后
+                o: n(i, "opacity", .5), //线条透明度
+                c: n(i, "color", "0,0,0"), //线条颜色
+                n: n(i, "count", 100) //线条数量
+            }
+        }
+        function o() {
+            a = m.width = window.innerWidth ||
+    document.documentElement.clientWidth || document.body.clientWidth,
+            c = m.height = window.innerHeight ||
+    document.documentElement.clientHeight || document.body.clientHeight
+        }
+        function i() {
+            r.clearRect(0, 0, a, c);
+            var n, e, t, o, m, l;
+            s.forEach(function(i, x) {
+                for (i.x += i.xa, i.y += i.ya, i.xa *= i.x > a || i.x < 0 ? -1 :
+1, i.ya *= i.y > c || i.y < 0 ? -1 : 1, r.fillRect(i.x - .5, i.y - .5, 1,
+1), e = x + 1; e < u.length; e++) n = u[e],
+                null !== n.x && null !== n.y && (o = i.x - n.x, m = i.y - n.y, l
+= o * o + m * m, l < n.max && (n === y && l >= n.max / 2 && (i.x -= .03 * o,
+i.y -= .03 * m), t = (n.max - l) / n.max, r.beginPath(), r.lineWidth = t /
+2, r.strokeStyle = "rgba(" + d.c + "," + (t + .2) + ")", r.moveTo(i.x, i.y),
+r.lineTo(n.x, n.y), r.stroke()))
+            }),
+            x(i)
+        }
+            var a, c, u, m = document.createElement("canvas"),
+                d = t(),
+                l = "c_n" + d.l,
+                r = m.getContext("2d"),
+                x = window.requestAnimationFrame || window.webkitRequestAnimationFrame
+|| window.mozRequestAnimationFrame || window.oRequestAnimationFrame ||
+window.msRequestAnimationFrame ||
+                function(n) {
+                    window.setTimeout(n, 1e3 / 45)
+                },
+                w = Math.random,
+                y = {
+                    x: null,
+                    y: null,
+                    max: 2e4
+                };
+            m.id = l,
+            m.style.cssText = "position:fixed;top:0;left:0;z-index:" + d.z +
+";opacity:" + d.o,
+            e("body")[0].appendChild(m),
+            o(),
+            window.onresize = o,
+            window.onmousemove = function(n) {
+                n = n || window.event,
+                    y.x = n.clientX,
+                    y.y = n.clientY
+                评论区采用的时Valine https://valine.js.org/ 和LeanCloud
+            },
+            window.onmouseout = function() {
+                y.x = null,
+                y.y = null
+            };
+            for (var s = [], f = 0; d.n > f; f++) {
+                var h = w() * a,
+                    g = w() * c,
+                    v = 2 * w() - 1,
+                    p = 2 * w() - 1;
+                    s.push({
+                        x: h,
+                        y: g,
+                        xa: v,
+                        ya: p,
+                        max: 6e3
+                    })
+            }
+            u = s.concat([y]),
+            setTimeout(function() {
+                i()
+            },
+            100)
+        } ();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">HanKangKai&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">HanKangKai&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">理解模板类型推导</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">HanKangKai</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">二月 29, 2024&nbsp;&nbsp;18:46:30</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%9D%A1%E6%AC%BE/">设计条款</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p><img src="/Pictures/C++%E8%A1%A5%E5%AE%8C%E8%AE%A1%E5%88%92%E8%83%8C%E6%99%AF.png" alt="C++补完计划背景"></p>
+<p>如今C++最重要最吸引人的特性<code>auto</code>是建立在模板类型推导的基础上的。如果你满意C++98的模板类型推导，那么你也会满意C++11的<code>auto</code>类型推导。</p>
+<p>但是当模板类型推导规则应用于<code>auto</code>环境时，有时不如应用于template时那么直观。由于这个原因，真正理解<code>auto</code>基于的模板类型推导的方方面面非常重要。</p>
+<p>我们可以考虑像这样一个函数模板：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">f</span><span class="params">(ParamType param)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>它的调用看起来像这样</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">f</span>(expr);                        <span class="comment">//使用表达式调用f</span></span><br></pre></td></tr></table></figure>
+<p>在编译期间，编译器使用<code>expr</code>进行两个类型推导：一个是针对<code>T</code>的，另一个是针对<code>ParamType</code>的。这两个类型通常是不同的，因为<code>ParamType</code>包含一些修饰，比如<code>const</code>和引用修饰符。</p>
+<p>举个例子，如果模板这样声明：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">f</span><span class="params">(<span class="type">const</span> T&amp; param)</span></span>;         <span class="comment">//ParamType是const T&amp;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后这样进行调用</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> x = <span class="number">0</span>;</span><br><span class="line"><span class="built_in">f</span>(x);                           <span class="comment">//用一个int类型的变量调用f</span></span><br></pre></td></tr></table></figure>
+
+<p><code>T</code>被推导为<code>int</code>，<code>ParamType</code>却被推导为<code>const int&amp;</code>。</p>
+<p>我们可能很自然的期望<code>T</code>和传递进函数的实参是相同的类型，也就是，<code>T</code>为<code>expr</code>的类型。在上面的例子中，事实就是那样：<code>x</code>是<code>int</code>，<code>T</code>被推导为<code>int</code>。但有时情况并非总是如此，<code>T</code>的类型推导不仅取决于<code>expr</code>的类型，也取决于<code>ParamType</code>的类型。这里有三种情况：</p>
+<ul>
+<li><p><code>ParamType</code>是一个指针或引用，但不是通用引用（关于通用引用请参见<a target="_blank" rel="noopener" href="https://github.com/kelthuzadx/EffectiveModernCppChinese/blob/master/5.RRefMovSemPerfForw/item24.md">Item24</a>。在这里你只需要知道它存在，而且不同于左值引用和右值引用）</p>
+</li>
+<li><p><code>ParamType</code>一个通用引用</p>
+</li>
+<li><p><code>ParamType</code>既不是指针也不是引用</p>
+</li>
+</ul>
+<p>我们下面将分成三个情景来讨论这三种情况，每个情景的都基于我们之前给出的模板：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">f</span><span class="params">(ParamType param)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">f</span>(expr);                        <span class="comment">//从expr中推导T和ParamType</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<h3 id="情景一：ParamType是一个指针或引用，但不是通用引用"><a href="#情景一：ParamType是一个指针或引用，但不是通用引用" class="headerlink" title="情景一：ParamType是一个指针或引用，但不是通用引用"></a>情景一：<code>ParamType</code>是一个指针或引用，但不是通用引用</h3><p>最简单的情况是<code>ParamType</code>是一个指针或者引用，但非通用引用。在这种情况下，类型推导会这样进行：</p>
+<ol>
+<li><p>如果<code>expr</code>的类型是一个引用，忽略引用部分</p>
+</li>
+<li><p>然后<code>expr</code>的类型与<code>ParamType</code>进行模式匹配来决定<code>T</code></p>
+</li>
+</ol>
+<p>举个例子，如果这是我们的模板，</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">f</span><span class="params">(T&amp; param)</span></span>;               <span class="comment">//param是一个引用</span></span><br></pre></td></tr></table></figure>
+
+<p>我们声明这些变量，</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> x=<span class="number">27</span>;                       <span class="comment">//x是int</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> cx=x;                 <span class="comment">//cx是const int</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span>&amp; rx=x;                <span class="comment">//rx是指向作为const int的x的引用</span></span><br></pre></td></tr></table></figure>
+
+<p>在不同的调用中，对<code>param</code>和<code>T</code>推导的类型会是这样：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">f</span>(x);                           <span class="comment">//T是int，param的类型是int&amp;</span></span><br><span class="line"><span class="built_in">f</span>(cx);                          <span class="comment">//T是const int，param的类型是const int&amp;</span></span><br><span class="line"><span class="built_in">f</span>(rx);                          <span class="comment">//T是const int，param的类型是const int&amp;</span></span><br></pre></td></tr></table></figure>
+
+<p>在第二个和第三个调用中，注意因为<code>cx</code>和<code>rx</code>被指定为<code>const</code>值，所以<code>T</code>被推导为<code>const int</code>，从而产生了<code>const int&amp;</code>的形参类型。这对于调用者来说很重要。当他们传递一个<code>const</code>对象给一个引用类型的形参时，他们期望对象保持不可改变性，也就是说，形参是reference-to-<code>const</code>的。这也是为什么将一个<code>const</code>对象传递给以<code>T&amp;</code>类型为形参的模板安全的：对象的常量性<code>const</code>ness会被保留为<code>T</code>的一部分。</p>
+<p>在第三个例子中，注意即使<code>rx</code>的类型是一个引用，<code>T</code>也会被推导为一个非引用 ，这是因为<code>rx</code>的引用性（reference-ness）在类型推导中会被忽略。</p>
+<p>这些例子只展示了左值引用，但是类型推导会如左值引用一样对待右值引用。当然，右值只能传递给右值引用，但是在类型推导中这种限制将不复存在。</p>
+<p>如果我们将<code>f</code>的形参类型<code>T&amp;</code>改为<code>const T&amp;</code>，情况有所变化，但不会变得那么出人意料。<code>cx</code>和<code>rx</code>的<code>const</code>ness依然被遵守，但是因为现在我们假设<code>param</code>是reference-to-<code>const</code>，<code>const</code>不再被推导为<code>T</code>的一部分：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">f</span><span class="params">(<span class="type">const</span> T&amp; param)</span></span>;         <span class="comment">//param现在是reference-to-const</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> x = <span class="number">27</span>;                     <span class="comment">//如之前一样</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> cx = x;               <span class="comment">//如之前一样</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span>&amp; rx = x;              <span class="comment">//如之前一样</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">f</span>(x);                           <span class="comment">//T是int，param的类型是const int&amp;</span></span><br><span class="line"><span class="built_in">f</span>(cx);                          <span class="comment">//T是int，param的类型是const int&amp;</span></span><br><span class="line"><span class="built_in">f</span>(rx);                          <span class="comment">//T是int，param的类型是const int&amp;</span></span><br></pre></td></tr></table></figure>
+
+
+<p>同之前一样，<code>rx</code>的reference-ness在类型推导中被忽略了。</p>
+<p>如果<code>param</code>是一个指针（或者指向<code>const</code>的指针）而不是引用，情况本质上也一样：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">f</span><span class="params">(T* param)</span></span>;               <span class="comment">//param现在是指针 </span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> x = <span class="number">27</span>;                     <span class="comment">//同之前一样</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> *px = &amp;x;             <span class="comment">//px是指向作为const int的x的指针</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">f</span>(&amp;x);                          <span class="comment">//T是int，param的类型是int*</span></span><br><span class="line"><span class="built_in">f</span>(px);                          <span class="comment">//T是const int，param的类型是const int*</span></span><br></pre></td></tr></table></figure>
+
+<p>到现在为止，你会发现你自己打哈欠犯困，因为C++的类型推导规则对引用和指针形参如此自然，书面形式来看这些非常枯燥。所有事情都那么理所当然！那正是在类型推导系统中你所想要的。</p>
+<h3 id="情景二：ParamType是一个通用引用"><a href="#情景二：ParamType是一个通用引用" class="headerlink" title="情景二：ParamType是一个通用引用"></a>情景二：<code>ParamType</code>是一个通用引用</h3><p>模板使用通用引用形参的话，那事情就不那么明显了。这样的形参被声明为像右值引用一样（也就是，在函数模板中假设有一个类型形参<code>T</code>，那么通用引用声明形式就是<code>T&amp;&amp;</code>)，它们的行为在传入左值实参时大不相同。完整的叙述请参见<a target="_blank" rel="noopener" href="https://github.com/kelthuzadx/EffectiveModernCppChinese/blob/master/5.RRefMovSemPerfForw/item24.md">Item24</a>，在这有些最必要的你还是需要知道：</p>
+<ul>
+<li><p>如果<code>expr</code>是左值，<code>T</code>和<code>ParamType</code>都会被推导为左值引用。这非常不寻常，第一，这是模板类型推导中唯一一种<code>T</code>被推导为引用的情况。第二，虽然<code>ParamType</code>被声明为右值引用类型，但是最后推导的结果是左值引用。</p>
+</li>
+<li><p>如果<code>expr</code>是右值，就使用正常的（也就是<strong>情景一</strong>）推导规则</p>
+</li>
+</ul>
+<p>举个例子：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">f</span><span class="params">(T&amp;&amp; param)</span></span>;              <span class="comment">//param现在是一个通用引用类型</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> x=<span class="number">27</span>;                       <span class="comment">//如之前一样</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> cx=x;                 <span class="comment">//如之前一样</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> &amp; rx=cx;              <span class="comment">//如之前一样</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">f</span>(x);                           <span class="comment">//x是左值，所以T是int&amp;，</span></span><br><span class="line">                                <span class="comment">//param类型也是int&amp;</span></span><br><span class="line"><span class="built_in">f</span>(cx);                          <span class="comment">//cx是左值，所以T是const int&amp;，</span></span><br><span class="line">                                <span class="comment">//param类型也是const int&amp;</span></span><br><span class="line"><span class="built_in">f</span>(rx);                          <span class="comment">//rx是左值，所以T是const int&amp;，</span></span><br><span class="line">                                <span class="comment">//param类型也是const int&amp;</span></span><br><span class="line"><span class="built_in">f</span>(<span class="number">27</span>);                          <span class="comment">//27是右值，所以T是int，</span></span><br><span class="line">                                <span class="comment">//param类型就是int&amp;&amp;</span></span><br></pre></td></tr></table></figure>
+
+<p>条款24详细解释了为什么这些例子是像这样发生的。这里关键在于通用引用的类型推导规则是不同于普通的左值或者右值引用的。尤其是，当通用引用被使用时，类型推导会区分左值实参和右值实参，但是对非通用引用时不会区分。</p>
+<h3 id="情景三：ParamType既不是指针也不是引用"><a href="#情景三：ParamType既不是指针也不是引用" class="headerlink" title="情景三：ParamType既不是指针也不是引用"></a>情景三：<code>ParamType</code>既不是指针也不是引用</h3><p>当<code>ParamType</code>既不是指针也不是引用时，我们通过传值（pass-by-value）的方式处理：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">f</span><span class="params">(T param)</span></span>;                <span class="comment">//以传值的方式处理param</span></span><br></pre></td></tr></table></figure>
+
+<p>这意味着无论传递什么<code>param</code>都会成为它的一份拷贝——一个完整的新对象。事实上<code>param</code>成为一个新对象这一行为会影响<code>T</code>如何从<code>expr</code>中推导出结果。</p>
+<ol>
+<li><p>和之前一样，如果<code>expr</code>的类型是一个引用，忽略这个引用部分</p>
+</li>
+<li><p>如果忽略<code>expr</code>的引用性（reference-ness）之后，<code>expr</code>是一个<code>const</code>，那就再忽略<code>const</code>。如果它是<code>volatile</code>，也忽略<code>volatile</code>（<code>volatile</code>对象不常见，它通常用于驱动程序的开发中。关于<code>volatile</code>的细节请参见<a target="_blank" rel="noopener" href="https://github.com/kelthuzadx/EffectiveModernCppChinese/blob/master/7.TheConcurrencyAPI/item40.md">Item40</a>）</p>
+</li>
+</ol>
+<p>因此</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="type">int</span> x=<span class="number">27</span>;                       <span class="comment">//如之前一样</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> cx=x;                 <span class="comment">//如之前一样</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> &amp; rx=cx;              <span class="comment">//如之前一样</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">f</span>(x);                           <span class="comment">//T和param的类型都是int</span></span><br><span class="line"><span class="built_in">f</span>(cx);                          <span class="comment">//T和param的类型都是int</span></span><br><span class="line"><span class="built_in">f</span>(rx);                          <span class="comment">//T和param的类型都是int</span></span><br></pre></td></tr></table></figure>
+
+<p>注意即使<code>cx</code>和<code>rx</code>表示<code>const</code>值，<code>param</code>也不是<code>const</code>。这是有意义的。<code>param</code>是一个完全独立于<code>cx</code>和<code>rx</code>的对象——是<code>cx</code>或<code>rx</code>的一个拷贝。具有常量性的<code>cx</code>和<code>rx</code>不可修改并不代表<code>param</code>也是一样。这就是为什么<code>expr</code>的常量性<code>const</code>ness（或易变性<code>volatile</code>ness)在推导<code>param</code>类型时会被忽略：因为<code>expr</code>不可修改并不意味着它的拷贝也不能被修改。</p>
+<p>认识到只有在传值给形参时才会忽略<code>const</code>（和<code>volatile</code>）这一点很重要，正如我们看到的，对于reference-to-<code>const</code>和pointer-to-<code>const</code>形参来说，<code>expr</code>的常量性<code>const</code>ness在推导时会被保留。但是考虑这样的情况，<code>expr</code>是一个<code>const</code>指针，指向<code>const</code>对象，<code>expr</code>通过传值传递给<code>param</code>：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">f</span><span class="params">(T param)</span></span>;                <span class="comment">//仍然以传值的方式处理param</span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">char</span>* <span class="type">const</span> ptr =         <span class="comment">//ptr是一个常量指针，指向常量对象</span></span><br><span class="line">    <span class="string">&quot;Fun with pointers&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">f</span>(ptr);                         <span class="comment">//传递const char * const类型的实参</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>在这里，解引用符号（*）的右边的<code>const</code>表示<code>ptr</code>本身是一个<code>const</code>：<code>ptr</code>不能被修改为指向其它地址，也不能被设置为null（解引用符号左边的<code>const</code>表示<code>ptr</code>指向一个字符串，这个字符串是<code>const</code>，因此字符串不能被修改）。当<code>ptr</code>作为实参传给<code>f</code>，组成这个指针的每一比特都被拷贝进<code>param</code>。像这种情况，<code>ptr</code><strong>自身的值会被传给形参</strong>，根据类型推导的第三条规则，<code>ptr</code>自身的常量性<code>const</code>ness将会被省略，所以<code>param</code>是<code>const char*</code>，也就是一个可变指针指向<code>const</code>字符串。在类型推导中，这个指针指向的数据的常量性<code>const</code>ness将会被保留，但是当拷贝<code>ptr</code>来创造一个新指针<code>param</code>时，<code>ptr</code>自身的常量性<code>const</code>ness将会被忽略。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>HanKangKai</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2024/02/29/%E7%90%86%E8%A7%A3%E6%A8%A1%E6%9D%BF%E7%B1%BB%E5%9E%8B%E6%8E%A8%E5%AF%BC/">http://example.com/2024/02/29/%E7%90%86%E8%A7%A3%E6%A8%A1%E6%9D%BF%E7%B1%BB%E5%9E%8B%E6%8E%A8%E5%AF%BC/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E6%A8%A1%E6%9D%BF/"># 模板</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2024/02/29/%E7%90%86%E8%A7%A3auto%E7%B1%BB%E5%9E%8B%E6%8E%A8%E5%AF%BC/">理解auto类型推导</a>
+            
+            
+            <a class="next" rel="next" href="/2024/02/29/%E5%B8%B8%E8%A7%81%E7%9A%84%E5%86%85%E5%AD%98%E9%94%99%E8%AF%AF%E4%BB%A5%E5%8F%8A%E5%AF%B9%E7%AD%96/">常见的内存错误以及对策</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© HanKangKai | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

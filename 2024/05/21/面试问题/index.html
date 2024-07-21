@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="HanKangKai">
+
+
+
+    <meta name="description" content="流浪者">
+
+
+
+<title>面试问题 | Wandergeneral</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+    <script>
+    !
+    function() {
+        function n(n, e, t) {
+            return n.getAttribute(e) || t
+        }
+        function e(n) {
+            return document.getElementsByTagName(n)
+        }
+        function t() {
+            var t = e("script"),
+                o = t.length,
+                i = t[o - 1];
+            return {
+                l: o,
+                z: n(i, "zIndex", -1), //置于主页面背后
+                o: n(i, "opacity", .5), //线条透明度
+                c: n(i, "color", "0,0,0"), //线条颜色
+                n: n(i, "count", 100) //线条数量
+            }
+        }
+        function o() {
+            a = m.width = window.innerWidth ||
+    document.documentElement.clientWidth || document.body.clientWidth,
+            c = m.height = window.innerHeight ||
+    document.documentElement.clientHeight || document.body.clientHeight
+        }
+        function i() {
+            r.clearRect(0, 0, a, c);
+            var n, e, t, o, m, l;
+            s.forEach(function(i, x) {
+                for (i.x += i.xa, i.y += i.ya, i.xa *= i.x > a || i.x < 0 ? -1 :
+1, i.ya *= i.y > c || i.y < 0 ? -1 : 1, r.fillRect(i.x - .5, i.y - .5, 1,
+1), e = x + 1; e < u.length; e++) n = u[e],
+                null !== n.x && null !== n.y && (o = i.x - n.x, m = i.y - n.y, l
+= o * o + m * m, l < n.max && (n === y && l >= n.max / 2 && (i.x -= .03 * o,
+i.y -= .03 * m), t = (n.max - l) / n.max, r.beginPath(), r.lineWidth = t /
+2, r.strokeStyle = "rgba(" + d.c + "," + (t + .2) + ")", r.moveTo(i.x, i.y),
+r.lineTo(n.x, n.y), r.stroke()))
+            }),
+            x(i)
+        }
+            var a, c, u, m = document.createElement("canvas"),
+                d = t(),
+                l = "c_n" + d.l,
+                r = m.getContext("2d"),
+                x = window.requestAnimationFrame || window.webkitRequestAnimationFrame
+|| window.mozRequestAnimationFrame || window.oRequestAnimationFrame ||
+window.msRequestAnimationFrame ||
+                function(n) {
+                    window.setTimeout(n, 1e3 / 45)
+                },
+                w = Math.random,
+                y = {
+                    x: null,
+                    y: null,
+                    max: 2e4
+                };
+            m.id = l,
+            m.style.cssText = "position:fixed;top:0;left:0;z-index:" + d.z +
+";opacity:" + d.o,
+            e("body")[0].appendChild(m),
+            o(),
+            window.onresize = o,
+            window.onmousemove = function(n) {
+                n = n || window.event,
+                    y.x = n.clientX,
+                    y.y = n.clientY
+                评论区采用的时Valine https://valine.js.org/ 和LeanCloud
+            },
+            window.onmouseout = function() {
+                y.x = null,
+                y.y = null
+            };
+            for (var s = [], f = 0; d.n > f; f++) {
+                var h = w() * a,
+                    g = w() * c,
+                    v = 2 * w() - 1,
+                    p = 2 * w() - 1;
+                    s.push({
+                        x: h,
+                        y: g,
+                        xa: v,
+                        ya: p,
+                        max: 6e3
+                    })
+            }
+            u = s.concat([y]),
+            setTimeout(function() {
+                i()
+            },
+            100)
+        } ();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">HanKangKai&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">HanKangKai&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">面试问题</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">HanKangKai</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">五月 21, 2024&nbsp;&nbsp;0:34:37</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p><strong>指针与引用</strong></p>
+<p>指针是变量，只不过存储的是地址。而引用仅仅是变量的“别名”。</p>
+<p>指针拥有自己的内存空间。而引用只是和变量共享内存空间，因此引用定义时就必须初始化。</p>
+<p>指针可以被重新赋值，而引用只能在初始化时赋值且不能改变。</p>
+<p>指针可以为空指针，但引用不会为空。</p>
+<p><strong>结构体与联合体</strong></p>
+<p>结构体是不同数据的组合，每种数据都有自己的空间。联合体是不同数据共用同一块内存。</p>
+<p>结构体的大小取决于所有数据成员的大小。联合体的大小取决于其中最长的数据成员。</p>
+<p>内存对齐：内存存取粒度，存取效率。</p>
+<p><strong>#define 和const</strong></p>
+<p>Define定义的是一个没有类型的数（常量）。而const修饰的是变量（不能改变的变量），变量有不同的类型，存放在静态区。 </p>
+<p>Define在编译阶段就会将相应的值进行替换。Const修饰的变量在编译时进行一次拷贝即可。</p>
+<p>Define常量无法用指针指向，但const修饰的变量可以被指针指向。</p>
+<p><strong>malloc，new，free，delete的关系以及区别</strong></p>
+<p>malloc仅仅分配一块指定大小的堆空间。而new分配一块指定大小的堆空间后，对其执行相应的构造函数对空间进行初始化。</p>
+<p>free仅仅是对目标空间进行释放。而delete会对对象先执行相应的析构函数，再释放空间。</p>
+<p>对于非内部数据类型，我们在为其分配空间后，需要有人为其执行构造进行初始化或者在释放空间前为其执行析构函数。因此在已有malloc与free后仍需要new和delete。</p>
+<p><strong>简述C++内存管理机制</strong></p>
+<p>在C++中，内存分为5个区：</p>
+<ol>
+<li>代码区：存储可执行代码。</li>
+<li>全局区：存储全局变量以及静态变量。</li>
+<li>常量区：只读区域，一般为const修饰的变量。</li>
+<li>堆区：由程序员管理的区域。</li>
+<li>栈区：由操作系统管理的区域。</li>
+</ol>
+<p>零零</p>
+<p><strong>析构函数为什么为虚函数</strong></p>
+<p>析构函数设为虚函数，当基类指针指向的派生类对象析构时，根据多态查虚表时会根据动态绑定先执行派生类的析构函数之后执行基类的析构函数。如果没有设置为虚函数，也就没有动态绑定，仅仅是静态绑定，当执行析构时，直接会执行基类析构函数，此时对象就会析构不完全从而导致内存泄漏。</p>
+<p><strong>阐述静态绑定与动态绑定</strong></p>
+<p>静态绑定是程序在编译时就确定了函数调用与函数实现的相匹配，编译时就确定了函数的具体实现。</p>
+<p>与之相反的是动态绑定，动态绑定建立的先决条件是虚函数。当对象调用虚函数时，根据对象的具体类型查虚表，查找虚函数在此类型下的具体实现，再进行调用与实现的匹配，是在运行时才绑定。</p>
+<p>基类指针指向派生类对象，这是实现动态绑定的关键。</p>
+<p><strong>阐述浅拷贝与深拷贝</strong></p>
+<p>浅拷贝指的是仅仅是构建了一个引用或者指针指向对象，看似两个相同的对象，实则同一个对象。</p>
+<p>深拷贝指的是根据被拷贝对象从头到尾申请独立的内存存储与原对象一样的数据，是两个对立的对象。</p>
+<p><strong>阐述C++的四种强制类型转换</strong></p>
+<ol>
+<li>发</li>
+<li>发</li>
+<li>发</li>
+<li>发</li>
+</ol>
+<p>发</p>
+<p><strong>引用作为参数或返回值类型的作用以及好处</strong></p>
+<ul>
+<li><strong>引用作为形参</strong>。当函数形参不为引用时，会牵扯到形参与实参的值传递，当调用函数传入实参时，会发生形参拷贝实参的值，形参在函数内如何改变也不会影响实参，形参与实参是分离的。但当形参为引用时，当调用函数传入实参时，形参是实参的别名，操作引用（形参）就是操作对象（实参），因此引用柞参可以传递对象。同时引用少一步拷贝，因此提高了运行效率。</li>
+<li><strong>引用作为返回值</strong>。当返回值为值类型时，当被一个变量接受时，必然会进行拷贝，拷贝就会有时间代价。但当返回值为引用时，返回一个全局变量或堆对象的引用时，就去除了拷贝的过程，因为引用是别名。</li>
+</ul>
+<p><strong>左值与右值的理解</strong></p>
+<p>左值是 指向特定内存的具名对象，右值是 不具名对象。左值可以取地址，右值无法取地址。</p>
+<p><img src="/Pictures/1716259614958.png" alt="1716259614958"></p>
+<p>对于将亡值，编译器可能会睁一只眼闭一只眼，在某些情况下会将左值类型判为右值进行处理，尽管它可能是具名的，编译器仍会将其判为右值，进而提高程序运行的效率。</p>
+<p><strong>阐述C++函数调用过程</strong></p>
+<p>在C++中函数的调用都是依靠栈帧完成的，每一个函数执行都会分配独立的栈帧，其中EBP寄存器永远指向栈底，ESP永远指向栈顶，EIP永远指向下一条指令。</p>
+<p>当main函数执行时，执行到某一函数时，将参数压栈后，在进入函数之前，会先将EIP的值压栈，同时使EIP存放函数的入口地址，创建函数的栈帧，先将EBP的值压栈，同时EBP指向新的栈底，ESP指向栈顶，等到函数执行完后，将结果存放到eax中，再弹出栈顶元素，直到ESP与EBP重合时，将ESP所指赋给EBP，同时弹出栈顶，此时ESP存储main函数的栈底地址，同时ESP指向了main函数的栈顶，eax存放了函数的返回值。此时就完成了函数的调用。</p>
+<p>函数的调用关键在于栈帧的压栈和出栈，以及ESP，EIP，EBP的组合。</p>
+<p><strong>简述（脏读，不可重复度，幻读）</strong></p>
+<p>脏读：事务A读取了事务B未提交的数据，如果事务B进行了回滚，事务A读取的数据就是错的。</p>
+<p>不可重复读：事务A在访问某一数据时，第一次读取和第二次读取之间，事务B进行了修改，因此事务A读到了本应相同的数据出现了不同。</p>
+<p>幻读：事务A读取了一些数据，事务B在这些数据中提交了部分数据，当事务A再次读取这些数据时，就读到了第一次没读到的数据，就好像出现了幻觉。</p>
+<p><strong>常量指针与指针常量</strong></p>
+<p>指针常量：指针类型的常量，其中存放的地址不能改变，但是可以通过地址改变所指向的值。</p>
+<p>常量指针：指向常量的指针，可以改变指向，但不能通过指向改变值。</p>
+<p><strong>数组与指针</strong></p>
+<p>例如：int a[3]</p>
+<p>此时系统分配3 * sizeof(int) 的连续内存空间，同时另分配一块1 * sizeof(int) 的空间存放连续空间的首地址，并取名为a。那么a就是一个int * 类型的常量。</p>
+<p>对于指针的加减与值不同，T * t 类型的加减遵循 t + sizeof( T ) ，因此对于数组有 * ( a + 1) 操作，与a[1]同理。 </p>
+<p><strong>sizeof与strlen的区别</strong></p>
+<p>sizeof是操作符，strlen是库函数。</p>
+<p>sizeof的参数可以是数据类型，也可以是变量。strlen的参数必须是以 &#x2F;0 为结尾的字符串。</p>
+<p><strong>const char * p 和 char * const p的区别</strong></p>
+<p>const在 * 左，证明为底层const修饰底层，p指向的值不能修改。</p>
+<p>const在 * 右，证明为顶层const修饰变量，指针变量本身不能改。</p>
+<p><strong>类模板与函数模板的区别</strong></p>
+<p>类模板在调用时，必须显式的指明模板类型。函数模板在编译时会自动类型推导。</p>
+<p>类模板的模板参数可以有默认值，函数模板没有。</p>
+<p>类模板中的函数在调用时才创建。</p>
+<p><strong>如何理解指针与引用</strong></p>
+<p>A. 在汇编中有 load  r1  1.  </p>
+<p>将1号地址中的值加载到r1中。【地址1——&gt;值】</p>
+<p>为了方便，在高级语言中有了变量。抽象了（地址到值）。</p>
+<p>B. 但1号内存块存有地址时，有load  r1  @1.</p>
+<p>将1号地址中的 地址中的 值加载到 r1中。【地址1——&gt;1中的地址——&gt;值】</p>
+<p>为了方便，在高级语言中有了指针。抽象了（地址到地址）。</p>
+<p>C. 指针是危险的，因此我们既要指针的底层地址操作，又要方便的抽象。因此引用诞生了。</p>
+<p><strong>简述指针参数传递与引用参数传递</strong></p>
+<p>指针换句话说也是变量，只不过存地址。所以指针传递时拷贝了地址，对地址操作是相同的。</p>
+<p>引用换句话说是带有const的指针，所以与指针传递是相同的。</p>
+<p><strong>gcc与g++的关系</strong></p>
+<p>gcc会把.c文件当成c处理，.cpp文件当成c++处理，但是不会为其链接C++库。</p>
+<p>g++会把.c和.cpp文件都当成c++处理。</p>
+<p><strong>fcntl的作用</strong></p>
+<p><strong>fork，写时拷贝</strong></p>
+<p><strong>程序，进程与线程</strong></p>
+<p><strong>谈一谈对文件描述符的理解</strong></p>
+<p><strong>全双工与半双工</strong></p>
+<p>库函数与系统调用</p>
+<p>三次握手与四次挥手</p>
+<p>socket</p>
+<p>拥塞控制</p>
+<p>select，poll，epoll</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>HanKangKai</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2024/05/21/%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98/">http://example.com/2024/05/21/%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E9%9D%A2%E8%AF%95/"># 面试</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2024/05/21/%E6%A0%91-%E6%8E%92%E5%BA%8F%E6%A0%91-%E5%B9%B3%E8%A1%A1%E6%A0%91-%E7%BA%A2%E9%BB%91%E6%A0%91/">树_排序树_平衡树_红黑树</a>
+            
+            
+            <a class="next" rel="next" href="/2024/04/27/%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F/">日志系统</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© HanKangKai | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

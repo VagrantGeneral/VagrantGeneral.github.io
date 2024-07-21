@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="HanKangKai">
+
+
+
+    <meta name="description" content="流浪者">
+
+
+
+<title>IO复用模型 | Wandergeneral</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+    <script>
+    !
+    function() {
+        function n(n, e, t) {
+            return n.getAttribute(e) || t
+        }
+        function e(n) {
+            return document.getElementsByTagName(n)
+        }
+        function t() {
+            var t = e("script"),
+                o = t.length,
+                i = t[o - 1];
+            return {
+                l: o,
+                z: n(i, "zIndex", -1), //置于主页面背后
+                o: n(i, "opacity", .5), //线条透明度
+                c: n(i, "color", "0,0,0"), //线条颜色
+                n: n(i, "count", 100) //线条数量
+            }
+        }
+        function o() {
+            a = m.width = window.innerWidth ||
+    document.documentElement.clientWidth || document.body.clientWidth,
+            c = m.height = window.innerHeight ||
+    document.documentElement.clientHeight || document.body.clientHeight
+        }
+        function i() {
+            r.clearRect(0, 0, a, c);
+            var n, e, t, o, m, l;
+            s.forEach(function(i, x) {
+                for (i.x += i.xa, i.y += i.ya, i.xa *= i.x > a || i.x < 0 ? -1 :
+1, i.ya *= i.y > c || i.y < 0 ? -1 : 1, r.fillRect(i.x - .5, i.y - .5, 1,
+1), e = x + 1; e < u.length; e++) n = u[e],
+                null !== n.x && null !== n.y && (o = i.x - n.x, m = i.y - n.y, l
+= o * o + m * m, l < n.max && (n === y && l >= n.max / 2 && (i.x -= .03 * o,
+i.y -= .03 * m), t = (n.max - l) / n.max, r.beginPath(), r.lineWidth = t /
+2, r.strokeStyle = "rgba(" + d.c + "," + (t + .2) + ")", r.moveTo(i.x, i.y),
+r.lineTo(n.x, n.y), r.stroke()))
+            }),
+            x(i)
+        }
+            var a, c, u, m = document.createElement("canvas"),
+                d = t(),
+                l = "c_n" + d.l,
+                r = m.getContext("2d"),
+                x = window.requestAnimationFrame || window.webkitRequestAnimationFrame
+|| window.mozRequestAnimationFrame || window.oRequestAnimationFrame ||
+window.msRequestAnimationFrame ||
+                function(n) {
+                    window.setTimeout(n, 1e3 / 45)
+                },
+                w = Math.random,
+                y = {
+                    x: null,
+                    y: null,
+                    max: 2e4
+                };
+            m.id = l,
+            m.style.cssText = "position:fixed;top:0;left:0;z-index:" + d.z +
+";opacity:" + d.o,
+            e("body")[0].appendChild(m),
+            o(),
+            window.onresize = o,
+            window.onmousemove = function(n) {
+                n = n || window.event,
+                    y.x = n.clientX,
+                    y.y = n.clientY
+                评论区采用的时Valine https://valine.js.org/ 和LeanCloud
+            },
+            window.onmouseout = function() {
+                y.x = null,
+                y.y = null
+            };
+            for (var s = [], f = 0; d.n > f; f++) {
+                var h = w() * a,
+                    g = w() * c,
+                    v = 2 * w() - 1,
+                    p = 2 * w() - 1;
+                    s.push({
+                        x: h,
+                        y: g,
+                        xa: v,
+                        ya: p,
+                        max: 6e3
+                    })
+            }
+            u = s.concat([y]),
+            setTimeout(function() {
+                i()
+            },
+            100)
+        } ();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">HanKangKai&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">HanKangKai&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">IO复用模型</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">HanKangKai</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">五月 30, 2024&nbsp;&nbsp;22:00:06</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p><img src="/Pictures/b1-1719422634214.jpg" alt="b1"></p>
+<p>我们经常会看到以下代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> listenfd = <span class="built_in">socket</span>();	</span><br><span class="line"><span class="built_in">bind</span>(listenfd);			<span class="comment">//绑定</span></span><br><span class="line"><span class="built_in">listen</span>(listenfd);		<span class="comment">//监听</span></span><br><span class="line"><span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">    <span class="type">int</span> connfd = <span class="built_in">accept</span>(listenfd);	 <span class="comment">//建立连接</span></span><br><span class="line">    <span class="type">int</span> n = <span class="built_in">read</span>(connfd, buff);		<span class="comment">//读数据</span></span><br><span class="line">    <span class="built_in">doSomeThing</span>(buff);			   <span class="comment">//处理数据</span></span><br><span class="line">    <span class="built_in">close</span>(connfd);				  <span class="comment">//关闭连接</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当其处于运行状态时，会出现两个阻塞，accept与read。</p>
+<p>当用户调用read时，会从用户态切到内核态，首先将接收到的数据放入内核缓冲区，再从内核缓冲区拷入用户缓冲区，从内核态切回用户态。</p>
+<h2 id="阻塞IO"><a href="#阻塞IO" class="headerlink" title="阻塞IO"></a>阻塞IO</h2><p>如果没有数据传来，便会阻塞在这一步。这便是传统的阻塞IO.<img src="/Pictures/%E9%98%BB%E5%A1%9E.png" alt="阻塞"></p>
+<p>如果客户端一直没传数据，那么便会一直阻塞在read的调用上，socket连接也不会进行，数据处理也不会进行。</p>
+<p>这是非常糟糕的一件事。但如何解决这一问题？有以下做法</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="number">1</span>) &#123;</span><br><span class="line">  	connfd = <span class="built_in">accept</span>(listenfd);  <span class="comment">// 阻塞建立连接</span></span><br><span class="line"> 	pthread_create（doWork);  <span class="comment">// 创建一个新的线程</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">doWork</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  	<span class="type">int</span> n = <span class="built_in">read</span>(connfd, buf);  <span class="comment">// 阻塞读数据</span></span><br><span class="line">  	<span class="built_in">doSomeThing</span>(buf);  <span class="comment">// 利用读到的数据做些什么</span></span><br><span class="line">  	<span class="built_in">close</span>(connfd);     <span class="comment">// 关闭连接，循环等待下一个连接</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此时，就可以不用等待read的完成便可以再次建立连接。</p>
+<p>但这仅仅是使用多线程理论使得read并没有阻塞在主线程上，而次线程仍会因read而阻塞等待，并非真正的非阻塞。</p>
+<p>操作系统为我们提供的 read 函数仍然是阻塞的。所以真正的非阻塞 IO，不能是通过我们用户层的小把戏实现，<strong>而是要恳请操作系统为我们提供一个非阻塞的 read 函数</strong>。 </p>
+<p>因此，来看看非阻塞。</p>
+<h2 id="非阻塞IO"><a href="#非阻塞IO" class="headerlink" title="非阻塞IO"></a>非阻塞IO</h2><p>非阻塞 read 函数的效果是，如果没有数据到达或到达网卡并未拷贝到了内核缓冲区（即 <strong>读已就绪之前的所有状态</strong>），立刻返回一个错误值（-1），而不是阻塞地等待。 </p>
+<p>操作系统提供了这样的功能，只需要在调用 read 前，将文件描述符设置为非阻塞即可。 </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">fcntl</span>(connfd, F_SETFL, O_NONBLOCK);</span><br><span class="line"><span class="type">int</span> n = <span class="built_in">read</span>(connfd, buffer) != SUCCESS);</span><br></pre></td></tr></table></figure>
+
+<p>这样便是真正的非阻塞IO。<img src="/Pictures/%E9%9D%9E%E9%98%BB%E5%A1%9E.png" alt="非阻塞"></p>
+<p>我们可以注意到的是，非阻塞IO并非完全的非阻塞，而是在读已就绪前是非阻塞的。</p>
+<h2 id="IO多路复用"><a href="#IO多路复用" class="headerlink" title="IO多路复用"></a>IO多路复用</h2><p>我们设想，有一个线程只接受tcp连接，并把连接到文件描述符存放到数组。</p>
+<p>再单独分一个线程，对数组内的描述符执行非阻塞read操作，这样的话，连接与接收数据便互不影响。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">    connfd = <span class="built_in">accept</span>(listenfd);</span><br><span class="line">	fdlist.<span class="built_in">add</span>(connfd);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">	<span class="keyword">for</span> (fd &lt;-- fdlist) &#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="built_in">read</span>(fd) != <span class="number">-1</span>) &#123;</span><br><span class="line">			<span class="built_in">doSomeThing</span>();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是，就像我们用多线程去修改阻塞时一样，这只是我们用户层的把戏，表面上实现了“多路复用”，但是for循环下的read将会大大消耗系统资源。</p>
+<p>因此，我们还得<strong>恳请操作系统提供一个多路复用的方法</strong>。<em>我们将一批文件描述符通过一次系统调用传给内核，由内核层去遍历，才能真正解决这个问题</em>。 </p>
+<p>操作系统提供了三种IO多路复用的方法。</p>
+<h2 id="1-select"><a href="#1-select" class="headerlink" title="1.select"></a>1.select</h2><p>我们可以把一个文件描述符的数组发给操作系统，让操作系统去遍历，确定可以读写的描述符的数量，告诉我们，然后以较小的代价去找到这些描述符，并处理它们。select便是这样。</p>
+<p><img src="/Pictures/select.png" alt="select"></p>
+<p>但是，值得注意的是：</p>
+<ul>
+<li>数组存储文件描述符，那么数量是有限的。</li>
+<li>调用select时必须传入数组，因此需从用户区域拷贝一个数组进内核区域，耗费大。</li>
+<li>尽管只进行了一次系统调用，但是在内核中仍是以轮询的方式遍历数组，耗时耗力。</li>
+<li>返回的仅仅是就绪的个数，用户态仍需再次遍历仅仅是遍历的少而已。但在某些特殊情况下，仍会全部遍历。</li>
+</ul>
+<p>这便是select，系统提供的最初的多路复用。</p>
+<h2 id="2-poll"><a href="#2-poll" class="headerlink" title="2.poll"></a>2.poll</h2><p>poll与select并没有本质区别，poll只是将select中的数组修改为链表，这样就会大大增加描述符的数量。</p>
+<p>如下图所示：<img src="/Pictures/poll.png" alt="poll"></p>
+<h2 id="3-epoll"><a href="#3-epoll" class="headerlink" title="3.epoll"></a>3.epoll</h2><p>select与poll有很多的问题需要解决，因此系统为我们提供了一种非常强大的多路复用方法epoll。</p>
+<p>第一，不再使用数组或链表，而是使用<strong>红黑树</strong>，由于红黑树的特性，查找将会特别容易而且快速。</p>
+<p>第二，用户态与内核态会共同对同一块内存进行映射，因此，免去了拷贝的消耗。</p>
+<p>第三，epoll会返回已就绪的文件描述符的集合，因此不需要进行不必要的遍历，只对已就绪的进行操作即可。</p>
+<p><img src="/Pictures/epoll.png" alt="epoll"></p>
+<h3 id="epoll三大API"><a href="#epoll三大API" class="headerlink" title="epoll三大API"></a>epoll三大API</h3><p>int epoll_create(int size);	&#x2F;&#x2F;构建一个epoll实例，并返回这个实例的句柄。</p>
+<p>int epoll_ctl(int epfd， int op， int fd， struct epoll_event *event);	&#x2F;&#x2F;将被监听的文件描述符添加到事件表中，删除或修改表中的事件。</p>
+<p>int epoll_wait(int epfd， struct epoll_event *events， int maxevents， int timeout);	&#x2F;&#x2F;阻塞等待事件的发生，返回时间的数目，并将触发的事件写入events数组中</p>
+<p>epoll监控多个文件描述符的I&#x2F;O事件。epoll支持边缘触发(edge trigger，ET)或水平触发（level trigger，LT)，通过epoll_wait等待I&#x2F;O事件，如果当前没有可用的事件则阻塞调用线程。</p>
+<p>select和poll只支持LT工作模式，epoll的默认的工作模式是LT模式。</p>
+<h3 id="ET模式与LT模式"><a href="#ET模式与LT模式" class="headerlink" title="ET模式与LT模式"></a>ET模式与LT模式</h3><p>试想一下，发送端发送5个字符（HELLO），但在接受后读取时只能读一个。如下图所示：<img src="/Pictures/bh.png" alt="bh"></p>
+<p>当我们使用LT模式时，可能会出现以下情况：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">H</span><br><span class="line">E</span><br><span class="line">L</span><br><span class="line">L</span><br><span class="line">O</span><br></pre></td></tr></table></figure>
+
+<p>为什么呢？那是因为在LT模式下，只要接收缓冲区未被读取完，便会通知，因此五行代表了五次事件。</p>
+<p>但当使用ET模式时，就会是这样：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">H</span><br></pre></td></tr></table></figure>
+
+<p>因为ET模式对于一个事件只有一次通知，但同时只读一个，因此只有H。</p>
+<p>但是仍有一个问题，我们应该使用阻塞还是非阻塞？</p>
+<p>如果在LT模式下，其实使用阻塞与非阻塞没太大的区别，因为LT模式是有数据才触发，没数据不触发，而阻塞与非阻塞IO的区别就在没数据的时候。</p>
+<p>假如，在ET模式下使用阻塞IO，那么因为读小于接收，因此需要使用while(1)之类的循环操作去反复读取，但是当读完最后一个值之后，因为使用的阻塞IO，所以一定会因为读不到值而停止等待。但对于非阻塞IO，读不到值时会立即返回-1，根据错误码便可判断读完成。</p>
+<p>我们可以看到的是，在接收缓冲区与读之间大小分配不合理才会出现了这么多不一样的情况。因此只要在此之间建立好一定的联系，使其能够合理分配，便可无忧。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>看到这里，我们便会发现一切的一切都源于<strong>阻塞的read</strong>这个系统调用，为了解决其长时间等待的问题，我们在用户态使用多线程去解决它。但是这个功能太重要了，因此系统提供了一种<strong>非阻塞的read</strong>，此时我们便可以直接使用非阻塞read。</p>
+<p>当我们有多个文件描述符需读取数据时，就需要遍历，当用户态遍历的文件描述符越来越多时，相当于在 while 循环里进行了越来越多的系统调用，这是糟糕的，因此系统又为我们提供了尽量少切换状态便可遍历的功能，那便是<strong>IO 多路复用</strong>。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>HanKangKai</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2024/05/30/IO%E5%A4%8D%E7%94%A8%E6%A8%A1%E5%9E%8B/">http://example.com/2024/05/30/IO%E5%A4%8D%E7%94%A8%E6%A8%A1%E5%9E%8B/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/IO%E5%A4%8D%E7%94%A8/"># IO复用</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2024/06/03/fork%E2%80%94%E2%80%94Linux%E4%B8%8B%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%88%9B%E5%BB%BA/">fork——Linux下的进程创建</a>
+            
+            
+            <a class="next" rel="next" href="/2024/05/28/%E4%BB%8E%E4%BB%A3%E7%A0%81%E5%88%B0%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E2%80%94%E2%80%94%E4%B8%80%E4%B8%AA%E7%AE%80%E7%9F%AD%E6%80%BB%E7%BB%931/">从代码到程序运行——一个简短总结1</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© HanKangKai | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
