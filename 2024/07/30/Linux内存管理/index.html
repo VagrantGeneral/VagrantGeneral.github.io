@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="HanKangKai">
+
+
+
+    <meta name="description" content="流浪者">
+
+
+
+<title>Linux内存管理 | Wandergeneral</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+    <script>
+    !
+    function() {
+        function n(n, e, t) {
+            return n.getAttribute(e) || t
+        }
+        function e(n) {
+            return document.getElementsByTagName(n)
+        }
+        function t() {
+            var t = e("script"),
+                o = t.length,
+                i = t[o - 1];
+            return {
+                l: o,
+                z: n(i, "zIndex", -1), //置于主页面背后
+                o: n(i, "opacity", .5), //线条透明度
+                c: n(i, "color", "0,0,0"), //线条颜色
+                n: n(i, "count", 100) //线条数量
+            }
+        }
+        function o() {
+            a = m.width = window.innerWidth ||
+    document.documentElement.clientWidth || document.body.clientWidth,
+            c = m.height = window.innerHeight ||
+    document.documentElement.clientHeight || document.body.clientHeight
+        }
+        function i() {
+            r.clearRect(0, 0, a, c);
+            var n, e, t, o, m, l;
+            s.forEach(function(i, x) {
+                for (i.x += i.xa, i.y += i.ya, i.xa *= i.x > a || i.x < 0 ? -1 :
+1, i.ya *= i.y > c || i.y < 0 ? -1 : 1, r.fillRect(i.x - .5, i.y - .5, 1,
+1), e = x + 1; e < u.length; e++) n = u[e],
+                null !== n.x && null !== n.y && (o = i.x - n.x, m = i.y - n.y, l
+= o * o + m * m, l < n.max && (n === y && l >= n.max / 2 && (i.x -= .03 * o,
+i.y -= .03 * m), t = (n.max - l) / n.max, r.beginPath(), r.lineWidth = t /
+2, r.strokeStyle = "rgba(" + d.c + "," + (t + .2) + ")", r.moveTo(i.x, i.y),
+r.lineTo(n.x, n.y), r.stroke()))
+            }),
+            x(i)
+        }
+            var a, c, u, m = document.createElement("canvas"),
+                d = t(),
+                l = "c_n" + d.l,
+                r = m.getContext("2d"),
+                x = window.requestAnimationFrame || window.webkitRequestAnimationFrame
+|| window.mozRequestAnimationFrame || window.oRequestAnimationFrame ||
+window.msRequestAnimationFrame ||
+                function(n) {
+                    window.setTimeout(n, 1e3 / 45)
+                },
+                w = Math.random,
+                y = {
+                    x: null,
+                    y: null,
+                    max: 2e4
+                };
+            m.id = l,
+            m.style.cssText = "position:fixed;top:0;left:0;z-index:" + d.z +
+";opacity:" + d.o,
+            e("body")[0].appendChild(m),
+            o(),
+            window.onresize = o,
+            window.onmousemove = function(n) {
+                n = n || window.event,
+                    y.x = n.clientX,
+                    y.y = n.clientY
+                评论区采用的时Valine https://valine.js.org/ 和LeanCloud
+            },
+            window.onmouseout = function() {
+                y.x = null,
+                y.y = null
+            };
+            for (var s = [], f = 0; d.n > f; f++) {
+                var h = w() * a,
+                    g = w() * c,
+                    v = 2 * w() - 1,
+                    p = 2 * w() - 1;
+                    s.push({
+                        x: h,
+                        y: g,
+                        xa: v,
+                        ya: p,
+                        max: 6e3
+                    })
+            }
+            u = s.concat([y]),
+            setTimeout(function() {
+                i()
+            },
+            100)
+        } ();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">HanKangKai&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">HanKangKai&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Linux内存管理</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">HanKangKai</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">七月 30, 2024&nbsp;&nbsp;20:49:14</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p><img src="/Pictures/b3-1719423265540.jpg" alt="b3"></p>
+<h2 id="1-虚拟内存"><a href="#1-虚拟内存" class="headerlink" title="1.虚拟内存"></a>1.虚拟内存</h2><p>首先，我们来试想一下，在我们点外卖或网购时，一般都会填写收货地址，如下所示：</p>
+<img src="/Pictures/1722424744675.png" alt="1722424744675" style="zoom:150%;" />
+
+<p>当然，也可以使用其他描述编写地址，但这些是我的真实地址吗，不，它是一个人们抽象出来的地址，而且对不同的人有不同的说法。</p>
+<p>现在回到计算机的世界，内存地址就是用来地位数据的存储位置，而内存地址分为<strong>物理地址</strong>和<strong>虚拟地址</strong>，物理地址就像我们真实的地理位置，而虚拟地址就像是我们上面的收货地址。那虚拟地址究竟是怎样的，32位虚拟地址如下图：</p>
+<p><img src="/Pictures/1722426552792.png" alt="1722426552792"></p>
+<p>我们可以看到，虚拟地址就像我们的收货地址一样具有分层的特点。</p>
+<h3 id="那我们为什么要用虚拟地址？"><a href="#那我们为什么要用虚拟地址？" class="headerlink" title="那我们为什么要用虚拟地址？"></a>那我们为什么要用虚拟地址？</h3><p>假设我们没有虚拟内存。对于同一个程序，当其同时执行三次时，便会同时出现三个进程，如果程序中有对变量的访问，那么三个变量所指向的内存就会产生冲突，原因便是在定义变量的时候就要为其指明物理内存地址，这在单一的进程中是很好的，但是，如果是多进程，便会产生冲突，而且不利于管理。如下图所示：</p>
+<p><img src="/Pictures/1722428442953.png" alt="1722428442953"></p>
+<p>当我们引入虚拟地址后，每个进程便会独立分配虚拟地址空间，它们之间相互隔离，进程都会默认自己拥有所有地址空间，这样就会将多进程之间协同的相关复杂细节统统交给内核中的内存管理模块来处理，极大地解放了程序员的心智负担。 如下所示：</p>
+<p><img src="/Pictures/1722428835027.png" alt="1722428835027"></p>
+<h2 id="2-进程的虚拟内存空间"><a href="#2-进程的虚拟内存空间" class="headerlink" title="2.进程的虚拟内存空间"></a>2.进程的虚拟内存空间</h2><p>我们已经知道了每个进程会独立分配虚拟内存空间，但这块空间长什么样便是接下来的话题。</p>
+<p>我们可以想到的是：</p>
+<ol>
+<li>代码需要运行，必须将机器码加载到内存——代码段。</li>
+<li>在代码中可能会出现大量的静态变量和全局变量——初始后的数据，数据段；未初始的数据——BSS段。</li>
+<li>代码中会遇到需要动态申请和释放的空间——堆区。</li>
+<li>代码在运行中可能需要动态库——文件映射与匿名映射区 。</li>
+<li>程序在运行时会调用各种函数，函数的局部变量以及参数——栈区；</li>
+</ol>
+<p>这些便是程序在运行时分配的虚拟内存空间的大致分区。</p>
+<p><img src="/Pictures/1722429747448.png" alt="1722429747448"></p>
+<h3 id="32-位机器上进程虚拟内存空间分布"><a href="#32-位机器上进程虚拟内存空间分布" class="headerlink" title="32 位机器上进程虚拟内存空间分布"></a>32 位机器上进程虚拟内存空间分布</h3><p>之前所展示的是虚拟内存的大致分布，现在我们来详细看一看这些空间详细的分布。如下图所示：</p>
+<p><img src="/Pictures/1722448194246.png" alt="1722448194246"></p>
+<p>指针的寻址范围为 2^32，所能表达的虚拟内存空间为 4 GB。所以在 32 位机器上进程的虚拟内存地址范围为：0x0000 0000 - 0xFFFF FFFF。</p>
+<p>其中用户态虚拟内存空间为 3 GB，虚拟内存地址范围为：0x0000 0000 - 0xC000 000 。内核态虚拟内存空间为 1 GB，虚拟内存地址范围为：0xC000 000 - 0xFFFF FFFF。</p>
+<p>用户态虚拟内存空间中的代码段并不是从 0x0000 0000 地址开始的，而是从 0x0804 8000 地址开始。</p>
+<p>0x0000 0000 到 0x0804 8000 这段虚拟内存地址是一段不可访问的保留区，因为在大多数操作系统中，数值比较小的地址通常被认为不是一个合法的地址，这块小地址是不允许访问的。</p>
+<p>保留区的上边就是代码段和数据段，它们是从程序的二进制文件中直接加载进内存中的，BSS 段中的数据也存在于二进制文件中，因为内核知道这些数据是没有初值的，所以在二进制文件中只会记录 BSS 段的大小，在加载进内存时会生成一段 0 填充的内存空间。</p>
+<p>紧挨着 BSS 段的上边就是我们经常使用到的堆空间，我们可以知道在堆空间中地址的增长方向是从低地址到高地址增长。内核中使用 start_brk 标识堆的起始位置，brk 标识堆当前的结束位置。</p>
+<p>当堆申请新的内存空间时，只需要将 brk 指针增加对应的大小，回收地址时减少对应的大小即可。比如当我们通过 malloc 向内核申请很小的一块内存时（128K 之内），就是通过改变 brk 位置实现的。堆空间的上边是一段待分配区域，用于扩展堆空间的使用。</p>
+<p>接下来就来到了文件映射与匿名映射区域。进程运行时所依赖的动态链接库中的代码段，数据段，BSS 段就加载在这里。还有我们调用 mmap 映射出来的一段虚拟内存空间也保存在这个区域。<strong>注意：在文件映射与匿名映射区的地址增长方向是从高地址向低地址增长</strong>。</p>
+<p>接下来用户态虚拟内存空间的最后一块区域就是栈空间了，在这里会保存函数运行过程所需要的局部变量以及函数参数等函数调用信息。<strong>栈空间中的地址增长方向是从高地址向低地址增长</strong>。每次进程申请新的栈地址时，其地址值是在减少的。在内核中使用 start_stack 标识栈的起始位置，RSP 寄存器中保存栈顶指针 stack pointer，RBP 寄存器中保存的是栈基地址。</p>
+<p>在栈空间的下边也有一段待分配区域用于扩展栈空间，在栈空间的上边就是内核空间了，进程虽然可以看到这段内核空间地址，但是就是不能访问。 </p>
+<h2 id="3-进程虚拟内存空间的管理"><a href="#3-进程虚拟内存空间的管理" class="headerlink" title="3.进程虚拟内存空间的管理"></a>3.进程虚拟内存空间的管理</h2><p><img src="/Pictures/1722429747448.png" alt="1722429747448"></p>
+<p>要了解进程的虚拟内存空间管理，我们就必须知道在内核中对各部分的描述是怎样的。</p>
+<p>首先，进程在内核中是通过<strong>task_struc</strong>t这个结构体描述的</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">task_struct</span> &#123;</span></span><br><span class="line">        <span class="comment">// 进程id</span></span><br><span class="line">	    <span class="type">pid_t</span>				pid;</span><br><span class="line">    </span><br><span class="line">        <span class="comment">// 用于标识线程所属的进程 pid</span></span><br><span class="line">	    <span class="type">pid_t</span>				tgid;</span><br><span class="line">    </span><br><span class="line">        <span class="comment">// 进程打开的文件信息</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">files_struct</span>	  *<span class="title">files</span>;</span></span><br><span class="line">    </span><br><span class="line">        <span class="comment">// 内存描述符 表示 进程虚拟地址空间</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">mm_struct</span>	  *<span class="title">mm</span>;</span></span><br><span class="line"></span><br><span class="line">        ......</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>其中最引起我们注意的便是<strong>mm_struct</strong>这个结构体变量，它所标识的便是进程虚拟地址空间。因此，同一个结构体的不同对象会有不同的mm_struct成员，因此也会有不同的独立的进程虚拟地址空间。</p>
+<p>当我们使用**fork()**创建进程时，mm_struct 结构会随着进程描述符 task_struct 的创建而创建 ，同时，在 copy_process 函数中创建 task_struct 结构，并拷贝父进程的相关资源到新进程的 task_struct 结构里，其中就包括拷贝父进程的虚拟内存空间 mm_struct 结构 。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> _do_fork(......) &#123;</span><br><span class="line">    </span><br><span class="line">    ......... 省略 ..........</span><br><span class="line">    </span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">pid</span> *<span class="title">pid</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">task_struct</span> *<span class="title">p</span>;</span></span><br><span class="line">	</span><br><span class="line">    ......... 省略 ..........</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 为进程创建 task_struct 结构，用父进程的资源填充 task_struct 信息</span></span><br><span class="line">	p = copy_process(........);</span><br><span class="line"></span><br><span class="line">         ......... 省略 ..........</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> __latent_entropy <span class="keyword">struct</span> task_struct * <span class="title function_">copy_process</span><span class="params">(.......)</span></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">task_struct</span> *<span class="title">p</span>;</span></span><br><span class="line">    <span class="comment">// 创建 task_struct 结构</span></span><br><span class="line">    p = dup_task_struct(......);</span><br><span class="line">      </span><br><span class="line">    <span class="comment">// 继承父进程打开的文件描述符</span></span><br><span class="line">	retval = copy_files(......, p);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 继承父进程所属的文件系统</span></span><br><span class="line">	retval = copy_fs(......, p);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 继承父进程注册的信号以及信号处理函数</span></span><br><span class="line">	retval = copy_sighand(......, p);</span><br><span class="line">	retval = copy_signal(......, p);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 继承父进程的虚拟内存空间</span></span><br><span class="line">	retval = copy_mm(......, p);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 继承父进程的 namespaces</span></span><br><span class="line">	retval = copy_namespaces(......, p);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 继承父进程的 IO 信息</span></span><br><span class="line">	retval = copy_io(......, p);</span><br><span class="line"></span><br><span class="line">      ...........省略.........</span><br><span class="line">    <span class="comment">// 分配 CPU</span></span><br><span class="line">    retval = sched_fork(......, p);</span><br><span class="line">    <span class="comment">// 分配 pid</span></span><br><span class="line">    pid = alloc_pid(p-&gt;nsproxy-&gt;pid_ns_for_children);</span><br><span class="line"></span><br><span class="line">    ..........省略.........</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>这里可以看出子进程在新创建出来之后它的虚拟内存空间是和父进程的虚拟内存空间一模一样的，直接拷贝过来</strong>。 </p>
+<p>值得关注的是copy_mm，我们可以看到其拷贝父进程空间给子进程。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">copy_mm</span><span class="params">(<span class="type">unsigned</span> <span class="type">long</span> clone_flags, <span class="keyword">struct</span> task_struct *tsk)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 子进程虚拟内存空间，父进程虚拟内存空间</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">mm_struct</span> *<span class="title">mm</span>, *<span class="title">oldmm</span>;</span></span><br><span class="line">	<span class="type">int</span> retval;</span><br><span class="line"></span><br><span class="line">        ...... 省略 ......</span><br><span class="line"></span><br><span class="line">	tsk-&gt;mm = <span class="literal">NULL</span>;</span><br><span class="line">	tsk-&gt;active_mm = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="comment">// 获取父进程虚拟内存空间</span></span><br><span class="line">	oldmm = current-&gt;mm;</span><br><span class="line">	<span class="keyword">if</span> (!oldmm)</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        ...... 省略 ......</span><br><span class="line">    <span class="comment">// 通过 vfork 或者 clone 系统调用创建出的子进程（线程）和父进程共享虚拟内存空间</span></span><br><span class="line">	<span class="keyword">if</span> (clone_flags &amp; CLONE_VM) &#123;</span><br><span class="line">        <span class="comment">// 增加父进程虚拟地址空间的引用计数</span></span><br><span class="line">		mmget(oldmm);</span><br><span class="line">        <span class="comment">// 直接将父进程的虚拟内存空间赋值给子进程（线程）</span></span><br><span class="line">        <span class="comment">// 线程共享其所属进程的虚拟内存空间</span></span><br><span class="line">		mm = oldmm;</span><br><span class="line">		<span class="keyword">goto</span> good_mm;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	retval = -ENOMEM;</span><br><span class="line">    <span class="comment">// 如果是 fork 系统调用创建出的子进程，则将父进程的虚拟内存空间以及相关页表拷贝到子进程中的 mm_struct 结构中。</span></span><br><span class="line">	mm = dup_mm(tsk);</span><br><span class="line">	<span class="keyword">if</span> (!mm)</span><br><span class="line">		<span class="keyword">goto</span> fail_nomem;</span><br><span class="line"></span><br><span class="line">good_mm:</span><br><span class="line">    <span class="comment">// 将拷贝出来的父进程虚拟内存空间 mm_struct 赋值给子进程</span></span><br><span class="line">	tsk-&gt;mm = mm;</span><br><span class="line">	tsk-&gt;active_mm = mm;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        ...... 省略 ......</span><br></pre></td></tr></table></figure>
+
+
+
+<p>copy_mm 函数首先会将父进程的虚拟内存空间 current-&gt;mm 赋值给指针 oldmm。然后通过 dup_mm 函数将父进程的虚拟内存空间以及<strong>相关页表</strong>拷贝到子进程的 mm_struct 结构中。最后将拷贝出来的 mm_struct 赋值给子进程的 task_struct 结构。</p>
+<p>而当我们通过 vfork 或者 clone 系统调用创建出的子进程，首先会设置 CLONE_VM 标识，这样来到 copy_mm 函数中就会进入 <code>if (clone_flags &amp; CLONE_VM)</code> 条件中，在这个分支中会将父进程的虚拟内存空间以及相关页表直接赋值给子进程。这样一来父进程和子进程的虚拟内存空间就变成共享的了。也就是说父子进程之间使用的虚拟内存空间是一样的，并不是一份拷贝。</p>
+<p>子进程共享了父进程的虚拟内存空间，这样子进程就变成了我们熟悉的线程，<strong>是否共享地址空间几乎是进程和线程之间的本质区别。Linux 内核并不区别对待它们，线程对于内核来说仅仅是一个共享特定资源的进程而已</strong>。</p>
+<p>内核线程和用户态线程的区别就是内核线程没有相关的内存描述符 mm_struct ，内核线程对应的 task_struct 结构中的 mm 域指向 Null，所以内核线程之间调度是不涉及地址空间切换的。</p>
+<p>当一个内核线程被调度时，它会发现自己的虚拟地址空间为 Null，虽然它<strong>不会访问用户态的内存</strong>，但是它会访问内核内存，聪明的内核会将调度之前的上一个用户态进程的虚拟内存空间 mm_struct 直接赋值给内核线程，因为内核线程不会访问用户空间的内存，它仅仅只会访问内核空间的内存，所以<strong>直接复用上一个用户态进程的虚拟地址空间就可以避免为内核线程分配 mm_struct 和相关页表的开销，以及避免内核线程之间调度时地址空间的切换开销</strong>。</p>
+<p>父进程与子进程的区别，进程与线程的区别，以及内核线程与用户态线程的区别其实都是围绕着这个mm_struct 展开的。</p>
+<h3 id=""><a href="#" class="headerlink" title="&lt;内核如何区分用户态和内核态的虚拟内存空间？&gt;"></a>&lt;内核如何区分用户态和内核态的虚拟内存空间？&gt;</h3><p>我们已经知道了虚拟内存空间会有内核与用户的区分，但内核是如何区分的？此时就要看看mm_struct这个结构体了。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">mm_struct</span> &#123;</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> task_size;	<span class="comment">/* size of task vm space */</span></span><br><span class="line">    ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这个结构体中有task_size这个变量，其值为 0xC000 000，熟悉吗？当然，这不就是内核与用户的那个3G区分线吗。</p>
+<h3 id="-1"><a href="#-1" class="headerlink" title="&lt;内核如何对这些空间进行布局？&gt;"></a>&lt;内核如何对这些空间进行布局？&gt;</h3><p>要了解虚拟内存的空间如何布局，就要查看mm_struct中的结构，如下图所示，为mm_struct的主要成员。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">mm_struct</span> &#123;</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> task_size;    <span class="comment">/* size of task vm space */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> start_code, end_code, start_data, end_data;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> start_brk, brk, start_stack;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> arg_start, arg_end, env_start, env_end;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> mmap_base;  <span class="comment">/* base of mmap area */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> total_vm;    <span class="comment">/* Total pages mapped */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> locked_vm;  <span class="comment">/* Pages that have PG_mlocked set */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> pinned_vm;  <span class="comment">/* Refcount permanently increased */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> data_vm;    <span class="comment">/* VM_WRITE &amp; ~VM_SHARED &amp; ~VM_STACK */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> exec_vm;    <span class="comment">/* VM_EXEC &amp; ~VM_WRITE &amp; ~VM_STACK */</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> stack_vm;    <span class="comment">/* VM_STACK */</span></span><br><span class="line"></span><br><span class="line">       ...... 省略 ........</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们可以看到。除去tsak_size指明了内核与用户的分区，其余变量都指明了内存中其他区域的起始和结束的位置，以start和end标志。就像下图这样：</p>
+<p><img src="/Pictures/1722585634628.png" alt="1722585634628"></p>
+<p>每个进程都对应一个task_struct结构，其中包括pid，以及指向虚拟内存空间的mm_struct结构。</p>
+<p>mm_struct结构中有分别定义各个内存区域大小的属性（code，data，brk，stack）。</p>
+<p>但是，仅仅定义大小是不行的，我们还需要对这些小区域<strong>进行组织</strong>起来。此时就要介绍另一个具有重要地位的结构体<strong>vm_area_struct</strong>，这个结构体单纯对内存区域进行规划组织：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">vm_area_struct</span> &#123;</span></span><br><span class="line"></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">vm_area_struct</span> *<span class="title">vm_next</span>, *<span class="title">vm_prev</span>;</span></span><br><span class="line">    </span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">rb_node</span> <span class="title">vm_rb</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">anon_vma_chain</span>;</span> </span><br><span class="line">    </span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">mm_struct</span> *<span class="title">vm_mm</span>;</span>	<span class="comment">/* The address space we belong to. */</span></span><br><span class="line">	</span><br><span class="line">	<span class="type">unsigned</span> <span class="type">long</span> vm_start;     <span class="comment">/* Our start address within vm_mm. */</span></span><br><span class="line">	<span class="type">unsigned</span> <span class="type">long</span> vm_end;       <span class="comment">/* The first byte after our end address within vm_mm. */</span></span><br><span class="line">    </span><br><span class="line">	<span class="type">unsigned</span> <span class="type">long</span> vm_flags; </span><br><span class="line"></span><br><span class="line">    .........</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>进入<strong>vm_area_struct</strong>后，明显可以看到<strong>vm_next</strong>和<strong>vm_prev</strong>，这样就形成了链表。在内存空间中，每个内存区域都对应一个vm_area_struct，其中通过vm_start和vm_end分别指向这个区域的头与尾，并通过<strong>vm_next，vm_prev</strong>将内存区域连接成整块内存。</p>
+<p>vm_area_struct中的<strong>vm_mm</strong>成员指向mm_struct，<strong>vm_rb</strong>指向红黑树的节点。此时，我们再看看mm_struct中的其他成员：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">mm_struct</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">vm_area_struct</span> *<span class="title">mmap</span>;</span>		<span class="comment">/* list of VMAs */</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">rb_root</span> *<span class="title">mm_rb</span>;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>mmap</strong>指向vm_area_struct那条链表的头。<strong>mm_rb</strong>指向红黑树的根节点。同时在每个vm_area_struct中都可以指回mm_struct。</p>
+<p>此时我们便可以看到一个完备的内存分配，组织：</p>
+<p><img src="/Pictures/1722609306812.png" alt="1722609306812"></p>
+<h2 id="4-二进制文件如何映射到虚拟内存空间中"><a href="#4-二进制文件如何映射到虚拟内存空间中" class="headerlink" title="4.二进制文件如何映射到虚拟内存空间中"></a>4.二进制文件如何映射到虚拟内存空间中</h2><p>我们写的程序代码在编译之后会生成一个 ELF 格式的二进制文件，这个二进制文件中包含了程序运行时所需要的信息，比如程序的机器码，程序中的全局变量以及静态变量等。</p>
+<p>这个 ELF 格式的二进制文件中的布局和我们前边讲的虚拟内存空间中的布局类似，也是一段一段的，每一段包含了不同的数据。<em><strong>磁盘文件中的段我们叫做 Section，内存中的段我们叫做 Segment，也就是内存区域。</strong></em> </p>
+<p>磁盘文件中的这些 Section 会在进程运行之前加载到内存中并映射到内存中的 Segment。通常是多个 Section 映射到一个 Segment。 </p>
+<h3 id="-2"><a href="#-2" class="headerlink" title="&lt;ELF 格式的二进制文件中的 Section 是如何加载并映射进虚拟内存空间的？&gt;"></a>&lt;ELF 格式的二进制文件中的 Section 是如何加载并映射进虚拟内存空间的？&gt;</h3><p>在内核中完成这个映射过程的函数是 <strong>load_elf_binary</strong> ，这个函数的作用很大，加载内核的是它，启动第一个用户态进程 init 的是它，fork 完了以后，调用 exec 运行一个二进制程序的也是它。当 exec 运行一个二进制程序的时候，除了解析 ELF 的格式之外，另外一个重要的事情就是建立上述提到的内存映射。 </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">load_elf_binary</span><span class="params">(<span class="keyword">struct</span> linux_binprm *bprm)</span></span><br><span class="line">&#123;</span><br><span class="line">	...... 省略 ........</span><br><span class="line">	<span class="comment">// 设置虚拟内存空间中的内存映射区域起始地址 mmap_base</span></span><br><span class="line">	setup_new_exec(bprm);</span><br><span class="line"></span><br><span class="line">	...... 省略 ........</span><br><span class="line">	<span class="comment">// 创建并初始化栈对应的 vm_area_struct 结构。</span></span><br><span class="line">	<span class="comment">// 设置 mm-&gt;start_stack 就是栈的起始地址也就是栈底，并将 mm-&gt;arg_start 是指向栈底的。</span></span><br><span class="line">	retval = setup_arg_pages(bprm, randomize_stack_top(STACK_TOP), executable_stack);</span><br><span class="line"></span><br><span class="line">	...... 省略 ........</span><br><span class="line">	<span class="comment">// 将二进制文件中的代码部分映射到虚拟内存空间中</span></span><br><span class="line">	error = elf_map(bprm-&gt;file, load_bias + vaddr, elf_ppnt, elf_prot, elf_flags, total_size);</span><br><span class="line"></span><br><span class="line">	...... 省略 ........</span><br><span class="line">	<span class="comment">// 创建并初始化堆对应的的 vm_area_struct 结构</span></span><br><span class="line">	<span class="comment">// 设置 current-&gt;mm-&gt;start_brk = current-&gt;mm-&gt;brk，设置堆的起始地址 start_brk，结束地址 brk。 起初两者相等表示堆是空的</span></span><br><span class="line">	retval = set_brk(elf_bss, elf_brk, bss_prot);</span><br><span class="line"></span><br><span class="line">	...... 省略 ........</span><br><span class="line">	<span class="comment">// 将进程依赖的动态链接库 .so 文件映射到虚拟内存空间中的内存映射区域</span></span><br><span class="line">	elf_entry = load_elf_interp(&amp;loc-&gt;interp_elf_ex,</span><br><span class="line">              interpreter,</span><br><span class="line">              &amp;interp_map_addr,</span><br><span class="line">              load_bias, interp_elf_phdata);</span><br><span class="line"></span><br><span class="line">	...... 省略 ........</span><br><span class="line">	<span class="comment">// 初始化内存描述符 mm_struct</span></span><br><span class="line">	current-&gt;mm-&gt;end_code = end_code;</span><br><span class="line">	current-&gt;mm-&gt;start_code = start_code;</span><br><span class="line">	current-&gt;mm-&gt;start_data = start_data;</span><br><span class="line">	current-&gt;mm-&gt;end_data = end_data;</span><br><span class="line">	current-&gt;mm-&gt;start_stack = bprm-&gt;p;</span><br><span class="line"></span><br><span class="line">	...... 省略 ........</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="5-内核虚拟内存空间"><a href="#5-内核虚拟内存空间" class="headerlink" title="5.内核虚拟内存空间"></a>5.内核虚拟内存空间</h2><p>我们已经知道了进程虚拟内存空间在内核中的布局以及管理，那么内核态的虚拟内存空间又是什么样子的呢？ </p>
+<p>不同进程之间的虚拟内存空间是相互隔离的，彼此之间相互独立，相互感知不到其他进程的存在。使得进程以为自己拥有所有的内存资源。 而内核态虚拟内存空间是所有进程共享的，不同进程进入内核态之后看到的虚拟内存空间全部是一样的。 </p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>HanKangKai</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2024/07/30/Linux%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">http://example.com/2024/07/30/Linux%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Linux/"># Linux</a>
+                    
+                        <a href="/tags/%E5%86%85%E5%AD%98/"># 内存</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2024/08/06/Libevent%E7%BD%91%E7%BB%9C%E5%BA%93/">Libevent网络库</a>
+            
+            
+            <a class="next" rel="next" href="/2024/07/29/%E4%BC%98%E5%85%88%E4%BD%BF%E7%94%A8make-unique%E5%92%8Cmake-shared/">优先使用make_unique和make_shared</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© HanKangKai | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

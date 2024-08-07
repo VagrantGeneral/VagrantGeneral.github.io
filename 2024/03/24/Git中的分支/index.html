@@ -223,6 +223,68 @@ window.msRequestAnimationFrame ||
                 <div class="container">
     
     
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
 
     
     <article class="post-wrap">
@@ -243,7 +305,7 @@ window.msRequestAnimationFrame ||
                         <span class="post-category">
                     Category:
                             
-                                <a href="/categories/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/">版本控制</a>
+                                <a href="/categories/Tool/">Tool</a>
                             
                         </span>
                     
@@ -252,7 +314,55 @@ window.msRequestAnimationFrame ||
         </header>
 
         <div class="post-content">
-            <p>看下图：<img src="/Pictures/%E5%88%86%E6%94%AF%E4%B8%8E%E5%90%88%E5%B9%B6%E7%9A%84%E6%84%8F%E4%B9%89.jpg" alt="分支与合并的意义"></p>
+            <h2 id="1-分支的抽象"><a href="#1-分支的抽象" class="headerlink" title="1.分支的抽象"></a>1.分支的抽象</h2><p>我们已经了解到git的每次提交会被连成一条线，这条线就是一个分支。</p>
+<p>之前，我们会说HEAD指向提交，但这是错的，HEAD指向的是master，而master指向的才是提交。</p>
+<p><img src="/Pictures/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-07-24%20010350.png" alt="屏幕截图 2024-07-24 010350"></p>
+<p>每次提交，master都会向前移动，这样master也会越来越长。</p>
+<p>当我们新创建一个dev分支时，就会新建一个指针dev指向当前提交，同时HEAD也会指向dev，代表当前在dev分支上：</p>
+<p><img src="/Pictures/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-07-24%20010435.png" alt="屏幕截图 2024-07-24 010435"></p>
+<p>由于当前是在dev分支上，当我们此时再次提交，便只会移动HEAD指向的分支，即只移动dev指针：</p>
+<p><img src="/Pictures/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-07-24%20010509.png" alt="屏幕截图 2024-07-24 010509"></p>
+<p>当dev的任务完成，我们就将两个分支合并。将master指向dev指向的提交，这样就合并了：</p>
+<p><img src="/Pictures/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-07-24%20010535.png" alt="屏幕截图 2024-07-24 010535"></p>
+<p>如果dev也不需要了，那就删除它：</p>
+<p><img src="/Pictures/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-07-24%20010603.png" alt="屏幕截图 2024-07-24 010603"></p>
+<p>此时，任务完成。</p>
+<h2 id="2-分支的使用"><a href="#2-分支的使用" class="headerlink" title="2.分支的使用"></a>2.分支的使用</h2><p> <strong>我们创建<code>dev</code>分支，然后切换到<code>dev</code>分支：</strong> </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout -b dev</span><br><span class="line">Switched to a new branch &#x27;dev&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>而上面一条命令相当于这两条：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git branch dev</span><br><span class="line">$ git checkout dev</span><br><span class="line">Switched to branch &#x27;dev&#x27;</span><br></pre></td></tr></table></figure>
+
+<p> <strong>用<code>git branch</code>命令查看当前分支：</strong> </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git branch</span><br><span class="line">* dev</span><br><span class="line">  master</span><br></pre></td></tr></table></figure>
+
+<p><strong>切换分支使用<code>git checkout 分支</code></strong> ：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout master</span><br></pre></td></tr></table></figure>
+
+<p> git checkout 这个命令在之前遇到过，用于撤销，为了更方便使用，用switch。</p>
+<p>创建并切换到新的<code>dev</code>分支，可以使用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git switch -c dev</span><br></pre></td></tr></table></figure>
+
+<p>直接切换到已有的<code>master</code>分支，可以使用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git switch master</span><br></pre></td></tr></table></figure>
+
+<p>使用新的<code>git switch</code>命令，比<code>git checkout</code>要更容易理解。</p>
+<p><strong><code>git merge</code>命令用于合并指定分支到当前分支</strong> ：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git merge dev</span><br></pre></td></tr></table></figure>
+
+<p><strong>在Git中鼓励大量使用分支</strong>。</p>
+<h2 id="3-分支之间的冲突"><a href="#3-分支之间的冲突" class="headerlink" title="3.分支之间的冲突"></a>3.分支之间的冲突</h2><p>现在我们有了不同的分支，我们在不同的分支进行提交时就像这样：</p>
+<p><img src="/Pictures/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-07-24%20120107.png" alt="屏幕截图 2024-07-24 120107"></p>
+<p>如果我们不同分支对同一文件进行了修改，此时，如果我们进行合并操作，”快速合并“是不允许的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git merge feature1</span><br><span class="line">Auto-merging readme.txt</span><br><span class="line">CONFLICT (content): Merge conflict in readme.txt</span><br><span class="line">Automatic merge failed; fix conflicts and then commit the result.</span><br></pre></td></tr></table></figure>
+
+<p>只能把各自的区别简单合并在一起，然后自己修改后提交：</p>
+<p><img src="/Pictures/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-07-24%20120224.png" alt="屏幕截图 2024-07-24 120224"></p>
+<p>除去快速合并，还可以进行非快速合并</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git merge --no-ff -m &quot;merge with no-ff&quot; dev</span><br><span class="line">Merge made by the &#x27;recursive&#x27; strategy.</span><br><span class="line"> readme.txt | 1 +</span><br><span class="line"> 1 file changed, 1 insertion(+)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/Pictures/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-07-24%20141324.png" alt="屏幕截图 2024-07-24 141324"></p>
+<h2 id="4-多人协作"><a href="#4-多人协作" class="headerlink" title="4.多人协作"></a>4.多人协作</h2><p>如下图：<img src="/Pictures/%E5%88%86%E6%94%AF%E4%B8%8E%E5%90%88%E5%B9%B6%E7%9A%84%E6%84%8F%E4%B9%89.jpg" alt="分支与合并的意义"></p>
 
         </div>
 

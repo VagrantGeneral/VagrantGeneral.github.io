@@ -305,7 +305,7 @@ window.msRequestAnimationFrame ||
                         <span class="post-category">
                     Category:
                             
-                                <a href="/categories/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/">版本控制</a>
+                                <a href="/categories/Tool/">Tool</a>
                             
                         </span>
                     
@@ -314,16 +314,82 @@ window.msRequestAnimationFrame ||
         </header>
 
         <div class="post-content">
-            <p><img src="/Pictures/git%E5%88%86%E5%8C%BA.png" alt="git分区"></p>
-<p>本地文件夹，在git bash或cmd中使用命令<code>git init</code>初始化为git仓库。</p>
-<h4 id="一-创建第一个文件后"><a href="#一-创建第一个文件后" class="headerlink" title="一.创建第一个文件后"></a>一.创建第一个文件后</h4><p>文件仓库<img src="/Pictures/%E6%96%87%E4%BB%B6%E4%BB%93%E5%BA%931.png" alt="文件仓库1"><br>文件状态<img src="/Pictures/%E6%96%87%E4%BB%B6%E7%8A%B6%E6%80%811.png" alt="文件状态1"><br>此时，文件在<code>未暂存区</code>，已暂存文件代表<code>暂存区</code>，选中未暂存文件，并暂存文件，<code>文件从未暂存区——移到——暂存区</code>。<img src="/Pictures/%E6%96%87%E4%BB%B6%E7%8A%B6%E6%80%812.png" alt="文件状态2"><br>若要将文件<code>提交至版本库</code>，1.在自己的区域编写提交记录； 2.点击提交；因此文件<code>从暂存区——移到——版本库</code>。<img src="/Pictures/%E6%96%87%E4%BB%B6%E7%8A%B6%E6%80%813_%E6%8F%90%E4%BA%A4%E5%90%8E.png" alt="文件状态3_提交后"></p>
-<p>若，在file1.txt中进行了开发（第一次更改），此时又出现了<code>未提交的更改</code>：<img src="/Pictures/%E6%96%87%E4%BB%B6%E7%8A%B6%E6%80%814_%E7%AC%AC%E4%B8%80%E6%AC%A1%E6%9B%B4%E6%94%B9.png" alt="文件状态4_第一次更改"><br>用上面同样的方式暂存，提交后：<img src="/Pictures/%E6%96%87%E4%BB%B6%E7%8A%B6%E6%80%815_%E6%8F%90%E4%BA%A4%E5%90%8E.png" alt="文件状态5_提交后"></p>
-<h4 id="二-创建两个及以上文件后"><a href="#二-创建两个及以上文件后" class="headerlink" title="二.创建两个及以上文件后"></a>二.创建两个及以上文件后</h4><p>此时Git分区的作用就体现了出来。</p>
+            <p><img src="/Pictures/git.png" alt="git"></p>
+<h2 id="1-学习Git的动机"><a href="#1-学习Git的动机" class="headerlink" title="1.学习Git的动机"></a>1.学习Git的动机</h2><p>在日常学习中，我们经常会遇到以下这种情况：</p>
+<p>对一个文件进行多次修改，但是又不想丢弃之前的修改，因此便会将之前的文件全部保留下来，当然，保留几个文件可能没有什么关系，但是，当文件的内容极其庞大，并且数量比较多时，这种方法就相当不好，而且在你寻找文件时也是一个麻烦。</p>
+<p>因此，一个简洁，高效，方便的版本管理工具显得尤为重要。此时，Git它来了。</p>
+<h2 id="2-Git的使用"><a href="#2-Git的使用" class="headerlink" title="2.Git的使用"></a>2.Git的使用</h2><p>要使用git必须下载安装git，这里默认已下载安装完毕，并且配置成功。</p>
+<h3 id="2-1创建版本库"><a href="#2-1创建版本库" class="headerlink" title="2.1创建版本库"></a>2.1创建版本库</h3><p>说的好听点叫版本库，说的普通点就是一个文件夹，只不过与普通文件夹不同的是内部会多出一个子文件夹**.git**，这个文件夹便是跟踪管理版本库的，其他地方没有任何区别。</p>
+<p><strong><code>git init</code>命令把普通文件夹变成Git可以管理的仓库</strong>： </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git init</span><br></pre></td></tr></table></figure>
+
+<p>此时你便会看到版本库创建成功。</p>
+<p><img src="/Pictures/git001_1.png" alt="git001_1"></p>
+<p> 同时，empty Git repository 提醒你这还是一个空的仓库。 </p>
+<p>我们在文件夹中添加一个文件readme.txt。此时出现了修改，我们要将修改加入版本库中</p>
+<p><strong>用命令<code>git add</code>告诉Git，把文件添加到仓库</strong>： </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git add filename.txt：</span><br></pre></td></tr></table></figure>
+
+<p> 具体使用如下所示：</p>
+<p><img src="/Pictures/git001_2.png" alt="git001_2"></p>
+<p>之后你会发现没有任何显示，那么很幸运，add成功了。</p>
+<p> Unix的哲学——“没有消息就是好消息” </p>
+<p><strong>用命令<code>git commit</code>告诉Git，把文件提交到仓库</strong>： </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git commit -m &quot;info&quot;</span><br></pre></td></tr></table></figure>
+
+<p>具体使用如下所示：</p>
+<p><img src="/C:/Users/24987/Desktop/%E8%83%8C%E6%99%AF&%E9%85%8D%E5%9B%BE/Git/git001_3%20(2).png" alt="git001_3 (/Pictures/git001_3%20(2).png)"></p>
+<p>-m之后写本次提交的说明，方便以后操作时的辨识。</p>
+<p>执行成功后系统提示 **<code>1 file changed</code><strong>：1个文件被改动（我们新添加的readme.txt文件）；</strong><code>2 insertions</code>**：插入了两行内容（readme.txt有两行内容）。 </p>
+<p>此时，就要问了，一次性就可以提交的事，<strong>为什么要分为两次操作（添加，提交）？</strong> 这就要说一说版本库的结构以及这样设计的功能了。</p>
+<p><img src="/Pictures/JieGouTu.png" alt="JieGouTu"></p>
+<p>Git的版本库中存有很多东西，包含stage（暂存区），默认分支master，以及指向分支节点的HEAD指针。</p>
+<p>我们把文件往Git版本库里添加的时候，是分两步执行的：</p>
+<ul>
+<li>第一步是用<code>git add</code>把文件添加进去，实际上就是把文件修改添加到暂存区；</li>
+<li>第二步是用<code>git commit</code>提交更改，实际上就是把暂存区的所有内容提交到当前分支。</li>
+</ul>
+<p>&#x2F;&#x2F;&#x2F;&#x2F;</p>
+<h3 id="2-2版本回退"><a href="#2-2版本回退" class="headerlink" title="2.2版本回退"></a>2.2版本回退</h3><p>当我们忘记了当前的状态是什么： <strong><code>git status</code>命令可以让我们时刻掌握仓库当前的状态 。</strong></p>
+<p><img src="/Pictures/git002_status.png" alt="git002_status"></p>
+<p> 输出告诉我们，<code>readme.txt</code>被修改过了，但还没有准备提交的修改。 </p>
+<p>当我们忘记了之前修改了什么： <strong>需要用<code>git diff</code>这个命令看看作了什么修改</strong>。</p>
+<p><img src="/Pictures/git002_diff.png" alt="git002_diff"></p>
+<p>现在我们就清楚了有什么修改了。</p>
+<p>试想，我们现在突然想到之前的某一版本有我们需要的东西，我们想要退回去。</p>
+<p> 在实际工作中，我们不可能记得一个几千行的文件每次都改了什么内容:  <strong>我们用<code>git log</code>命令查看</strong> 。</p>
+<p><img src="/Pictures/git003.png" alt="git003"></p>
+<p>此时，我们便知道了每次的记录，同时也体现出了commit时认真写commit信息的重要性。</p>
+<p> <strong>我们要把当前版本回退到上一个版本，就可以使用<code>git reset</code>命令</strong> 。</p>
+<p><img src="/Pictures/git004_reset.png" alt="git004_reset"></p>
+<p>还可以以下方式：</p>
+<p><img src="/Pictures/git004_reset2.png" alt="git004_reset2"></p>
+<p>此时我们便会看到文件已经回退到上一次的提交版本。</p>
+<p><img src="/Pictures/Headptr.png" alt="Headptr"></p>
+<h3 id="2-3撤销修改"><a href="#2-3撤销修改" class="headerlink" title="2.3撤销修改"></a>2.3撤销修改</h3><p>当我们发现有些修改是错误的，需要我们撤销修改， Git会告诉我们，**<code>git checkout -- file</code>可以丢弃工作区的修改：** </p>
+<p><img src="/Pictures/git010_chechout.png" alt="git010_chechout"></p>
+<p>这里有两种情况：</p>
+<p>一种是<code>readme.txt</code>自修改后还没有被放到暂存区，现在，撤销修改就回到和版本库一模一样的状态；</p>
+<p>一种是<code>readme.txt</code>已经添加到暂存区后，又作了修改，现在，撤销修改就回到添加到暂存区后的状态。</p>
+<p>总之，就是让这个文件回到最近一次<code>git commit</code>或<code>git add</code>时的状态。</p>
+<p>但是，当我们发现已经添加到暂存区的内容中有需要撤销的修改， Git同样告诉我们，<strong>用命令<code>git reset HEAD </code>可以把暂存区的修改撤销掉，重新放回工作区</strong>： </p>
+<p><img src="/Pictures/git011_2.png" alt="git011_2"></p>
+<p>对于修改的回退有以下场景：</p>
+<p><img src="/Pictures/1721752865708.png" alt="1721752865708"></p>
+<h3 id="2-4远程仓库"><a href="#2-4远程仓库" class="headerlink" title="2.4远程仓库"></a>2.4远程仓库</h3><p>现在，你的本地已经有一个版本库，同时又想在GitHub上创建远程库。</p>
+<p>按照指示在GitHub上创建仓库后， 我们根据GitHub的提示，在本地的仓库下运行命令： </p>
+<p><img src="/Pictures/git012.png" alt="git012"></p>
+<p>这里我们可能会有疑问，origin以及后面的一长串是什么。</p>
+<p><img src="/Pictures/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-07-23%20020536.png" alt="屏幕截图 2024-07-23 020536"></p>
+<p>接下来将本地库的所有内容推送到远程库：</p>
+<p><img src="/Pictures/git013.png" alt="git013"></p>
+<p>现在，只要本地由提交，就可以推送到远程库：<strong>git push origin master</strong></p>
+<p>如果我们先创建了远程库，那么下一步便是用命令<code>git clone</code>克隆一个本地库： </p>
+<p><img src="/Pictures/git014.png" alt="git014"></p>
+<p>此时，本地库也已经完成。</p>
+<h3 id="2-5分支管理"><a href="#2-5分支管理" class="headerlink" title="2.5分支管理"></a>2.5分支管理</h3><h4 id="二-创建两个及以上文件后"><a href="#二-创建两个及以上文件后" class="headerlink" title="二.创建两个及以上文件后"></a>二.创建两个及以上文件后</h4><p>此时Git分区的作用就体现了出来。</p>
 <p><em><strong>思考：试想一下为什么要在未暂存区和版本库之间要有一个暂存区？</strong></em></p>
 <p>如果中间没有暂存区，那么在未暂存区无论是否准备完全，都要提交到版本库中；但如果有了暂存区，就可以在暂存区进行进一步的筛选检查。</p>
-<h4 id="三-命令操作"><a href="#三-命令操作" class="headerlink" title="三.命令操作"></a>三.命令操作</h4><p>1.未暂存区–&gt;暂存区   git add <filename> 或 git add *   ；</p>
-<p>2.暂存区–&gt;版本库   git commit m”描述信息”   ；</p>
-<p>3.软合并（版本库–&gt;暂存区）   git reset –mix 版本号   ；<br>  强行合并（丢掉此次提交之后的所有提交）   不要了    ；</p>
 
         </div>
 
