@@ -382,7 +382,7 @@ window.msRequestAnimationFrame ||
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">mm_struct</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">vm_area_struct</span> *<span class="title">mmap</span>;</span>		<span class="comment">/* list of VMAs */</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">rb_root</span> *<span class="title">mm_rb</span>;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><strong>mmap</strong>指向vm_area_struct那条链表的头。<strong>mm_rb</strong>指向红黑树的根节点。同时在每个vm_area_struct中都可以指回mm_struct。</p>
-<p>此时我们便可以看到一个完备的内存分配，组织：</p>
+<p>此时我们便可以看到一个完备的内存分配组织：</p>
 <p><img src="/Pictures/1722609306812.png" alt="1722609306812"></p>
 <h2 id="4-二进制文件如何映射到虚拟内存空间中"><a href="#4-二进制文件如何映射到虚拟内存空间中" class="headerlink" title="4.二进制文件如何映射到虚拟内存空间中"></a>4.二进制文件如何映射到虚拟内存空间中</h2><p>我们写的程序代码在编译之后会生成一个 ELF 格式的二进制文件，这个二进制文件中包含了程序运行时所需要的信息，比如程序的机器码，程序中的全局变量以及静态变量等。</p>
 <p>这个 ELF 格式的二进制文件中的布局和我们前边讲的虚拟内存空间中的布局类似，也是一段一段的，每一段包含了不同的数据。<em><strong>磁盘文件中的段我们叫做 Section，内存中的段我们叫做 Segment，也就是内存区域。</strong></em> </p>
