@@ -307,8 +307,8 @@ window.msRequestAnimationFrame ||
         </header>
 
         <div class="post-content">
-            <p><img src="/Pictures/b3.jpg" alt="b3"></p>
-<h2 id="Linux中的文件描述符"><a href="#Linux中的文件描述符" class="headerlink" title="Linux中的文件描述符"></a>Linux中的文件描述符</h2><p>在Linux中有句话，一切皆文件。文件又可分为：普通文件、目录文件、链接文件和设备文件。 当我们在操作这些文件时，需要查找文件名。但是在操作文件时还要查找文件名，效率低，所以需要为每一个文件指定一个索引，通过这个索引可以对文件进行操作。</p>
+            <p><img src="/Pictures/b3.jpg"></p>
+<h2 id="Linux中的文件描述符"><a href="#Linux中的文件描述符" class="headerlink" title="Linux中的文件描述符"></a>Linux中的文件描述符</h2><p><strong>在Linux中</strong>有句话，<strong>一切皆文件</strong>。文件又可分为：普通文件、目录文件、链接文件和设备文件。 当我们在操作这些文件时，需要查找文件名。但是在操作文件时还要查找文件名，效率低，所以需要为每一个文件指定一个索引，通过这个索引可以对文件进行操作。</p>
 <p><strong>文件描述符</strong>就是内核为了高效管理这些已经被打开的文件所创建的索引。 <img src="/Pictures/%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6.png" alt="文件描述符"></p>
 <p>但是，以上只是最浅显的理解，关于文件描述符，Linux内核维护了3个数据结构：</p>
 <ul>
@@ -326,6 +326,49 @@ window.msRequestAnimationFrame ||
 <li>进程 A 的描述符 0 和进程 B 的描述符 3 分别指向不同的打开文件表项，但这些表项均指向 i-node 表的同一个条目（标号为 1976）；换言之，它们指向了同一个文件。发生这种情况是因为每个进程各自对同一个文件发起了 open() 调用。同一个进程两次打开同一个文件，也会发生类似情况。</li>
 </ul>
 <p>这就说明：同一个进程的不同文件描述符可以指向同一个文件；不同进程可以拥有相同的文件描述符；不同进程的同一个文件描述符可以指向不同的文件（一般也是这样，除了 0、1、2 这三个特殊的文件）；不同进程的不同文件描述符也可以指向同一个文件。</p>
+<h3 id="C语言中文件描述符的使用"><a href="#C语言中文件描述符的使用" class="headerlink" title="C语言中文件描述符的使用"></a>C语言中文件描述符的使用</h3><p>C语言中可以通过 open 函数返回一个文件的文件描述符，首先创建一个 test.py 文件用于打开，然后创建一个 test.c 文件，输入下面代码保存。 编译后执行，发现新打开文件的文件描述符是3。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span> &#123;</span><br><span class="line">        <span class="type">int</span> fd = open(<span class="string">&quot;test.py&quot;</span>, O_RDONLY);</span><br><span class="line">        <span class="keyword">if</span> (fd == <span class="number">-1</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;test.py fd = %d \n&quot;</span>, fd);</span><br><span class="line">        close(fd);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         </div>
 

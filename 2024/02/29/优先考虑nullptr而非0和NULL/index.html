@@ -252,7 +252,7 @@ window.msRequestAnimationFrame ||
         </header>
 
         <div class="post-content">
-            <p><img src="/Pictures/C++%E8%A1%A5%E5%AE%8C%E8%AE%A1%E5%88%92%E8%83%8C%E6%99%AF.png" alt="C++补完计划背景"></p>
+            <p><img src="/Pictures/C++%E8%A1%A5%E5%AE%8C%E8%AE%A1%E5%88%92%E8%83%8C%E6%99%AF.png"></p>
 <p>先看这句话：字面值<code>0</code>是一个<code>int</code>不是指针。<br>如果C++发现在当前上下文只能使用指针，它会很不情愿的把<code>0</code>解释为指针，但是那是最后的退路。一般来说C++的解析策略是把<code>0</code>看做<code>int</code>而不是指针。</p>
 <p>实际上，<code>NULL</code>也是这样的。但在<code>NULL</code>的实现细节有些不确定因素，因为实现被允许给<code>NULL</code>一个除了<code>int</code>之外的整型类型。这不常见，但也算不上问题所在。这里的问题不是<code>NULL</code>没有一个确定的类型，而是<code>0</code>和<code>NULL</code>都不是指针类型。</p>
 <p>在C++98中，对指针类型和整型进行重载意味着可能导致奇怪的事情。如果给下面的重载函数传递<code>0</code>或<code>NULL</code>，它们绝不会调用指针版本的重载函数：</p>

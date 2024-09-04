@@ -223,6 +223,68 @@ window.msRequestAnimationFrame ||
                 <div class="container">
     
     
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
 
     
     <article class="post-wrap">
@@ -245,24 +307,48 @@ window.msRequestAnimationFrame ||
         </header>
 
         <div class="post-content">
-            <p><strong>指针与引用</strong></p>
-<p>指针是变量，只不过存储的是地址。而引用仅仅是变量的“别名”。</p>
+            <h2 id="指针与引用"><a href="#指针与引用" class="headerlink" title="指针与引用"></a>指针与引用</h2><p>指针是变量，只不过存储的是地址。而引用仅仅是变量的“别名”。</p>
 <p>指针拥有自己的内存空间。而引用只是和变量共享内存空间，因此引用定义时就必须初始化。</p>
 <p>指针可以被重新赋值，而引用只能在初始化时赋值且不能改变。</p>
 <p>指针可以为空指针，但引用不会为空。</p>
-<p><strong>结构体与联合体</strong></p>
-<p>结构体是不同数据的组合，每种数据都有自己的空间。联合体是不同数据共用同一块内存。</p>
-<p>结构体的大小取决于所有数据成员的大小。联合体的大小取决于其中最长的数据成员。</p>
-<p>内存对齐：内存存取粒度，存取效率。</p>
-<p><strong>#define 和const</strong></p>
-<p>Define定义的是一个没有类型的数（常量）。而const修饰的是变量（不能改变的变量），变量有不同的类型，存放在静态区。 </p>
+<h2 id="如何理解指针与引用"><a href="#如何理解指针与引用" class="headerlink" title="如何理解指针与引用"></a>如何理解指针与引用</h2><p>A. 在汇编中有 load  r1  1.  </p>
+<p>将1号地址中的值加载到r1中。【地址1——&gt;值】</p>
+<p>为了方便，在高级语言中有了变量。抽象了（地址到值）。</p>
+<p>B. 但1号内存块存有地址时，有load  r1  @1.</p>
+<p>将1号地址中的 地址中的 值加载到 r1中。【地址1——&gt;1中的地址——&gt;值】</p>
+<p>为了方便，在高级语言中有了指针。抽象了（地址到地址）。</p>
+<p>C. 指针是危险的，因此我们既要指针的底层地址操作，又要方便的抽象。因此引用诞生了。</p>
+<h2 id="define-和const"><a href="#define-和const" class="headerlink" title="#define 和const"></a>#define 和const</h2><p>Define定义的是一个没有类型的数（常量）。而const修饰的是变量（不能改变的变量），变量有不同的类型，存放在静态区。 </p>
 <p>Define在编译阶段就会将相应的值进行替换。Const修饰的变量在编译时进行一次拷贝即可。</p>
 <p>Define常量无法用指针指向，但const修饰的变量可以被指针指向。</p>
-<p><strong>malloc，new，free，delete的关系以及区别</strong></p>
-<p>malloc仅仅分配一块指定大小的堆空间。而new分配一块指定大小的堆空间后，对其执行相应的构造函数对空间进行初始化。</p>
+<p>const int* a &#x3D; &amp;x    与    int* const a &#x3D; &amp;x</p>
+<p>对于左边来说：变量a 存储的是 不能被改变的int变量的地址，因此不能</p>
+<h2 id="指针与数组"><a href="#指针与数组" class="headerlink" title="指针与数组"></a>指针与数组</h2><p>当我们创建一个数组时，会分配 <strong>n * sizeof(T)</strong> 的空间。</p>
+<p>此时，数组名 就<strong>类似于 一个T*的常量</strong> ，存储数组的首地址。</p>
+<p>对于指针的加法。因此就出现了 *<em>a[1] 等同于 <em>(a + 1)</em></em> 的情况。</p>
+<h2 id="函数重载、函数重写、函数隐藏的区别"><a href="#函数重载、函数重写、函数隐藏的区别" class="headerlink" title="函数重载、函数重写、函数隐藏的区别"></a>函数重载、函数重写、函数隐藏的区别</h2><ol>
+<li>函数重载：在<strong>同一作用域内</strong>被声明的几个具有<strong>不同参数列表</strong>（参数的类型，个数，顺序不同）的同名函数，根据参数列表确定调用哪个函数，重载<strong>不关心函数返回类型</strong>。 </li>
+<li>函数重写： 派生类中存在重新定义的函数。其函数名，参数列表，都必须同基类中被重写的函数一致， 返回值类型除了协变情况下也必须和基类中被重写的函数一致，只有函数体不同 。</li>
+<li>函数隐藏：派生类的函数屏蔽了与其同名的基类函数，注意只要同名函数并且基类函数没有<code>virtual</code>修饰，不管参数列表是否相同，基类函数都会被隐藏。</li>
+</ol>
+<h2 id="说一说多态"><a href="#说一说多态" class="headerlink" title="说一说多态"></a>说一说多态</h2><p>同一行为，不同子类表现出不同的形态。</p>
+<p>首先，多态产生的条件：1.继承。2.虚函数。3.重写。而第三点我将它理解为虚表的变化。因为，虚表不变。调用的函数是不会变的。</p>
+<p>虚表，每个类都要维护一个虚表，每个对象都会维护一个虚表指针指向虚表，当对象调用虚函数时，会调用自己实际是哪个类的虚表所指向的虚函数。</p>
+<h2 id="说一说三次握手和四次挥手"><a href="#说一说三次握手和四次挥手" class="headerlink" title="说一说三次握手和四次挥手"></a>说一说三次握手和四次挥手</h2><p>设备之间通过报文段进行交流沟通。</p>
+<p>这些报文段统一交流格式，信息头+数据尾。在信息头中，有一些信息是所有协议都会有的（1.我从哪里来。2.我要到哪里去。3.我现在是什么状态。），因此源IP与目的IP或源MAC与目的MAC便是哪里来去哪，而其余便是标记此时的状态。</p>
+<p>这些标记中，以<strong>序号seq</strong>（报文段首字节的字节流编号），<strong>确认号ACK</strong>（期望从目标主机收到的下一字节的编号），以及<strong>标志位</strong>最重要。</p>
+<p>ACK是比较重要的，因为ACK即代表了<strong>我已经收到了这个号以前的所有数据</strong>，也代表了<strong>我期望的数据的号</strong>。</p>
+<h2 id="说一说阻塞IO与非阻塞IO"><a href="#说一说阻塞IO与非阻塞IO" class="headerlink" title="说一说阻塞IO与非阻塞IO"></a>说一说阻塞IO与非阻塞IO</h2><p>我的出发点是IO，IO就是通过系统来调用IO设备来获取或发送数据，阻塞的IO便是系统在未获取到数据或未发送数据而等待。</p>
+<p>当我们调用阻塞IO时，会从用户态切换到内核态，将数据从内核缓冲区拷到用户缓冲区，但没数据或者数据未从设备的缓冲区拷到内核缓冲区便会一直等，直到将这一系列事情做完才返回。</p>
+<p>但对于非阻塞IO，若没数据或者数据未从设备的缓冲区拷到内核缓冲区，那它便会立刻返回一个信息，接着继续查看，直到数据到内核缓冲区以后便开始阻塞。因此，非阻塞IO并不是完全的非阻塞。这里的非体现的是不浪费。</p>
+<h2 id="说一说IO复用"><a href="#说一说IO复用" class="headerlink" title="说一说IO复用"></a>说一说IO复用</h2><p>我的出发点还是阻塞的IO，因为我们经常会连接多个服务，但是对这些个服务的访问便是一大难题，我们需要用类似于循环的方式调用read()，这样就要来回的切换权限，因此便需要一种可以快速遍历的方法，那便是IO复用。</p>
+<h2 id="说一说epoll的LT和ET模式"><a href="#说一说epoll的LT和ET模式" class="headerlink" title="说一说epoll的LT和ET模式"></a>说一说epoll的LT和ET模式</h2><p>当我们使用epoll的LT模式时，若描述符有数据便会通知，因此需要调用read来读取数据，没有数据便会停止通知，因此读缓冲的大小和接受缓冲的大小没关系。</p>
+<p>但当我们使用ET模式时，描述符有事件时只通知一次，因此需要使用while来调用IO操作，当到最后一次循环时，便会到没数据时的IO的状态，因此便需要非阻塞IO来判别。</p>
+<h2 id="说一说malloc，free，new，delete的区别"><a href="#说一说malloc，free，new，delete的区别" class="headerlink" title="说一说malloc，free，new，delete的区别"></a>说一说malloc，free，new，delete的区别</h2><p>malloc仅仅分配一块指定大小的堆空间。而new分配一块指定大小的堆空间后，对其执行相应的构造函数对空间进行初始化。</p>
 <p>free仅仅是对目标空间进行释放。而delete会对对象先执行相应的析构函数，再释放空间。</p>
 <p>对于非内部数据类型，我们在为其分配空间后，需要有人为其执行构造进行初始化或者在释放空间前为其执行析构函数。因此在已有malloc与free后仍需要new和delete。</p>
-<p><strong>简述C++内存管理机制</strong></p>
+<h2 id="传参"><a href="#传参" class="headerlink" title="传参"></a>传参</h2><p>传参包含值传参，地址传参以及引用传参，但是地址传参又何尝不是一种值传递呢。</p>
+<h2 id="说一说标准IO与文件IO的区别"><a href="#说一说标准IO与文件IO的区别" class="headerlink" title="说一说标准IO与文件IO的区别"></a>说一说标准IO与文件IO的区别</h2><h2 id="说一说进程与线程"><a href="#说一说进程与线程" class="headerlink" title="说一说进程与线程"></a>说一说进程与线程</h2><p><strong>简述C++内存管理机制</strong></p>
 <p>在C++中，内存分为5个区：</p>
 <ol>
 <li>代码区：存储可执行代码。</li>
@@ -281,14 +367,6 @@ window.msRequestAnimationFrame ||
 <p><strong>阐述浅拷贝与深拷贝</strong></p>
 <p>浅拷贝指的是仅仅是构建了一个引用或者指针指向对象，看似两个相同的对象，实则同一个对象。</p>
 <p>深拷贝指的是根据被拷贝对象从头到尾申请独立的内存存储与原对象一样的数据，是两个对立的对象。</p>
-<p><strong>阐述C++的四种强制类型转换</strong></p>
-<ol>
-<li>发</li>
-<li>发</li>
-<li>发</li>
-<li>发</li>
-</ol>
-<p>发</p>
 <p><strong>引用作为参数或返回值类型的作用以及好处</strong></p>
 <ul>
 <li><strong>引用作为形参</strong>。当函数形参不为引用时，会牵扯到形参与实参的值传递，当调用函数传入实参时，会发生形参拷贝实参的值，形参在函数内如何改变也不会影响实参，形参与实参是分离的。但当形参为引用时，当调用函数传入实参时，形参是实参的别名，操作引用（形参）就是操作对象（实参），因此引用柞参可以传递对象。同时引用少一步拷贝，因此提高了运行效率。</li>
@@ -337,17 +415,8 @@ window.msRequestAnimationFrame ||
 <p><strong>gcc与g++的关系</strong></p>
 <p>gcc会把.c文件当成c处理，.cpp文件当成c++处理，但是不会为其链接C++库。</p>
 <p>g++会把.c和.cpp文件都当成c++处理。</p>
-<p><strong>fcntl的作用</strong></p>
-<p><strong>fork，写时拷贝</strong></p>
-<p><strong>程序，进程与线程</strong></p>
-<p><strong>谈一谈对文件描述符的理解</strong></p>
 <p><strong>全双工与半双工</strong></p>
-<p>库函数与系统调用</p>
-<p>三次握手与四次挥手</p>
-<p>socket</p>
-<p>拥塞控制</p>
-<p>select，poll，epoll</p>
-
+<h3 id="库函数与系统调用"><a href="#库函数与系统调用" class="headerlink" title="库函数与系统调用"></a>库函数与系统调用</h3><h3 id="三次握手与四次挥手"><a href="#三次握手与四次挥手" class="headerlink" title="三次握手与四次挥手"></a>三次握手与四次挥手</h3><h3 id="select，poll，epoll"><a href="#select，poll，epoll" class="headerlink" title="select，poll，epoll"></a>select，poll，epoll</h3><h3 id="static关键字"><a href="#static关键字" class="headerlink" title="static关键字"></a>static关键字</h3><h3 id="vector，list，map的区别"><a href="#vector，list，map的区别" class="headerlink" title="vector，list，map的区别"></a>vector，list，map的区别</h3><h3 id="重写和重载以及继承"><a href="#重写和重载以及继承" class="headerlink" title="重写和重载以及继承"></a>重写和重载以及继承</h3><h3 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h3><h3 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h3><h3 id="tcp协议"><a href="#tcp协议" class="headerlink" title="tcp协议"></a>tcp协议</h3>
         </div>
 
         
@@ -401,7 +470,7 @@ window.msRequestAnimationFrame ||
                 <a class="prev" rel="prev" href="/2024/05/21/%E6%A0%91-%E6%8E%92%E5%BA%8F%E6%A0%91-%E5%B9%B3%E8%A1%A1%E6%A0%91-%E7%BA%A2%E9%BB%91%E6%A0%91/">树_排序树_平衡树_红黑树</a>
             
             
-            <a class="next" rel="next" href="/2024/04/27/%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F/">日志系统</a>
+            <a class="next" rel="next" href="/2024/04/04/std-bind%E7%9A%84%E4%BD%BF%E7%94%A8/">std_bind的使用</a>
             
         </section>
 

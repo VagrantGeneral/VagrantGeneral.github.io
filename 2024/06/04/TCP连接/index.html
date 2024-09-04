@@ -336,7 +336,7 @@ window.msRequestAnimationFrame ||
 <ol>
 <li><strong>客户端发送请求报文。SYN置为1，代表此报文为请求连接的报文。seq为client_x，代表序号随机初始化值。</strong></li>
 <li><em>服务端收到客户端发来的请求报文时，为客户端分配缓存和变量。</em></li>
-<li><strong>服务端发送请求报文，携带确认信息。SYN置为1，代表此报文为请求连接的报文。ACK为client_x + 1代表服务端已经确认收到client_x + 1之前的所有数据，期望下次发送client_x + 1号的报文段。seq为serv_x，代表序号随机初始化值。</strong></li>
+<li><strong>服务端发送请求报文，携带确认信息。SYN置为1，代表此报文为请求连接的报文。ACK为client_x + 1代表服务端已经确认收到client_x + 1之前的所有数据，期望下次发送client_x + 1号的报文段。seq为serv_x，代表序号随机初始化值。</strong> </li>
 <li><em>客户端收到服务端发来的请求报文时，为服务端分配缓存和变量。</em>此时双向通信已基本完成。</li>
 <li><strong>客户端发送响应报文。ACK为serv_x + 1代表客户端已经确认收到serv_x + 1之前的所有数据，期望下次发送serv_x + 1号的报文段。seq为client_x + 1，代表此报文序号为client_x + 1。</strong></li>
 </ol>

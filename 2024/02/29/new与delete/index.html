@@ -314,20 +314,23 @@ window.msRequestAnimationFrame ||
         </header>
 
         <div class="post-content">
-            <p><img src="/Pictures/C++%E8%A1%A5%E5%AE%8C%E8%AE%A1%E5%88%92%E8%83%8C%E6%99%AF-1713625821724.png" alt="C++补完计划背景"></p>
+            <p><img src="/Pictures/C++%E8%A1%A5%E5%AE%8C%E8%AE%A1%E5%88%92%E8%83%8C%E6%99%AF.png"></p>
 <h1 id="1-new-operator"><a href="#1-new-operator" class="headerlink" title="1.new operator"></a>1.new operator</h1><p>new operator是我们平时最常用的new。例如：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class A &#123;</span><br><span class="line">	...</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">A * a = new A(1);</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line">	...</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">A * a = <span class="keyword">new</span> <span class="built_in">A</span>(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
 
 <p>当new开始执行时：</p>
-<p>1.调用[[new与delete|operator new]]分配内存。如果类自己定义了<em>operator new</em>，那么会调用自己的<em>operator new</em>来分配内存。</p>
-<p>2.调用类的构造函数。</p>
-<p>3.返回内存的首地址。</p>
+<ol>
+<li>调用operator new分配内存。如果类自己定义了<em>operator new</em>，那么会调用自己的<em>operator new</em>来分配内存。</li>
+<li>调用类的构造函数。</li>
+<li>返回内存的首地址。</li>
+</ol>
+<p>&#x2F;&#x2F;</p>
 <h1 id="2-operator-new"><a href="#2-operator-new" class="headerlink" title="2.operator new"></a>2.operator new</h1><p>operator new的原型</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">void * operator new (size_t size);</span><br><span class="line">void * operator new (size_t size, const nothrow_t&amp; nothrow_value) noexcept;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> * <span class="keyword">operator</span> <span class="title">new</span> <span class="params">(<span class="type">size_t</span> size)</span></span>;</span><br><span class="line"><span class="function"><span class="type">void</span> * <span class="keyword">operator</span> <span class="title">new</span> <span class="params">(<span class="type">size_t</span> size, <span class="type">const</span> <span class="type">nothrow_t</span>&amp; nothrow_value)</span> <span class="keyword">noexcept</span></span>;</span><br></pre></td></tr></table></figure>
 
 <p><em>operator new</em>的作用类似于malloc。<br>因此，operator new仅仅是分配固定大小的内存，不会调用构造函数。</p>
 <h1 id="3-placement-new"><a href="#3-placement-new" class="headerlink" title="3.placement new"></a>3.placement new</h1><p>看以下示例：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">class A &#123;...&#125;;</span><br><span class="line"></span><br><span class="line">A * p1 = (A *)malloc(sizeof(A) * 1);</span><br><span class="line">A * p2 = new(p1) A(2);</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;...&#125;;</span><br><span class="line"></span><br><span class="line">A * p1 = (A *)<span class="built_in">malloc</span>(<span class="built_in">sizeof</span>(A) * <span class="number">1</span>);</span><br><span class="line">A * p2 = <span class="built_in">new</span>(p1) <span class="built_in">A</span>(<span class="number">2</span>);</span><br></pre></td></tr></table></figure>
 <p>placement new仅在一个已经分配好的内存上调用构造函数。</p>
 <h1 id="4-delete-operator"><a href="#4-delete-operator" class="headerlink" title="4.delete operator"></a>4.delete operator</h1><p>1.调用类的析构函数。<br>2.调用[[new与delete|operator delete]]释放对象内存。</p>
 <h1 id="5-operator-delete"><a href="#5-operator-delete" class="headerlink" title="5.operator delete"></a>5.operator delete</h1><p><em>operator delete</em>不调用析构，仅仅释放内存。</p>

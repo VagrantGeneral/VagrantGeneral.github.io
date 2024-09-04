@@ -307,7 +307,7 @@ window.msRequestAnimationFrame ||
         </header>
 
         <div class="post-content">
-            <p><img src="/Pictures/b1-1719422634214.jpg" alt="b1"></p>
+            <p><img src="/Pictures/b1-1719422634214.jpg"></p>
 <p>我们经常会看到以下代码：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> listenfd = <span class="built_in">socket</span>();	</span><br><span class="line"><span class="built_in">bind</span>(listenfd);			<span class="comment">//绑定</span></span><br><span class="line"><span class="built_in">listen</span>(listenfd);		<span class="comment">//监听</span></span><br><span class="line"><span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">    <span class="type">int</span> connfd = <span class="built_in">accept</span>(listenfd);	 <span class="comment">//建立连接</span></span><br><span class="line">    <span class="type">int</span> n = <span class="built_in">read</span>(connfd, buff);		<span class="comment">//读数据</span></span><br><span class="line">    <span class="built_in">doSomeThing</span>(buff);			   <span class="comment">//处理数据</span></span><br><span class="line">    <span class="built_in">close</span>(connfd);				  <span class="comment">//关闭连接</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 

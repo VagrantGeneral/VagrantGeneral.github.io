@@ -223,6 +223,68 @@ window.msRequestAnimationFrame ||
                 <div class="container">
     
     
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
 
     
     <article class="post-wrap">
@@ -245,7 +307,71 @@ window.msRequestAnimationFrame ||
         </header>
 
         <div class="post-content">
-            
+            <p><img src="/Pictures/C++%E8%A1%A5%E5%AE%8C%E8%AE%A1%E5%88%92%E8%83%8C%E6%99%AF.png"></p>
+<h1 id="一-多态"><a href="#一-多态" class="headerlink" title="一.多态"></a>一.多态</h1><p>说到<strong>多态</strong>，从字面意思来看：<strong>一个事物的不同形态</strong> 。</p>
+<p>在C++中，我们经常听到两个多态：</p>
+<ol>
+<li>静态多态。</li>
+<li>动态多态。</li>
+</ol>
+<h2 id="1-1静态多态"><a href="#1-1静态多态" class="headerlink" title="1.1静态多态"></a>1.1静态多态</h2><p>我们可以知道， 函数重载就是一个简单的静态多态 。</p>
+<p><strong>静态多态是编译器在编译期间完成的，编译器会根据实参类型来选择调用合适的函数，如果有合适的函数可以调用就调，没有的话就会发出警告或者报错</strong> 。</p>
+<h2 id="1-2动态多态"><a href="#1-2动态多态" class="headerlink" title="1.2动态多态"></a>1.2动态多态</h2><p>动态多态，明显与静态多态是相反的，它是在<strong>程序运行时</strong>根据基类的<strong>引用</strong>（指针）指向的对象来确定自己具体该调用哪一个类的<strong>虚函数</strong>。</p>
+<p>我们看以下示例：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Car</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">TakeCar</span><span class="params">()</span> </span>= <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Ferrari</span> : <span class="keyword">public</span> Car &#123;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">TakeCar</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Ferrari&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AMG</span> : <span class="keyword">public</span> Car &#123;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">TakeCar</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;AMG&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Car * myCar = <span class="keyword">new</span> <span class="built_in">Ferrari</span>();</span><br><span class="line">    myCar-&gt;<span class="built_in">TakeCar</span>();</span><br><span class="line">    Car * myCar2 = <span class="keyword">new</span> <span class="built_in">AMG</span>();</span><br><span class="line">    myCar2-&gt;<span class="built_in">TakeCar</span>();</span><br><span class="line">    <span class="keyword">delete</span> myCar;</span><br><span class="line">    <span class="keyword">delete</span> myCar2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们可以看到有两个Car类型的指针，它们都调用了TakeCar()这个方法，但是运行结果却是不同的。</p>
+<p>这便是一个最简单的多态。其中最关键的便是<strong>指针</strong>以及<strong>virtual</strong>这两个东西。</p>
+<h1 id="二-C-类对象布局"><a href="#二-C-类对象布局" class="headerlink" title="二.C++类对象布局"></a>二.C++类对象布局</h1><p>看下图所示：</p>
+<p><img src="/Pictures/1724854175779.png" alt="1724854175779"></p>
+<p>在一个类中，所有东西分为两种<strong>函数</strong>与<strong>属性</strong>。</p>
+<p>函数部分分两大类：</p>
+<ol>
+<li>非虚函数，存储在<strong>代码区</strong>。</li>
+<li>虚函数，存储在<strong>代码区</strong>，但是会维护一个<strong>虚表指针</strong>。</li>
+</ol>
+<p><img src="/Pictures/1724855410475.png" alt="1724855410475"></p>
+<p>属性部分分两大类：</p>
+<ol>
+<li>非静态属性，每个对象都有。</li>
+<li>静态属性，存储在<strong>全局区</strong>。所有对象维护一个。</li>
+</ol>
+<p>因此，<strong>影响C++对象大小的因素：非静态成员属性，虚表指针，字节对齐</strong>。</p>
+<h2 id="初探虚表"><a href="#初探虚表" class="headerlink" title="初探虚表"></a>初探虚表</h2><p>现在，我们知道了虚表，但我们如何获取或者看到虚表呢？看以下示例：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">vAfunc1</span><span class="params">()</span> </span>&#123; std::cout &lt;&lt; <span class="string">&quot;A::vAfunc1()&quot;</span> &lt;&lt; std::endl; &#125;;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">vAfunc2</span><span class="params">()</span> </span>&#123; std::cout &lt;&lt; <span class="string">&quot;A::vAfunc2()&quot;</span> &lt;&lt; std::endl; &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">B</span> : <span class="keyword">public</span> A &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">vBfunc1</span><span class="params">()</span> </span>&#123; std::cout &lt;&lt; <span class="string">&quot;B::vBfunc1()&quot;</span> &lt;&lt; std::endl; &#125;;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">vBfunc2</span><span class="params">()</span> </span>&#123; std::cout &lt;&lt; <span class="string">&quot;B::vBfunc2()&quot;</span> &lt;&lt; std::endl; &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">vAfunc1</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123; std::cout &lt;&lt; <span class="string">&quot;B::vAfunc1()&quot;</span> &lt;&lt; std::endl; &#125;;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">func2</span><span class="params">()</span> </span>&#123; std::cout &lt;&lt; <span class="string">&quot;B::func2()&quot;</span> &lt;&lt; std::endl; &#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> data3_;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    A a1;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;a1虚表的地址为 &quot;</span> &lt;&lt; (<span class="type">int64_t</span>*)*(<span class="type">int64_t</span>*)(&amp;a1) &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;a1虚表中第一个函数地址为 &quot;</span> &lt;&lt; (<span class="type">int64_t</span>*)*((<span class="type">int64_t</span>*)*(<span class="type">int64_t</span>*)(&amp;a1)) &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;a1虚表中第二个函数地址为 &quot;</span> &lt;&lt; (<span class="type">int64_t</span>*)*((<span class="type">int64_t</span>*)*(<span class="type">int64_t</span>*)(&amp;a1) + <span class="number">1</span>) &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;over&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果如下：</p>
+<p><img src="/Pictures/1724856232587.png" alt="1724856232587"></p>
+<p>如果我们使用的是VS，便可以通过调试获取其地址：</p>
+<p><img src="/Pictures/1724856167636.png" alt="1724856167636"></p>
+<p>现在我们已经可以获取到虚表，那么是不是可以通过虚表来运行其中的虚函数？是的。</p>
+<p>运行函数：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> Fun = <span class="built_in">void</span>();</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    A a1;</span><br><span class="line">    Fun* pFun = <span class="literal">nullptr</span>;</span><br><span class="line">    pFun = (Fun*)*((<span class="type">int64_t</span>*)*(<span class="type">int64_t</span>*)(&amp;a1));</span><br><span class="line">    <span class="built_in">pFun</span>();</span><br><span class="line">    pFun = (Fun*)*((<span class="type">int64_t</span>*)*(<span class="type">int64_t</span>*)(&amp;a1) + <span class="number">1</span>);</span><br><span class="line">    <span class="built_in">pFun</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<p><img src="/Pictures/1724856976962.png" alt="1724856976962"></p>
+<h1 id="三-运行时多态"><a href="#三-运行时多态" class="headerlink" title="三.运行时多态"></a>三.运行时多态</h1><p>现在我们已经了解到虚表，而我们的运行时多态便是依赖于虚表。</p>
+<p>当一个类中有了虚函数，那么便会自动维护一个<strong>虚表指针</strong>，其指向这个类所维护的虚表，而虚表的内容便是所有虚函数的函数地址。</p>
+<p>我们看一段代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">A</span>() &#123;</span><br><span class="line">        data1_ = <span class="keyword">new</span> <span class="built_in">int</span>();</span><br><span class="line">        data2_ = <span class="keyword">new</span> <span class="built_in">int</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">vAfunc1</span><span class="params">()</span> </span>&#123; std::cout &lt;&lt; <span class="string">&quot;A::vAfunc1()&quot;</span> &lt;&lt; std::endl; &#125;;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">vAfunc2</span><span class="params">()</span> </span>&#123; std::cout &lt;&lt; <span class="string">&quot;A::vAfunc2()&quot;</span> &lt;&lt; std::endl; &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">func1</span><span class="params">()</span> </span>&#123; std::cout &lt;&lt; <span class="string">&quot;A::func1()&quot;</span> &lt;&lt; std::endl; &#125;;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">func2</span><span class="params">()</span> </span>&#123; std::cout &lt;&lt; <span class="string">&quot;A::func2()&quot;</span> &lt;&lt; std::endl; &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">A</span>() &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;A::~A&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        <span class="keyword">delete</span> data1_;</span><br><span class="line">        <span class="keyword">delete</span> data2_;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> *data1_&#123;&#125;;</span><br><span class="line">    <span class="type">int</span> *data2_&#123;&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">B</span> : <span class="keyword">public</span> A &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">B</span>() &#123; data3_ = <span class="keyword">new</span> <span class="built_in">int</span>(); &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">vAfunc1</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123; std::cout &lt;&lt; <span class="string">&quot;B::vAfunc1()&quot;</span> &lt;&lt; std::endl; &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">vBfunc1</span><span class="params">()</span> </span>&#123; std::cout &lt;&lt; <span class="string">&quot;B::vBfunc1()&quot;</span> &lt;&lt; std::endl; &#125;;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">vBfunc2</span><span class="params">()</span> </span>&#123; std::cout &lt;&lt; <span class="string">&quot;B::vBfunc2()&quot;</span> &lt;&lt; std::endl; &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">func2</span><span class="params">()</span> </span>&#123; std::cout &lt;&lt; <span class="string">&quot;B::func2()&quot;</span> &lt;&lt; std::endl; &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">B</span>() &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;B::~B&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        <span class="keyword">delete</span> data3_;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> *data3_&#123;&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    B b;</span><br><span class="line">    Fun* pFun = <span class="literal">nullptr</span>;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;虚函数表地址 &quot;</span> &lt;&lt; (<span class="type">int64_t</span>*)*(<span class="type">int64_t</span>*)(&amp;b) &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;虚函数表第1个函数地址 &quot;</span> &lt;&lt; (<span class="type">int64_t</span>*)*((<span class="type">int64_t</span>*)*(<span class="type">int64_t</span>*)(&amp;b)) &lt;&lt; std::endl;</span><br><span class="line">    pFun = (Fun*)*((<span class="type">int64_t</span>*)*(<span class="type">int64_t</span>*)(&amp;b));</span><br><span class="line">    <span class="built_in">pFun</span>();</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;虚函数表第2个函数地址 &quot;</span> &lt;&lt; (<span class="type">int64_t</span>*)*((<span class="type">int64_t</span>*)*(<span class="type">int64_t</span>*)(&amp;b) + <span class="number">1</span>) &lt;&lt; std::endl;</span><br><span class="line">    pFun = (Fun*)*((<span class="type">int64_t</span>*)*(<span class="type">int64_t</span>*)(&amp;b) + <span class="number">1</span>);</span><br><span class="line">    <span class="built_in">pFun</span>();</span><br><span class="line">    <span class="comment">/*std::cout &lt;&lt; &quot;虚函数表第3个函数地址 &quot; &lt;&lt; (int64_t*)*((int64_t*)*(int64_t *)(&amp;b) + 2) &lt;&lt; std::endl;</span></span><br><span class="line"><span class="comment">    pFun = (Fun*)*((int64_t*)*(int64_t*)(&amp;b) + 2);</span></span><br><span class="line"><span class="comment">    pFun();*/</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;虚函数表第4个函数地址 &quot;</span> &lt;&lt; (<span class="type">int64_t</span>*)*((<span class="type">int64_t</span>*)*(<span class="type">int64_t</span> *)(&amp;b) + <span class="number">3</span>) &lt;&lt; std::endl;</span><br><span class="line">    pFun = (Fun*)*((<span class="type">int64_t</span>*)*(<span class="type">int64_t</span>*)(&amp;b) + <span class="number">3</span>);     </span><br><span class="line">    <span class="built_in">pFun</span>();</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;虚函数表第5个函数地址 &quot;</span> &lt;&lt; (<span class="type">int64_t</span>*)*((<span class="type">int64_t</span>*)*(<span class="type">int64_t</span>*)(&amp;b) + <span class="number">4</span>) &lt;&lt; std::endl;</span><br><span class="line">    pFun = (Fun*)*((<span class="type">int64_t</span>*)*(<span class="type">int64_t</span>*)(&amp;b) + <span class="number">4</span>);</span><br><span class="line">    <span class="built_in">pFun</span>();</span><br><span class="line">    <span class="comment">/*std::cout &lt;&lt; &quot;虚函数表第6个函数地址 &quot; &lt;&lt; (int64_t*)*((int64_t*)*(int64_t*)(&amp;b) + 5) &lt;&lt; std::endl;</span></span><br><span class="line"><span class="comment">    pFun = (Fun*)*((int64_t*)*(int64_t*)(&amp;b) + 5);</span></span><br><span class="line"><span class="comment">    pFun();*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果如下：</p>
+<p><img src="/Pictures/1724863738211.png" alt="1724863738211"></p>
+<p> 我们看以下图示，类A与类B的关系图，其中包含了对象的内容以及虚表的大致内容：</p>
+<p><img src="/Pictures/1724863127082.png" alt="1724863127082"></p>
+<p>类A的对象各自维护一个vtable指针，指向类A的虚表。</p>
+<p>在类A中有<strong>vAfunc1()<strong>和</strong>vAfunc2()<strong>以及</strong>析构</strong>三个虚函数，因此虚表中便会维护这三个函数的地址。</p>
+<p>类B继承类A，因此类B的虚表也会维护类A的虚函数。</p>
+<p>在类B中便会有<strong>vAfunc1()<strong>和</strong>vAfunc2()<strong>，自己的</strong>析构</strong>，**vBfunc1()<strong>和</strong>vBfunc2()**五个虚函数的地址。</p>
+<p>但是，在类B中重写了vAfunc1()，因此B虚表中<strong>vAfunc1_addr</strong>便会重新指向B重写的vAfunc1()。这样当B的对象调用vAfunc1()这个函数时，会通过虚表调用已经重写的（属于本类的）vAfunc1()函数。</p>
+<h2 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h2><p>当类与类之间处于<strong>继承</strong>关系，并且类中有<strong>虚函数</strong>和<strong>函数重写</strong>时，<strong>父类指针</strong>（引用）指向<strong>子类对象</strong>。</p>
+<ol>
+<li>同一行为，不同子类表现出不同的形态。</li>
+<li>同一方法，不同对象产生出不同的行为。</li>
+</ol>
+<p>&#x2F;&#x2F;</p>
+<h2 id="RTTI（运行时类型识别）"><a href="#RTTI（运行时类型识别）" class="headerlink" title="RTTI（运行时类型识别）"></a>RTTI（运行时类型识别）</h2><p>由于多态的存在，当一个函数的传入参数是<strong>父类指针（或引用）</strong>，有的时候就需要获取参数到底是哪一个子类。</p>
+
         </div>
 
         

@@ -15,7 +15,7 @@
 
 
 
-<title>仿函数 | Wandergeneral</title>
+<title>归档: 2024 | Wandergeneral</title>
 
 
 
@@ -220,109 +220,44 @@ window.msRequestAnimationFrame ||
     }
 </script>
             <div class="main">
-                <div class="container">
+                <div class="post-wrap archive">
     
     
-
-    
-    <article class="post-wrap">
-        <header class="post-header">
-            <h1 class="post-title">仿函数</h1>
-            
-                <div class="post-meta">
-                    
-                        Author: <a itemprop="author" rel="author" href="/">HanKangKai</a>
-                    
-
-                    
-                        <span class="post-time">
-                        Date: <a href="#">二月 28, 2024&nbsp;&nbsp;22:24:29</a>
-                        </span>
-                    
-                    
-                        <span class="post-category">
-                    Category:
-                            
-                                <a href="/categories/%E5%8F%AF%E8%B0%83%E7%94%A8%E5%AF%B9%E8%B1%A1/">可调用对象</a>
-                            
-                        </span>
-                    
-                </div>
-            
-        </header>
-
-        <div class="post-content">
-            <p><img src="/Pictures/C++%E8%A1%A5%E5%AE%8C%E8%AE%A1%E5%88%92%E8%83%8C%E6%99%AF.png" alt="C++补完计划背景"></p>
-<p><em>仿函数就是仿造的函数，它并不是一个真正意义上的函数。它是一个类中的运算符（）重载，但它具有函数的功能</em>。</p>
-<p>样例：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Compare</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> m_Number;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Compare</span>(<span class="type">int</span> num) : <span class="built_in">m_Number</span>(num)&#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="type">int</span> other)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> m_Number &gt; other;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">Compare <span class="title">cmp</span><span class="params">(<span class="number">10</span>)</span></span>;</span><br><span class="line">    std::cout &lt;&lt; <span class="built_in">cmp</span>(<span class="number">11</span>) &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; <span class="built_in">cmp</span>(<span class="number">9</span>) &lt;&lt; std::endl;</span><br><span class="line">    std::cin.<span class="built_in">get</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>函数对象的出现是为了代替函数指针的，最明显的一个特点是：可以使用内联函数。而如果使用内联函数的指针，编译器会把它当普通函数对待。另外，函数对象是类封装的，代码不但看起来简洁，设计也灵活，比如还可以用关联，聚合，依赖的类之间的关系，与用到他们的类组合在一起，这样有利于资源的管理（这点可能是它相对于函数最显著的优点了）。</p>
-<p>另外值得注意的是，仿函数（Functor）也是 STL 六大模块之一，其余 5 个分别是容器（Container）、算法（Algorithm）、迭代器（Iterator）、适配器（Adapter）和分配器（Allocator）。</p>
-
-        </div>
+        
 
         
-            <section class="post-copyright">
-                
-                    <p class="copyright-item">
-                        <span>Author:</span>
-                        <span>HanKangKai</span>
-                    </p>
-                
-                
-                    <p class="copyright-item">
-                        <span>Permalink:</span>
-                        <span><a href="http://example.com/2024/02/28/%E4%BB%BF%E5%87%BD%E6%95%B0/">http://example.com/2024/02/28/%E4%BB%BF%E5%87%BD%E6%95%B0/</a></span>
-                    </p>
-                
-                
-                    <p class="copyright-item">
-                        <span>License:</span>
-                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
-                    </p>
-                
-                
-                     <p class="copyright-item">
-                         <span>Slogan:</span>
-                         <span>Do you believe in <strong>DESTINY</strong>?</span>
-                     </p>
-                
-
-            </section>
+            <h3>2024</h3>
         
-        <section class="post-tags">
-            <div>
-                <span>Tag(s):</span>
-                <span class="tag">
-                    
-                    
-                        <a href="/tags/c-c/"># c/c++</a>
-                    
-                        <a href="/tags/%E4%BB%BF%E5%87%BD%E6%95%B0/"># 仿函数</a>
-                    
-                        
-                </span>
-            </div>
-            <div>
-                <a href="javascript:window.history.back();">back</a>
-                <span>· </span>
-                <a href="/">home</a>
-            </div>
-        </section>
-        <section class="post-nav">
-            
-                <a class="prev" rel="prev" href="/2024/02/28/%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88/">函数指针</a>
-            
-            
-            <a class="next" rel="next" href="/2024/02/28/%E5%8F%AF%E8%B0%83%E7%94%A8%E5%AF%B9%E8%B1%A1/">可调用对象</a>
-            
-        </section>
 
+        <article class="archive-item">
+            <a class="archive-item-link" href="/2024/02/28/decltype%E5%85%B3%E9%94%AE%E5%AD%97/">decltype关键字</a>
+            <span class="archive-item-date">二月 28, 2024</span>
+        </article>
+    
+        
 
-    </article>
+        
+
+        <article class="archive-item">
+            <a class="archive-item-link" href="/2024/02/28/auto%E5%85%B3%E9%94%AE%E5%AD%97/">auto关键字</a>
+            <span class="archive-item-date">二月 28, 2024</span>
+        </article>
+    
+        
+
+        
+
+        <article class="archive-item">
+            <a class="archive-item-link" href="/2024/02/28/const%E5%85%B3%E9%94%AE%E5%AD%97/">const关键字</a>
+            <span class="archive-item-date">二月 28, 2024</span>
+        </article>
+    
+    
+    <nav class="pagination">
+        <a class="page-number" href="/archives/2024/">1</a><span class="space">&hellip;</span><a class="page-number" href="/archives/2024/page/6/">6</a><a class="page-number" href="/archives/2024/page/7/">7</a><span class="page-number current">8</span>
+    </nav>
+
 </div>
-
             </div>
             <footer id="footer" class="footer">
     <div class="copyright">

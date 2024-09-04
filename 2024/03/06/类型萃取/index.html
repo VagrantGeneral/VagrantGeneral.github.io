@@ -252,7 +252,7 @@ window.msRequestAnimationFrame ||
         </header>
 
         <div class="post-content">
-            <p><img src="/Pictures/C++%E8%A1%A5%E5%AE%8C%E8%AE%A1%E5%88%92%E8%83%8C%E6%99%AF-1713625821724.png" alt="C++补完计划背景"></p>
+            <p><img src="/Pictures/C++%E8%A1%A5%E5%AE%8C%E8%AE%A1%E5%88%92%E8%83%8C%E6%99%AF.png"></p>
 <p>如果你尝试过模板元编程（<em>template metaprogramming</em>，TMP）， 你一定会碰到取模板类型参数然后基于它创建另一种类型的情况。举个例子，给一个类型<code>T</code>，如果你想去掉<code>T</code>的常量修饰和引用修饰（<code>const</code>- or reference qualifiers），比如你想把<code>const std::string&amp;</code>变成<code>std::string</code>。又或者你想给一个类型加上<code>const</code>或变为左值引用，比如把<code>Widget</code>变成<code>const Widget</code>或<code>Widget&amp;</code>。</p>
 <p>C++11在<em>type traits</em>（类型特性）中给了你一系列工具去实现类型转换，如果要使用这些模板请包含头文件<code>&lt;type_traits&gt;</code>。里面有许许多多<em>type traits</em>，也不全是类型转换的工具，也包含一些可预测接口的工具。给一个你想施加转换的类型<code>T</code>，结果类型就是<code>std::</code>transformation<code>&lt;T&gt;::type</code>，比如：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">std::remove_const&lt;T&gt;::type          <span class="comment">//从const T中产出T</span></span><br><span class="line"></span><br><span class="line">std::remove_reference&lt;T&gt;::type      <span class="comment">//从T&amp;和T&amp;&amp;中产出T</span></span><br><span class="line"></span><br><span class="line">std::add_lvalue_reference&lt;T&gt;::type  <span class="comment">//从T中产出T&amp;</span></span><br></pre></td></tr></table></figure>

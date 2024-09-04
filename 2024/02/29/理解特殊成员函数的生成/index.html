@@ -252,7 +252,21 @@ window.msRequestAnimationFrame ||
         </header>
 
         <div class="post-content">
-            
+            <p><img src="/Pictures/C++%E8%A1%A5%E5%AE%8C%E8%AE%A1%E5%88%92%E8%83%8C%E6%99%AF.png"></p>
+<p>在C++中，<strong>特殊成员函数</strong>指C++自己生成的函数。包含<strong>默认构造函数</strong>，<strong>析构函数</strong>，<strong>拷贝构造函数</strong>，<strong>拷贝赋值运算符</strong>等。</p>
+<p>这些函数仅在需要的时候才生成。C++11迎来了<strong>移动构造函数</strong>和<strong>移动赋值运算符</strong>。</p>
+<p>C++11对于特殊成员函数处理的规则如下：</p>
+<p>+ <strong>默认构造函数</strong>：和C++98规则相同。仅当类不存在用户声明的构造函数时才自动生成。</p>
+<p>+ <strong>析构函数</strong>：基本上和C++98相同；稍微不同的是现在析构默认<code>noexcept</code>（参见<a target="_blank" rel="noopener" href="https://github.com/kelthuzadx/EffectiveModernCppChinese/blob/master/3.MovingToModernCpp/item14.md">Item14</a>）。和C++98一样，仅当基类析构为虚函数时该类析构才为虚函数。</p>
+<p>+ <strong>拷贝构造函数</strong>：和C++98运行时行为一样：逐成员拷贝non-static数据。仅当类没有用户定义的拷贝构造时才生成。如果类声明了移动操作它就是<em>delete</em>的。当用户声明了拷贝赋值或者析构，该函数自动生成已被废弃。</p>
+<p>+ <strong>拷贝赋值运算符</strong>：和C++98运行时行为一样：逐成员拷贝赋值non-static数据。仅当类没有用户定义的拷贝赋值时才生成。如果类声明了移动操作它就是<em>delete</em>的。当用户声明了拷贝构造或者析构，该函数自动生成已被废弃。</p>
+<p>+ <strong>移动构造函数</strong>和<strong>移动赋值运算符</strong>：都对非static数据执行逐成员移动。仅当类没有用户定义的拷贝操作，移动操作或析构时才自动生成。</p>
+<p><strong>请记住：</strong></p>
+<p>+ 特殊成员函数是编译器可能自动生成的函数：默认构造函数，析构函数，拷贝操作，移动操作。</p>
+<p>+ 移动操作仅当类没有显式声明移动操作，拷贝操作，析构函数时才自动生成。</p>
+<p>+ 拷贝构造函数仅当类没有显式声明拷贝构造函数时才自动生成，并且如果用户声明了移动操作，拷贝构造就是<em>delete</em>。拷贝赋值运算符仅当类没有显式声明拷贝赋值运算符时才自动生成，并且如果用户声明了移动操作，拷贝赋值运算符就是<em>delete</em>。当用户声明了析构函数，拷贝操作的自动生成已被废弃。</p>
+<p>+ 成员函数模板不抑制特殊成员函数的生成。</p>
+
         </div>
 
         

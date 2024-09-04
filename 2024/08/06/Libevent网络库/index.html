@@ -307,7 +307,7 @@ window.msRequestAnimationFrame ||
         </header>
 
         <div class="post-content">
-            <p><img src="/Pictures/b1-1719423178395.jpg" alt="b1"></p>
+            <p><img src="/Pictures/b1-1719422634214.jpg"></p>
 <h2 id="1-Reactor模型-和-Proactor模型"><a href="#1-Reactor模型-和-Proactor模型" class="headerlink" title="1.Reactor模型 和 Proactor模型"></a>1.Reactor模型 和 Proactor模型</h2><p>在socket一篇中，我们提到服务器要服务多个客户端时，那么最直接的方式就是为每一条连接创建进程或线程，只不过进程消耗太多的资源，因此经常使用轻量化的线程。</p>
 <p>但是，当业务逻辑完成后，随着连接关闭后线程也要销毁，像这样不停地创建和销毁线程，同样会带来性能开销，也会造成浪费资源。在一些较大的程序中需要连接几万条客户端，那便会创建几万条线程，这样是很糟糕的。</p>
 <p>要解决这个问题，我们可以使用【资源复用】 的思想。</p>

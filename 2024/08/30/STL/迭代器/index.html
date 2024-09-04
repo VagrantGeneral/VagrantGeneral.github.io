@@ -15,7 +15,7 @@
 
 
 
-<title>日志系统 | Wandergeneral</title>
+<title>迭代器 | Wandergeneral</title>
 
 
 
@@ -223,11 +223,73 @@ window.msRequestAnimationFrame ||
                 <div class="container">
     
     
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
 
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">日志系统</h1>
+            <h1 class="post-title">迭代器</h1>
             
                 <div class="post-meta">
                     
@@ -236,7 +298,7 @@ window.msRequestAnimationFrame ||
 
                     
                         <span class="post-time">
-                        Date: <a href="#">四月 27, 2024&nbsp;&nbsp;10:03:18</a>
+                        Date: <a href="#">八月 30, 2024&nbsp;&nbsp;15:30:23</a>
                         </span>
                     
                     
@@ -245,7 +307,30 @@ window.msRequestAnimationFrame ||
         </header>
 
         <div class="post-content">
-            
+            <p><img src="/Pictures/d8979bebca06d0f76ae72c852cc9d18.jpg"></p>
+<p>迭代器是 C++ 标准模板库（STL）中的核心部件之一，它允许程序员以统一的方式访问容器中的元素，而不需要关心容器的具体实现细节。</p>
+<p>迭代器是一个对象，它提供了一种方法来遍历容器中的元素。迭代器可以被视为指向容器中元素的指针，但它比指针更加灵活和强大。迭代器可以用于访问、修改容器中的元素，并且可以与 STL 算法一起使用。</p>
+<h2 id="迭代器的语法"><a href="#迭代器的语法" class="headerlink" title="迭代器的语法"></a>迭代器的语法</h2><p>迭代器的语法通常如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iterator&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用迭代器遍历容器</span></span><br><span class="line"><span class="keyword">for</span> (ContainerType::iterator it = container.<span class="built_in">begin</span>(); it != container.<span class="built_in">end</span>(); ++it) &#123;</span><br><span class="line">    <span class="comment">// 访问元素 *it</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当我们使用迭代器遍历std::vector容器时：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">std::vector&lt;<span class="type">int</span>&gt; vec = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用迭代器遍历 vector</span></span><br><span class="line"><span class="keyword">for</span> (std::vector&lt;<span class="type">int</span>&gt;::iterator it = vec.<span class="built_in">begin</span>(); it != vec.<span class="built_in">end</span>(); ++it) &#123;</span><br><span class="line">    std::cout &lt;&lt; *it &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用 auto 关键字简化迭代器类型</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> it = vec.<span class="built_in">begin</span>(); it != vec.<span class="built_in">end</span>(); ++it) &#123;</span><br><span class="line">    std::cout &lt;&lt; *it &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         </div>
 
         
@@ -259,7 +344,7 @@ window.msRequestAnimationFrame ||
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="http://example.com/2024/04/27/%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F/">http://example.com/2024/04/27/%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F/</a></span>
+                        <span><a href="http://example.com/2024/08/30/STL/%E8%BF%AD%E4%BB%A3%E5%99%A8/">http://example.com/2024/08/30/STL/%E8%BF%AD%E4%BB%A3%E5%99%A8/</a></span>
                     </p>
                 
                 
@@ -292,10 +377,10 @@ window.msRequestAnimationFrame ||
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2024/05/21/%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98/">面试问题</a>
+                <a class="prev" rel="prev" href="/2024/08/30/STL/%E5%AE%B9%E5%99%A8/">容器</a>
             
             
-            <a class="next" rel="next" href="/2024/04/04/std-bind%E7%9A%84%E4%BD%BF%E7%94%A8/">std_bind的使用</a>
+            <a class="next" rel="next" href="/2024/08/25/%E5%A4%8D%E4%B9%A0/">复习</a>
             
         </section>
 

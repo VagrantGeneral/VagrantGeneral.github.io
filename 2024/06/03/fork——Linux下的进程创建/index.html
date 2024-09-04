@@ -310,7 +310,7 @@ window.msRequestAnimationFrame ||
             <h2 id="Fork创建进程"><a href="#Fork创建进程" class="headerlink" title="Fork创建进程"></a>Fork创建进程</h2><p>我们先看一个例子：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span> </span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span> <span class="params">()</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">	<span class="type">pid_t</span> fpid; <span class="comment">//fpid表示fork函数返回的值</span></span><br><span class="line">	<span class="type">int</span> count=<span class="number">0</span>;</span><br><span class="line">	fpid=fork(); </span><br><span class="line">	<span class="keyword">if</span> (fpid &lt; <span class="number">0</span>) </span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;error in fork!&quot;</span>); </span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (fpid == <span class="number">0</span>) &#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;This is 子进程， my process id is %d/n&quot;</span>,<span class="built_in">getpid</span>()); </span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;我是爹的儿子/n&quot;</span>);</span><br><span class="line">		count++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;This is 父进程, my process id is %d/n&quot;</span>,<span class="built_in">getpid</span>()); </span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;我是孩子他爹/n&quot;</span>);</span><br><span class="line">		count++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;统计结果是: %d/n&quot;</span>,count);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">  运行结果是：</span><br><span class="line">    This is 子进程，my process id is <span class="number">5574</span></span><br><span class="line">    我是爹的儿子</span><br><span class="line">    统计结果是: <span class="number">1</span></span><br><span class="line">        </span><br><span class="line">    This is 父进程, my process id is <span class="number">5573</span></span><br><span class="line">    我是孩子他爹</span><br><span class="line">    统计结果是: <span class="number">1</span></span><br></pre></td></tr></table></figure>
 
-<p>是不是很奇怪？fork后面的好像执行了两次，但两种结果意味着fork有两种返回值（fpid有两个值）。</p>
+<p>是不是很奇怪？fork后面的内容好像执行了两次，但两种结果意味着fork有两种返回值（fpid有两个值）。</p>
 <p>fork调用的一个奇妙之处就是它仅仅被调用一次，却能够返回两次，它可能有三种不同的返回值：       							1）在父进程中，fork返回新创建子进程的进程ID；<br>2）在子进程中，fork返回0；																																				3）如果出现错误，fork返回一个负值； </p>
 <p>在fork函数执行完毕后，如果创建新进程成功，则出现两个进程，一个是子进程，一个是父进程。我们可以通过fork返回的值来判断当前进程是子进程还是父进程。 </p>
 <p>（fpid的值为什么在父子进程中不同。“其实就相当于链表，进程形成了链表，父进程的fpid(p 意味point)指向子进程的进程id, 因为子进程没有子进程，所以其fpid为0. ）</p>
@@ -324,6 +324,51 @@ window.msRequestAnimationFrame ||
 
 <p>结果：<img src="/Pictures/1717430566833.png" alt="1717430566833"></p>
 <p>这便是Fork。</p>
+<h2 id="vfork"><a href="#vfork" class="headerlink" title="vfork"></a>vfork</h2><h2 id="进程终止"><a href="#进程终止" class="headerlink" title="进程终止"></a>进程终止</h2><h3 id="1-退出码"><a href="#1-退出码" class="headerlink" title="1.退出码"></a>1.退出码</h3><p>我们一般以0表示代码成功执行完毕，以非0表示代码执行过程中出现错误 。 退出码可以人为定义，也可以使用系统的错误码表 。</p>
+<p>系统错误码表：</p>
+<p><img src="/Pictures/1725367352531.png" alt="1725367352531"></p>
+<h3 id="2-退出方法"><a href="#2-退出方法" class="headerlink" title="2.退出方法"></a>2.退出方法</h3><p><strong>1. _exit()</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="type">void</span> _exit(<span class="type">int</span> status);</span><br></pre></td></tr></table></figure>
+
+<p>status 定义了进程的终止状态，父进程通过wait来获取该值。</p>
+<p><strong>2. exit()</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="type">void</span> <span class="title function_">exit</span><span class="params">(<span class="type">int</span> status)</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>_exit与exit的区别</strong></p>
+<ol>
+<li>_exit()是直接退出进程。</li>
+<li>而exit()是先做完清理等工作后，调用_exit()退出进程。</li>
+</ol>
+<p>两者关系：</p>
+<img src="/Pictures/exit%E4%B8%8E_exit.png"  />
+
+<p>&#x2F;&#x2F;</p>
+<p><strong>3. main函数return</strong></p>
+<p>return是一种更常见的退出进程方法，执行return n等同于执行exit(n)，因为调用main的运行时函数会将main的返回值当做exit的参数</p>
+<h2 id="进程等待"><a href="#进程等待" class="headerlink" title="进程等待"></a>进程等待</h2><p>当子进程退出，并不是完全退出，子进程的PCB任然存在，父进程如果不等待回收，就可能造成‘僵尸进程’的问题，进而造成内存泄漏。进程一旦变成僵尸状态，并不能被父进程给kill掉，因为子进程已经死去，只能父进程等待回收 </p>
+<h3 id="1-等待的方法"><a href="#1-等待的方法" class="headerlink" title="1.等待的方法"></a><strong>1.等待的方法</strong></h3><h3 id="1-1wait"><a href="#1-1wait" class="headerlink" title="1.1wait()"></a>1.1wait()</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">pid_t</span> <span class="title function_">wait</span><span class="params">(<span class="type">int</span>*status)</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h3 id="1-2waitpid"><a href="#1-2waitpid" class="headerlink" title="1.2waitpid"></a>1.2waitpid</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pid_ t <span class="title function_">waitpid</span><span class="params">(<span class="type">pid_t</span> pid, <span class="type">int</span> *status, <span class="type">int</span> options)</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>总结：</p>
+<ol>
+<li>如果子进程已经退出，调用wait&#x2F;waitpid时，wait&#x2F;waitpid会立即返回，并且释放资源，获得子进程退出信息 。</li>
+<li>如果在任意时刻调用wait&#x2F;waitpid，子进程存在且正常运行，则进程可能阻塞 。</li>
+<li>如果不存在该子进程，则立即出错返回。</li>
+</ol>
+<p>&#x2F;&#x2F;</p>
 
         </div>
 
