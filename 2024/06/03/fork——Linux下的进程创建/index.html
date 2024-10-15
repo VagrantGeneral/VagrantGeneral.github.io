@@ -350,25 +350,17 @@ window.msRequestAnimationFrame ||
 <h2 id="进程等待"><a href="#进程等待" class="headerlink" title="进程等待"></a>进程等待</h2><p>当子进程退出，并不是完全退出，子进程的PCB任然存在，父进程如果不等待回收，就可能造成‘僵尸进程’的问题，进而造成内存泄漏。进程一旦变成僵尸状态，并不能被父进程给kill掉，因为子进程已经死去，只能父进程等待回收 </p>
 <h3 id="1-等待的方法"><a href="#1-等待的方法" class="headerlink" title="1.等待的方法"></a><strong>1.等待的方法</strong></h3><h3 id="1-1wait"><a href="#1-1wait" class="headerlink" title="1.1wait()"></a>1.1wait()</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">pid_t</span> <span class="title function_">wait</span><span class="params">(<span class="type">int</span>*status)</span>;</span><br></pre></td></tr></table></figure>
 
-
-
-
-
-
-
+<p>&#x2F;&#x2F;</p>
 <h3 id="1-2waitpid"><a href="#1-2waitpid" class="headerlink" title="1.2waitpid"></a>1.2waitpid</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pid_ t <span class="title function_">waitpid</span><span class="params">(<span class="type">pid_t</span> pid, <span class="type">int</span> *status, <span class="type">int</span> options)</span>;</span><br></pre></td></tr></table></figure>
 
-
-
-
-
+<p>&#x2F;&#x2F;</p>
+<h2 id="进程间通讯"><a href="#进程间通讯" class="headerlink" title="进程间通讯"></a>进程间通讯</h2><p>每个进程间的数据是和操作是相互独立的，</p>
 <p>总结：</p>
 <ol>
 <li>如果子进程已经退出，调用wait&#x2F;waitpid时，wait&#x2F;waitpid会立即返回，并且释放资源，获得子进程退出信息 。</li>
 <li>如果在任意时刻调用wait&#x2F;waitpid，子进程存在且正常运行，则进程可能阻塞 。</li>
 <li>如果不存在该子进程，则立即出错返回。</li>
 </ol>
-<p>&#x2F;&#x2F;</p>
 
         </div>
 

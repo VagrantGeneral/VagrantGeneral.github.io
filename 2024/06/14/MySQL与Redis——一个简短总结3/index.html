@@ -223,6 +223,68 @@ window.msRequestAnimationFrame ||
                 <div class="container">
     
     
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
 
     
     <article class="post-wrap">
@@ -253,7 +315,32 @@ window.msRequestAnimationFrame ||
 
         <div class="post-content">
             <p><img src="/Pictures/b1-1719422634214.jpg"></p>
+<h1 id="1-MySQL"><a href="#1-MySQL" class="headerlink" title="1.MySQL"></a>1.MySQL</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from user;</span><br></pre></td></tr></table></figure>
 
+<p>对于MySQL数据库，我们并不陌生，但当我们写出并执行以上语句时，它到底经历了什么我们并不知道，但这应该是我们要知道的。接下来就来探索一下这个过程。</p>
+<h2 id="1-1MySQL的执行过程"><a href="#1-1MySQL的执行过程" class="headerlink" title="1.1MySQL的执行过程"></a>1.1MySQL的执行过程</h2><p>当我们在计算机上想用数据库时，肯定要<strong>找到并连接</strong>到它，这时我们都会有一个共同的操作：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot -p</span><br></pre></td></tr></table></figure>
+
+<p>当我们输完密码后，MySQL的服务端和客户端会进行<strong>三次握手</strong>，因为MySQL的传输是基于TCP协议进行的。等一切准备就绪就可以使用sql语句进行数据操作了。如下所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from user where id = 1;</span><br></pre></td></tr></table></figure>
+
+<p>在计算机系统中，有一个非常有用的设计是人们所共识的，那便是缓存操作。因此，不必先查库，会先<strong>查缓存</strong> ，若找到目标就会直接返回，找不到，那便会进行下一步操作。</p>
+<p>缓存中没有记录，那便只能对语句本身进行<strong>解析</strong>，包含：</p>
+<ol>
+<li>词法分析：语句是由一个个的<strong>token(符号)</strong> 组成，其中有些是关键字，有些是非关键字。</li>
+<li>语法分析：将关键字所代表的语法构建语法树，获取相应的字段，条件，值等。</li>
+</ol>
+<p>当解析完成后，就要处理这个语法树，其中包含：</p>
+<ol>
+<li><p>预处理：检查表或者字段是否存在。同时将 * ，_ ，%等替换为相应的目标。</p>
+</li>
+<li><p>优化：帮我们制定查询计划。这个可能现在看起来没什么用，但当语句换为以下这种时，便会由极大的作用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select workaddress, count(*) address_count from emp where (age &lt; 45) group by workaddress having (address_count &gt;= 3);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>执行：根据执行计划执行语句，从存储引擎获取记录，返回给客户端。</p>
+</li>
+</ol>
+<h2 id="1-2MySQL的存储结构"><a href="#1-2MySQL的存储结构" class="headerlink" title="1.2MySQL的存储结构"></a>1.2MySQL的存储结构</h2><h1 id="2-Redis"><a href="#2-Redis" class="headerlink" title="2.Redis"></a>2.Redis</h1>
         </div>
 
         

@@ -313,6 +313,8 @@ window.msRequestAnimationFrame ||
 
 <p>当其处于运行状态时，会出现两个阻塞，accept与read。</p>
 <p>当用户调用read时，会从用户态切到内核态，首先将接收到的数据放入内核缓冲区，再从内核缓冲区拷入用户缓冲区，从内核态切回用户态。</p>
+<p><img src="/Pictures/sedrftgy.png" alt="sedrftgy"></p>
+<p>&#x2F;&#x2F;</p>
 <h2 id="阻塞IO"><a href="#阻塞IO" class="headerlink" title="阻塞IO"></a>阻塞IO</h2><p>如果没有数据传来，便会阻塞在这一步。这便是传统的阻塞IO.<img src="/Pictures/%E9%98%BB%E5%A1%9E.png" alt="阻塞"></p>
 <p>如果客户端一直没传数据，那么便会一直阻塞在read的调用上，socket连接也不会进行，数据处理也不会进行。</p>
 <p>这是非常糟糕的一件事。但如何解决这一问题？有以下做法</p>
