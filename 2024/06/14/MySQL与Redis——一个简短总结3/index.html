@@ -314,7 +314,7 @@ window.msRequestAnimationFrame ||
         </header>
 
         <div class="post-content">
-            <p><img src="/Pictures/b1-1719422634214.jpg"></p>
+            <p><img src="/Pictures/mysql_original_wordmark_logo_icon_146417.png" alt="mysql_original_wordmark_logo_icon_146417"></p>
 <h1 id="1-MySQL"><a href="#1-MySQL" class="headerlink" title="1.MySQL"></a>1.MySQL</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from user;</span><br></pre></td></tr></table></figure>
 
 <p>对于MySQL数据库，我们并不陌生，但当我们写出并执行以上语句时，它到底经历了什么我们并不知道，但这应该是我们要知道的。接下来就来探索一下这个过程。</p>
@@ -340,7 +340,21 @@ window.msRequestAnimationFrame ||
 <li><p>执行：根据执行计划执行语句，从存储引擎获取记录，返回给客户端。</p>
 </li>
 </ol>
-<h2 id="1-2MySQL的存储结构"><a href="#1-2MySQL的存储结构" class="headerlink" title="1.2MySQL的存储结构"></a>1.2MySQL的存储结构</h2><h1 id="2-Redis"><a href="#2-Redis" class="headerlink" title="2.Redis"></a>2.Redis</h1>
+<h2 id="1-2MySQL的存储结构"><a href="#1-2MySQL的存储结构" class="headerlink" title="1.2MySQL的存储结构"></a>1.2MySQL的存储结构</h2><h2 id="InnoDB如何存储数据"><a href="#InnoDB如何存储数据" class="headerlink" title="InnoDB如何存储数据"></a>InnoDB如何存储数据</h2><p>在MySQL中数据以行来存储，但以行来读取效率太低，因此<strong>InnoDB 的数据是按「数据页」为单位来读写的</strong> 。</p>
+<p>在每个数据页中，有<strong>文件头</strong>，<strong>页头</strong>，<strong>记录</strong>，<strong>页目录</strong>，<strong>文件尾</strong>等分区，这些<strong>数据页</strong>通过文件头中的指针相连接，形成一个<strong>双链表</strong>的结构。</p>
+<p><img src="/Pictures/1729086283384.png" alt="1729086283384"></p>
+<p>在每个数据页中，每条用户记录 <strong>按照「主键」</strong>以<strong>单链表</strong>形式进行管理，为了提升查找效率，页目录提供简单的目录（分组索引）。</p>
+<p>此时，我们便可以快速检索记录。</p>
+<p>数据页内部的问题解决了，但当数据页的数量极其庞大时，就需要一种更为方便的结构来管理数据页，<strong>同时数据页的读取属于I&#x2F;O操作，每一次的I&#x2F;O操作都浪费时间和资源，因此，检索的次数也必须要少。</strong> </p>
+<p>InnoDB存储引擎使用B+树来管理数据页，B+树的特点便是 <strong>矮 和 胖</strong>。</p>
+<p><img src="/Pictures/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-10-16%20224015.png" alt="屏幕截图 2024-10-16 224015"></p>
+<p>我们可以看到，1.只有叶子节点存放数据项，其他节点都存放页表项。2.所有数据页都会出现在叶子节点上。</p>
+<p>此时，便可以通过<strong>主键</strong>查询到<strong>数据行</strong>。这叫<code>聚簇索引</code>。</p>
+<p>但是，我们要通过非主键查询时，就不能使用聚簇索引，因此就要创建<code>二级索引</code>来通过<strong>非主键</strong>查询到<strong>主键</strong>。</p>
+<p>这样InnoDB的存储形式就明了了。</p>
+<p>&#x2F;&#x2F;</p>
+<p><img src="/Pictures/redis_original_wordmark_logo_icon_146369.png" alt="redis_original_wordmark_logo_icon_146369"></p>
+<h1 id="2-Redis"><a href="#2-Redis" class="headerlink" title="2.Redis"></a>2.Redis</h1>
         </div>
 
         
